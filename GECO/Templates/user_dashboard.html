@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+<h1>Dashboard de usuario</h1>
+
+
+{% block content %}
+{% if user.is_authenticated %}
+  Hi {{ user.username }}!
+  Estas loggueado
+  
+  	aqui va el dashboard
+  <p><a href="{% url 'logout' %}">logout</a></p>
+{% endif %}
+{% endblock %}

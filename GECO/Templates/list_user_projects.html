@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+<h1>Creacion de proyectos</h1>
+
+
+{% block content %}
+{% if user.is_authenticated %}
+  Hi {{ user.username }}!
+
+  {% for res in result %}
+	<p>{{ res.name }}</p>
+  {% endfor %}
+<p><a href="{% url 'logout' %}">logout</a></p>
+
+{% endif %}
+{% endblock %}

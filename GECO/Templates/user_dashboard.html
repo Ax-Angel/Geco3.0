@@ -9,6 +9,17 @@
   Estas loggueado
   
   	aqui va el dashboard
+
+	{% if not result %}
+		<p>No ha seleccionado ningun proyecto</p>
+	{% else %}
+		<p>PROYECTO SELECCIONADO: {{ project.name }}</p>
+		{% for doc in documents %}
+			<p>{{ doc.name }}</p>
+		{% endfor %}
+	{% endif %}
+
+
   <p><a href="{% url 'logout' %}">logout</a></p>
 {% endif %}
 {% endblock %}

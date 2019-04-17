@@ -4,6 +4,7 @@ from .models import *
 from django.db import IntegrityError
 import traceback
 from users.models import User
+from django.views.generic.edit import FormView
 
 # Create your views here.
 def index_view(request):
@@ -13,9 +14,9 @@ def index_view(request):
 def user_dashboard_view(request):
     if request.method == 'GET' and request.GET.get('p',False):
         project = str(request.GET.get('p', ''))
-
         projectObj = NormalProject.objects.get(name=project)
         documents = Document.objects.filter(project=projectObj)
+        print(documents)
         result = []
         for doc in documents:
             result.append(doc)
@@ -50,8 +51,48 @@ def normal_project_view(request):
         form = normal_project_form()
     return render(request, 'normal_project_form.html', {'form': form})
 
+class document_view(FormView): 
+    form_class = document_form
+    template_name = 'document_form.html'  # Replace with your template.
+    success_url = 'http://localhost:8000/dashboard/'  # Replace with your URL or reverse().
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        files = request.FILES.getlist('files')
+        if request.user.is_authenticated:
+            users = NormalProject.objects.values_list('project_members', flat=True)
+            if request.user.pk in users:
+                if form.is_valid():
+                    project = NormalProject.objects.get(name=str(form.cleaned_data['project_name']))
+                    for f in files:
+                        try:
+                            doc = Document(file = f,
+                                            name = f.name,
+                                            owner = request.user,
+                                            project = project)
+                            doc.save()
+
+                        except:
+                            print('error')
+                    return self.form_valid(form)
+
+                else:
+                    print(form.errors)
+                    return self.form_invalid(form)
+
+    def get(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if request.user.is_authenticated:
+            return super(document_view, self).get(request, *args, **kwargs)
+        else:
+            redirect('http://localhost:8000/accounts/login/')
+
+
 def list_collaborators_project_view(request):
     pass
+
 
 def list_user_projects_view(request):
     if request.method == 'GET':

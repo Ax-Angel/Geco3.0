@@ -26,4 +26,6 @@ urlpatterns = [
     path('dashboard/create_project/', normal_project_view, name = 'create_project'),
     path('dashboard/add_collaborator/', add_collaborator_view, name = 'add_collaborator'),
     path('list_user_projects/', list_user_projects_view, name = 'list_user_proyects'),
+    path('dashboard/upload_document/', document_view.as_view(), name = 'document'),
+
 ]

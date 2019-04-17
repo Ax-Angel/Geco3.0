@@ -10,10 +10,10 @@
   
   	aqui va el dashboard
 
-	{% if not result %}
+	{% if not project %}
 		<p>No ha seleccionado ningun proyecto</p>
 	{% else %}
-		<p>PROYECTO SELECCIONADO: {{ project.name }}</p>
+		<p>PROYECTO SELECCIONADO: {{ project }}</p>
 		{% for doc in documents %}
 			<p>{{ doc.name }}</p>
 		{% endfor %}

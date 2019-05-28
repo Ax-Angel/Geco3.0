@@ -3,7 +3,7 @@ from django.db import models
 from .validators import validate_file_extension
 
 # Create your models here.
-class NormalProject(models.Model):
+class Project(models.Model):
     name = models.CharField(max_length=100, null=False, unique=True)
     description = models.CharField(max_length=250, null=False, unique=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='owner_normalproject', on_delete=models.CASCADE)
@@ -34,6 +34,10 @@ class NormalProject(models.Model):
     def __str__(self):
         return str(self.name)
 
+class Document(models.Model):
+    project = models.ForeignKey(Project, related_name='project_document', on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='owner_document', on_delete=models.CASCADE)
+
 class File(models.Model):
     file = models.FileField(blank=False, null=False, upload_to='mediafiles/', validators=[validate_file_extension])
     name = models.CharField(max_length=100, null=False, unique=True)
@@ -47,16 +51,12 @@ class File(models.Model):
     def set_file(self, file_url):
         self.file = file_url
 
-class Document():
-    project = models.ForeignKey(NormalProject, related_name='project_document', on_delete=models.CASCADE)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='owner_document', on_delete=models.CASCADE)
-
-class NormalMetadata(models.Model):
+class Metadata(models.Model):
     name = models.CharField(max_length=100, null=False, unique=True)
-    project = models.ManyToManyField(NormalProject, blank=True)
+    project = models.ManyToManyField(Project, blank=True)
 
-class DocumentNormalMetadataRelation(models.Model):
-    metadata = models.ForeignKey(NormalMetadata, related_name='metadata', on_delete=models.CASCADE)
-    file = models.ForeignKey(File, related_name='file', on_delete=models.CASCADE)
+class DocumentMetadataRelation(models.Model):
+    metadata = models.ForeignKey(Metadata, related_name='metadata', on_delete=models.CASCADE)
+    file = models.ForeignKey(File, related_name='metadata_file', on_delete=models.CASCADE)
     data = models.CharField(max_length=100, blank=True, null=True)
 

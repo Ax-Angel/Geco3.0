@@ -14,12 +14,13 @@ def index_view(request):
 def user_dashboard_view(request):
     if request.method == 'GET' and request.GET.get('p',False):
         project = str(request.GET.get('p', ''))
-        projectObj = NormalProject.objects.get(name=project)
+        projectObj = Project.objects.get(name=project)
         documents = Document.objects.filter(project=projectObj)
-        print(documents)
         result = []
         for doc in documents:
-            result.append(doc)
+            files = File.objects.filter(document=doc)
+            for f in files:
+                result.append(f)
     else:
         result = []
         project = None
@@ -36,7 +37,7 @@ def normal_project_view(request):
                 print(validatedData)
 
                 try:
-                    project = NormalProject(owner = request.user,
+                    project = Project(owner = request.user,
                                                 name = str(validatedData['name']),
                                                 public_status = validatedData['is_public'],
                                                 collab_status = validatedData['is_collab']
@@ -61,17 +62,19 @@ class document_view(FormView):
         form = self.get_form(form_class)
         files = request.FILES.getlist('files')
         if request.user.is_authenticated:
-            users = NormalProject.objects.values_list('project_members', flat=True)
+            users = Project.objects.values_list('project_members', flat=True)
             if request.user.pk in users:
                 if form.is_valid():
-                    project = NormalProject.objects.get(name=str(form.cleaned_data['project_name']))
+                    project = Project.objects.get(name=str(form.cleaned_data['project_name']))
                     for f in files:
                         try:
-                            doc = Document(file = f,
-                                            name = f.name,
-                                            owner = request.user,
-                                            project = project)
+                            doc = Document(project=project,
+                                                owner=request.user)
                             doc.save()
+                            file = File(file = f,
+                                            name = f.name,
+                                            document = doc)
+                            file.save()
 
                         except:
                             print('error')
@@ -97,7 +100,7 @@ def list_collaborators_project_view(request):
 def list_user_projects_view(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
-            projects = NormalProject.objects.filter(project_members=request.user)
+            projects = Project.objects.filter(project_members=request.user)
             result = []
             for project in projects:
                 result.append(project)
@@ -116,7 +119,7 @@ def add_collaborator_view(request):
                 print(validatedData)
 
                 try:
-                    project = NormalProject.objects.get(name = str(validatedData['project_name']))
+                    project = Project.objects.get(name = str(validatedData['project_name']))
 
                 except:
                     error = "Proyecto no encontrado"

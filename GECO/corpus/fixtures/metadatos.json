@@ -1,0 +1,93 @@
+[
+    {
+      "model": "corpus.metadata",
+      "pk": 1,
+      "fields": {
+        "name": "Lengua"
+      }
+    },
+    {
+        "model": "corpus.metadata",
+        "pk": 2,
+        "fields": {
+          "name": "Título en lengua"
+        }
+    },
+    {
+      "model": "corpus.metadata",
+      "pk": 3,
+      "fields": {
+        "name": "Autor/Investigador/Traductor"
+      }
+    },
+    {
+        "model": "corpus.metadata",
+        "pk": 4,
+        "fields": {
+          "name": "Editorial del texto"
+        }
+    },
+    {
+      "model": "corpus.metadata",
+      "pk": 5,
+      "fields": {
+        "name": "Variante en el texto"
+      }
+    },
+    {
+        "model": "corpus.metadata",
+        "pk": 6,
+        "fields": {
+          "name": "Variantes de la lengua en norma ISO"
+        }
+    },
+    {
+      "model": "corpus.metadata",
+      "pk": 7,
+      "fields": {
+        "name": "Año del texto"
+      }
+    },
+    {
+        "model": "corpus.metadata",
+        "pk": 8,
+        "fields": {
+          "name": "País/Ubicación de la lengua"
+        }
+    },
+    {
+      "model": "corpus.metadata",
+      "pk": 9,
+      "fields": {
+        "name": "Estado"
+      }
+    },
+    {
+        "model": "corpus.metadata",
+        "pk": 10,
+        "fields": {
+          "name": "División regional"
+        }
+    },
+    {
+      "model": "corpus.metadata",
+      "pk": 11,
+      "fields": {
+        "name": "Comunidad/Localidad a la que pertenece la lengua"
+      }
+    },
+    {
+        "model": "corpus.metadata",
+        "pk": 12,
+        "fields": {
+          "name": "Clasificación genérica"
+        }
+    },
+    {
+      "model": "corpus.metadata",
+      "pk": 13,
+      "fields": {
+        "name": "Notas"
+      }
+    }
+]

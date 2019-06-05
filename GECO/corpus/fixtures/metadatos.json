@@ -10,21 +10,21 @@
         "model": "corpus.metadata",
         "pk": 2,
         "fields": {
-          "name": "Título en lengua"
+          "name": "Título"
         }
     },
     {
       "model": "corpus.metadata",
       "pk": 3,
       "fields": {
-        "name": "Autor/Investigador/Traductor"
+        "name": "Autor"
       }
     },
     {
         "model": "corpus.metadata",
         "pk": 4,
         "fields": {
-          "name": "Editorial del texto"
+          "name": "Editorial"
         }
     },
     {
@@ -45,14 +45,14 @@
       "model": "corpus.metadata",
       "pk": 7,
       "fields": {
-        "name": "Año del texto"
+        "name": "Año"
       }
     },
     {
         "model": "corpus.metadata",
         "pk": 8,
         "fields": {
-          "name": "País/Ubicación de la lengua"
+          "name": "País"
         }
     },
     {
@@ -73,7 +73,7 @@
       "model": "corpus.metadata",
       "pk": 11,
       "fields": {
-        "name": "Comunidad/Localidad a la que pertenece la lengua"
+        "name": "Comunidad a la que pertenece"
       }
     },
     {

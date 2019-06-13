@@ -16,7 +16,7 @@
 <body>
 <div id="fixed-header">
 			<a href="#">
- <img src="{% static 'img/geco_00.jpg' %}" width="48" height="30" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco_00.jpg">
+ <img src="{% static 'img/geco.png' %}" width="31" height="30" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco.png">
  			</a>
 			<a href="#">Inicio</a>
             <a href="#">Miembros</a>
@@ -26,10 +26,13 @@
             <a href="#">Ayuda</a>
 </div>
 
-      {% block content %}  
+{% block sidebar %}
+{% endblock sidebar %}
+
+ {% block content %}  
     <div id="content">      
     </div>
- {% endblock %}  
+ {% endblock content %}
 
 <div id="fixed-footer">
 2019, Grupo de Ingeniería Lingüística - Mail, teléfono-ext, redes

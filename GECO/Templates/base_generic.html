@@ -9,14 +9,14 @@
   <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 <![endif]-->
 
-  {% load static %}
+ {% load static %}
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
 <div id="fixed-header">
 			<a href="#">
- <img src="{% static 'img/geco.png' %}" width="31" height="30" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco.png">
+ <img src="{% static 'img/geco.png' %}" width="38" height="34" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco_00.jpg">
  			</a>
 			<a href="#">Inicio</a>
             <a href="#">Miembros</a>
@@ -35,7 +35,15 @@
  {% endblock content %}
 
 <div id="fixed-footer">
-2019, Grupo de Ingeniería Lingüística - Mail, teléfono-ext, redes
+
+2019, <a href="http://grupos.iingen.unam.mx/iling/es-mx/Paginas/default.aspx" target="_blank">Grupo de Ingeniería Lingüística</a>, &nbsp;
+<a href="mailto:gil@iingen.unam.mx" target="_blank"> <img src="{% static 'img/mail.jpg' %}" width="38" height="38" alt="mail"></a>&nbsp;
+<a href="mailto:gil@iingen.unam.mx">gil@iingen.unam.mx</a>,&nbsp; 
+<img src="{% static 'img/phone.jpg' %}" width="38" height="38"> +52(55)5623-3600 ext. 8808, &nbsp;
+<a href="https://www.facebook.com/ingenieriaLinguistica/" target="_blank"><img src="{% static 'img/face-ico.png' %}" alt="Facebook" width="38" height="38"></a> &nbsp;
+<a href="https://twitter.com/gil_unam" target="_blank"><img src="{% static 'img/twit-ico.png' %}" width="38" height="38" alt="twitter"></a>&nbsp; 
+<a href="https://www.youtube.com/channel/UCnvi-DrR-m_gl-IhtP07dYA" target="_blank"><img src="{% static 'img/you-ico.png' %}" width="38" height="38" alt="Youtube"></a>
+
 </div>
 </body>
 </html>

@@ -1,7 +1,33 @@
 @charset "utf-8";
+
 /* CSS Document */
 
 
+/*
+Name: GECO
+Author: Grupo de Ingeniería Lingüística
+Author URI: http://www.corpus.unam.mx/
+Description: Sitio con aplicaciones específicas para el tratamiento de corpus lingüísticos
+Version: 3
+License: n/a
+Text Domain: Grupo de Ingeniería Lingüística
+Tags: corpus lingüístico
+*/
+
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.15;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0px;
+    font-size: 0.9em;
+    background-color: #FFF;
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
 
 article,
 aside,
@@ -11,112 +37,88 @@ header,
 nav,
 main,
 section {
-	display:block;
-}
-
-
-
-html {
-	font-family:Arial, Helvetica, sans-serif;
-	line-height:1.15;
-	-ms-text-size-adjust: 100%;
-	-webkit-text-size-adjust: 100%;
-}
-
-body {
-	margin:0px;
-    font-size:0.9em;
-    background-color:#FFF;
-	padding-top:60px;
-    padding-bottom:40px;
+    display: block;
 }
 
 a:link {
-  color: green; 
-  background-color: transparent; 
-  text-decoration: none;
+    color: black;
+    background-color: transparent;
+    text-decoration: none;
 }
 
 a:visited {
-  color: pink;
-  background-color: transparent;
-  text-decoration: none;
+    color: black;
+    background-color: transparent;
+    text-decoration: none;
 }
 
 a:hover {
-  color: red;
-  background-color: transparent;
-  text-decoration: underline;
+    color: red;
+    background-color: transparent;
+    text-decoration: underline;
 }
 
 a:active {
-  color: yellow;
-  background-color: transparent;
-  text-decoration: underline;
+    color: yellow;
+    background-color: transparent;
+    text-decoration: underline;
 }
 
 
+/* Header */
 
-/* Header. */
-
-
-#fixed-header, #fixed-footer {
-    width:100%;
-    position:fixed;
-    background:#333;
-    padding:1px 0;
-    color:#fff;
-	
-}
-#fixed-header {
-    left:0;
-	top:0;
-    width:100%;
-    background:#FFF;
-    margin:0px auto;
-    text-align:center;
-}
+#fixed-header,
 #fixed-footer {
-  left:0;
-  bottom:0;
-  width:100%;
-  background:#CCC;
-  color:#000;
-  text-align:center;
+    width: 100%;
+    position: fixed;
+    background: #FFF;
+    padding: 1px 0;
+    color: #000;
+    border: 1px solid #000;
 }
+
+#fixed-header {
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #FFF;
+    margin: 0px auto;
+    color: #000;
+    text-align: center;
+}
+
+
+/* Footer */
+
+#fixed-footer {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #FFF;
+    margin: 0px auto;
+    color: #000;
+    text-align: center;
+}
+
+
+/* Containers */
+
 #content {
-	width:99%;
-    background:#F0F0F0;
-    border:1px solid #000;
-    margin:0px auto;
+    width: 99%;
+    background: #FFF;
+    margin: 0px auto;
 }
-
-
-
-
-
 
 section {
-  margin: 5px;
-  padding: 10px;
-  background-color: lightgrey;
+    margin: 5px;
+    padding: 10px;
+    background-color: lightgrey;
 }
 
 article {
-  margin: 5px;
-  padding: 10px;
-  background-color: white;
-}
-
-
-nav ul {
-  padding: 0;
-  
-}
-
-nav ul li {
-  display: inline;
-  margin: 5px;
+    margin: 5px;
+    padding: 10px;
+    background-color: white;
 }
 
 .wrapper {
@@ -126,11 +128,19 @@ nav ul li {
 }
 
 
+/* Navigation */
+
+nav ul {
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 5px;
+}
 
 
-
-
-
+/* Sidebars */
 
 .sidebar-nav {
     margin-top: 20px;

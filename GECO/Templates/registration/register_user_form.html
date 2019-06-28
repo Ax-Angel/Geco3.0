@@ -1,18 +1,27 @@
 {% extends "base_generic.html" %}
 
-<h1>Creacion de usuarios</h1>
-
-
 {% block content %}
+
+    <div id="content">
+<div class="container_form">
+<h1>Registro de usuario</h1>
+
 {% if user.is_authenticated %}
-  Hi {{ user.username }}!
-  Estas loggueado
-  <p><a href="{% url 'logout' %}">logout</a></p>
+<p>  Hola {{ user.username }}! </p>
+<p>  Estas loggueado </p>
+  <p><a href="{% url 'logout' %}">cerrar sesión</a></p>
 {% else %}
-  <form method="post">
-	  {% csrf_token %}
+
+  <form method="post"> {% csrf_token %}
+    <div class="row">	  
 	  {{ form.as_p }}
+    </div>
+    <div class="row">
   <button type="submit">Enviar</button>
+    </div>
   </form>
+</div>
 {% endif %}
+
+</div>
 {% endblock %}

@@ -1,12 +1,13 @@
 {% extends "base_generic.html" %}
 
-<h1>Creacion de proyectos</h1>
-
-
 {% block content %}
+    <div id="content">
+
+<h1>Creación de proyectos</h1>
+
 {% if user.is_authenticated %}
-  Hi {{ user.username }}!
-  Estas loggueado
+<p>  Hola {{ user.username }}! </p>
+<p>  Estas loggueado </p>
   {% if form.errors %}
     {% for field in form %}
         {% for error in field.errors %}
@@ -21,12 +22,19 @@
         </div>
     {% endfor %}
   {% endif %}
-	<form method="post">
-		  {% csrf_token %}
-		  {{ form.as_p }}
-	<button type="submit">Enviar</button>
-	</form>
 
-  <p><a href="{% url 'logout' %}">logout</a></p>
+<div class="container_form">
+	<form method="post"> {% csrf_token %}
+    <div class="row">		  
+		  {{ form.as_p }}
+    </div>
+    <div class="row">
+	<button type="submit">Enviar</button>
+    </div>
+	</form>
+</div>
+  <p><a href="{% url 'logout' %}">Cerrar sesión</a></p>
+
 {% endif %}
+</div>
 {% endblock %}

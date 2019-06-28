@@ -1,7 +1,10 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<p>Logged out!</p>  
+    <div style="padding-left:30px;" id="content">
+<h1>Sesión cerrada</h1>  
 
-<a href="{% url 'login'%}">Click here to login again.</a>
+<p><a href="{% url 'login'%}">Click aquí para iniciar sesión de nuevo.</a></p>
+
+</div>
 {% endblock %}

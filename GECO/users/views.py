@@ -19,7 +19,10 @@ def register_user_view(request):
             try:
                 usr = User.objects.create_user(username=str(form.cleaned_data['user_name']),
                                             email=str(form.cleaned_data['email']),
-                                            password=str(form.cleaned_data['password']))
+                                            password=str(form.cleaned_data['password']),
+                                            institution=str(form.cleaned_data['institution']),
+                                            degree=str(form.cleaned_data['degree']),
+                                            country=str(form.cleaned_data['country']),)
             
             except:
                 print(traceback.format_exc())

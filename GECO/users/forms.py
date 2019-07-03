@@ -13,3 +13,6 @@ class register_user_form(forms.Form):
     user_name = forms.CharField(label='Nombre de usuario', max_length=100)
     email = forms.EmailField(max_length=100)
     password = forms.CharField(widget=forms.PasswordInput())
+    institution = forms.CharField(max_length=100)
+    degree = forms.CharField(max_length=100)
+    country = forms.CharField(max_length=100)

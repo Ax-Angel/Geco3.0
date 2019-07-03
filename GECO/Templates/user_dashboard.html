@@ -28,18 +28,20 @@
   <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
 																	<!-- Aquí van los contenidos del menú izquierdo -->
   <fieldset>
-    <legend>Mis proyectos</legend>   
-    <a href="?q={{ user.username }}" class="w3-bar-item w3-button">Link 1</a>
-    <a href="#" class="w3-bar-item w3-button">Link 2</a>
-    <a href="#" class="w3-bar-item w3-button">Link 3</a>
+    <legend>Mis proyectos</legend>
+    {% for p in user_projects %}   
+    <a href="?q={{ p }}" class="w3-bar-item w3-button">{{ p }}</a>
+    {% endfor %}
+      
   </fieldset>
 
   <fieldset>
     <legend>Proyectos públicos</legend>
-    <a href="?q={{ user.username }}" class="w3-bar-item w3-button">Link 4</a>
-    <a href="#" class="w3-bar-item w3-button">Link 5</a>
-    <a href="#" class="w3-bar-item w3-button">Link 6</a>
+    {% for p in public_projects %}   
+    <a href="?q={{ p }}" class="w3-bar-item w3-button">{{ p }}</a>
+    {% endfor %}
   </fieldset>
+    
 
 </div>
 

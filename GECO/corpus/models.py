@@ -5,7 +5,7 @@ from .validators import validate_file_extension
 # Create your models here.
 class Project(models.Model):
     name = models.CharField(max_length=100, null=False, unique=True)
-    description = models.CharField(max_length=250, null=False, unique=True)
+    description = models.CharField(max_length=250, null=False, unique=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='owner_normalproject', on_delete=models.CASCADE)
     project_members = models.ManyToManyField(settings.AUTH_USER_MODEL)
     public_status = models.BooleanField(default=0)
@@ -21,6 +21,13 @@ class Project(models.Model):
 
     def get_project_members(self):
         return self.project_members
+
+    def is_user_collaborator(self, user):
+        list_col = self.get_project_members().all()
+        if user in list_col:
+            return True
+        else:
+            return False
 
     def get_owner(self):
         return self.owner

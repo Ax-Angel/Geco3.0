@@ -12,20 +12,36 @@ def index_view(request):
         return render(request, 'index.html', {})
 
 def user_dashboard_view(request):
-    if request.method == 'GET' and request.GET.get('p',False):
-        project = str(request.GET.get('p', ''))
-        projectObj = Project.objects.get(name=project)
-        documents = Document.objects.filter(project=projectObj)
-        result = []
-        for doc in documents:
-            files = File.objects.filter(document=doc)
-            for f in files:
-                result.append(f)
+    if request.user.is_authenticated:
+        if request.method == 'GET' and request.GET.get('q',False):
+            project = str(request.GET.get('q', ''))
+            projectObj = Project.objects.get(name=project)
+            print(projectObj)
+            documents = Document.objects.filter(project=projectObj)
+
+            result = []
+            for doc in documents:
+                files = File.objects.filter(document=doc)
+                for f in files:
+                    result.append(f)
+    
+        else:
+            result = []
+            project = None
     else:
-        result = []
-        project = None
- 
-    return render(request, 'user_dashboard.html', {'project': project, 'documents': result})
+        pass
+
+    user_projects = []
+    public_projects = []
+    all_projects = Project.objects.all()
+    for proj in all_projects:
+        print(proj.is_public())
+        if proj.is_user_collaborator(request.user):
+            user_projects.append(proj)
+        elif proj.is_public():
+            public_projects.append(proj)  
+
+    return render(request, 'user_dashboard.html', {'user_projects': user_projects, 'public_projects': public_projects, 'project': project, 'documents': result})
 
 
 def normal_project_view(request):
@@ -46,11 +62,12 @@ def normal_project_view(request):
                     project.project_members.add(request.user)
                     return redirect('http://localhost:8000/dashboard/')
                 except IntegrityError as e:
-                    return render(request, 'normal_project_form.html', {'form': form})
+                    traceback.print_exc()
+                    return render(request, 'normal_project_form.html', {'form': form, 'error': str(traceback.print_exception)})
     else:
 
         form = normal_project_form()
-    return render(request, 'normal_project_form.html', {'form': form})
+    return render(request, 'normal_project_form.html', {'form': form, 'error': False})
 
 class document_view(FormView): 
     form_class = document_form

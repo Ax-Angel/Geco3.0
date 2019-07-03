@@ -56,7 +56,8 @@ def normal_project_view(request):
                     project = Project(owner = request.user,
                                                 name = str(validatedData['name']),
                                                 public_status = validatedData['is_public'],
-                                                collab_status = validatedData['is_collab']
+                                                collab_status = validatedData['is_collab'],
+                                                parallel_status = validatedData['is_parallel']
                                                 )
                     project.save()
                     project.project_members.add(request.user)

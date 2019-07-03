@@ -10,6 +10,7 @@ class Project(models.Model):
     project_members = models.ManyToManyField(settings.AUTH_USER_MODEL)
     public_status = models.BooleanField(default=0)
     collab_status = models.BooleanField(default=0)
+    parallel_status = models.BooleanField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 

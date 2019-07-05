@@ -17,7 +17,7 @@ def register_user_view(request):
         form = register_user_form(request.POST)
         if form.is_valid():
             try:
-                usr = User.objects.create_user(username=str(form.cleaned_data['user_name']),
+                usr = User.objects.create_user(username=str(form.cleaned_data['username']),
                                             email=str(form.cleaned_data['email']),
                                             password=str(form.cleaned_data['password']),
                                             institution=str(form.cleaned_data['institution']),

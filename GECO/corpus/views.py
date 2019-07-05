@@ -29,7 +29,7 @@ def user_dashboard_view(request):
             result = []
             project = None
     else:
-        pass
+        return redirect('index')
 
     user_projects = []
     public_projects = []
@@ -44,10 +44,10 @@ def user_dashboard_view(request):
     return render(request, 'user_dashboard.html', {'user_projects': user_projects, 'public_projects': public_projects, 'project': project, 'documents': result})
 
 
-def normal_project_view(request):
-    if request.method == 'POST':
-        form = normal_project_form(request.POST)
-        if request.user.is_authenticated:
+def create_project_view(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = create_project_form(request.POST)
             if form.is_valid():
                 validatedData = form.cleaned_data
                 print(validatedData)
@@ -61,14 +61,15 @@ def normal_project_view(request):
                                                 )
                     project.save()
                     project.project_members.add(request.user)
-                    return redirect('http://localhost:8000/dashboard/')
+                    return redirect('dashboard')
                 except IntegrityError as e:
                     traceback.print_exc()
-                    return render(request, 'normal_project_form.html', {'form': form, 'error': str(traceback.print_exception)})
+                    return render(request, 'create_project_form.html', {'form': form, 'error': str(traceback.print_exception)})
+        else:
+            form = create_project_form()
     else:
-
-        form = normal_project_form()
-    return render(request, 'normal_project_form.html', {'form': form, 'error': False})
+        return redirect('index')
+    return render(request, 'create_project_form.html', {'form': form, 'error': False})
 
 class document_view(FormView): 
     form_class = document_form

@@ -20,7 +20,8 @@
 
 <div class="container_form">
 <h1> Iniciar sesión </h1>
-<form method="post" action="{% url 'login' %}"> {% csrf_token %}
+<p>Si aún no tienes cuenta, <a style="color:green;" href="{% url 'register' %}">regístrate</a></p>
+<form method="post"> {% csrf_token %}
 
     <div class="row">
  {{ form.username.label_tag }} <br> {{ form.username }}
@@ -30,11 +31,11 @@
  {{ form.password.label_tag }} <br> {{ form.password }}
 	</div>
     <div style="padding-top:20px;" class="row">
-  <input type="submit" value="login" />
+  <input type="submit" value="Iniciar sesión" />
   <input type="hidden" name="next" value="{{ next }}" />
 </div>
 </form>
-<p><a href="{% url 'password_reset' %}">Cambiar contraseña</a></p>
+<p><a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a></p>
 </div>
 </div>
 

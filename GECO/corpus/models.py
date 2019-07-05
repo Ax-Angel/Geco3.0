@@ -39,9 +39,6 @@ class Project(models.Model):
     def set_status_collab(self, status):
         self.collab_status=status
 
-    def __str__(self):
-        return str(self.name)
-
 class Document(models.Model):
     project = models.ForeignKey(Project, related_name='project_document', on_delete=models.CASCADE)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='owner_document', on_delete=models.CASCADE)

@@ -10,9 +10,9 @@ class register_user_form(forms.Form):
     El modelo de los usuarios se encuentra en django.contrib.auth.models.user
 
     """
-    user_name = forms.CharField(label='Nombre de usuario', max_length=100)
-    email = forms.EmailField(max_length=100)
-    password = forms.CharField(widget=forms.PasswordInput())
-    institution = forms.CharField(max_length=100)
-    degree = forms.CharField(max_length=100)
-    country = forms.CharField(max_length=100)
+    username = forms.CharField(label='Nombre de usuario', max_length=100)
+    email = forms.EmailField(max_length=100, label="Correo electrónico")
+    password = forms.CharField(widget=forms.PasswordInput(), label="Contraseña")
+    institution = forms.CharField(max_length=100, label="Institución")
+    degree = forms.CharField(max_length=100, label="Grado escolar")
+    country = forms.CharField(max_length=100, label="País")

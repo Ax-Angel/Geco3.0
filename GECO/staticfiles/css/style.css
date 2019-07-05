@@ -99,6 +99,23 @@ Tags: corpus lingüístico
         background: #FFF;
         margin: 0px auto;
     }
+
+    #content-index {
+        width: 99%;
+        background: #FFF;
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+
+    #content-index h1 {
+        margin-left: -40%;
+        text-align: center; 
+    }
+
+    #dashboard {
+        margin-left: 9%;
+        margin-right: 9%;
+    }
     
     section {
         margin: 5px;
@@ -172,6 +189,21 @@ Tags: corpus lingüístico
         height: 2em;
         border-radius: 5px;
     }
+
+    .button {
+        font: bold 11px Arial;
+        text-decoration: none;
+        background-color: #EEEEEE;
+        color: #333333;
+        padding: 2px 6px 2px 6px;
+        border-top: 1px solid #CCCCCC;
+        border-right: 1px solid #333333;
+        border-bottom: 1px solid #333333;
+        border-left: 1px solid #CCCCCC;
+        margin-left: 70%;
+      }
+      
+
     /* Style the container */
     
     .container_form {

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'corpus',
     'common',
+    'apps.concordanciaParalelo',
 ]
 
 MIDDLEWARE = [

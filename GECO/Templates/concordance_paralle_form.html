@@ -1,0 +1,404 @@
+{% extends "base_generic.html" %}
+<h1>Concordancia Corpus Paralelo</h1>
+
+{% block sidebar %}
+{% load static %} 
+{% load my_filters %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% block title %}<title>GECO 3/Concordancia Corpus Paralelo</title>{% endblock %}
+
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<![endif]-->
+  <!-- Add additional CSS in static file -->
+ 
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+
+<body>
+
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="leftMenu">
+  <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
+																	<!-- Aquí van los contenidos del menú izquierdo -->
+  <fieldset>
+    <legend>Mis proyectos</legend>
+    {% for p in project %}
+      <a href="?q={{ p.id }}">{{ p.name }}
+      {% if p.public_status %} 
+        <img width="18px" height="18px" src="{% static 'img/publico.jpg' %}">
+      {% else %}
+        <img width="18px" height="18px" src="{% static 'img/personal.jpg' %}">
+      {% endif %}
+      {% if p.parallel_status %} 
+        <img width="18px" height="18px" src="{% static 'img/paral.jpg' %}">
+      {% else %}
+        <img width="18px" height="18px" src="{% static 'img/monol.jpg' %}">
+      {% endif %}
+
+      {% if p.collab_status %} 
+        <img width="18px" height="18px" src="{% static 'img/compartido.jpg' %}">
+      {% else %}
+        <img width="18px" height="18px" src="{% static 'img/personal.jpg' %}">
+      {% endif %}
+      </a>
+    {% endfor %}
+      
+  </fieldset>
+
+  <fieldset>
+    <legend>Proyectos públicos</legend>
+    {% for p in project_public %}   
+      <a href="?q={{ p.id }}">{{ p.name }}
+      {% if p.public_status %} 
+        <img width="18px" height="18px" src="{% static 'img/publico.jpg' %}">
+      {% else %}
+        <img width="18px" height="18px" src="{% static 'img/personal.jpg' %}">
+      {% endif %}
+
+      {% if p.parallel_status %} 
+        <img width="18px" height="18px" src="{% static 'img/paral.jpg' %}">
+      {% else %}
+        <img width="18px" height="18px" src="{% static 'img/monol.jpg' %}">
+      {% endif %}
+
+      {% if p.collab_status %} 
+        <img width="18px" height="18px" src="{% static 'img/compartido.jpg' %}">
+      {% else %}
+        <img width="18px" height="18px" src="{% static 'img/personal.jpg' %}">
+      {% endif %}
+      </a>
+    {% endfor %}
+
+  </fieldset>
+    
+</div>
+
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0;" id="rightMenu">
+  <button onclick="closeRightMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
+																	<!-- Aquí van los contenidos del menú derecho -->
+  <a href="#" class="w3-bar-item w3-button">Editar perfil</a>
+  <a href="{% url 'logout' %}" class="w3-bar-item w3-button">Cerrar sesión</a>
+</div>
+
+<div class="w3-dark-grey">
+  <button class="w3-button dark-grey w3-medium w3-left" onclick="openLeftMenu()">&#9776; Proyectos</button>
+  <button class="w3-button dark-grey w3-medium w3-right" onclick="openRightMenu()">Perfil de usuario &#9776;</button>
+</div>
+
+<script>
+function openLeftMenu() {
+  document.getElementById("leftMenu").style.display = "block";
+}
+
+function closeLeftMenu() {
+  document.getElementById("leftMenu").style.display = "none";
+}
+
+function openRightMenu() {
+  document.getElementById("rightMenu").style.display = "block";
+}
+
+function closeRightMenu() {
+  document.getElementById("rightMenu").style.display = "none";
+}
+</script>
+</body>
+</html>
+{% endblock sidebar %}
+
+{% block content %}
+
+<form method="POST">
+{% csrf_token %}
+  {% if not project_select %}
+    <div align="center">
+      <h1>Concordancias</h1>
+      <h4>Bienvenido a la sección de Concordancia para Corpus Paralelo </h4>
+      <h6>Buscador de palabras en contexto</h6>
+      <br>
+    </div>
+    <br>
+    <div align="center">
+      <p>Seleccione algún proyecto para realizar la Concordancia</p>
+      {% if not user.is_authenticated %}
+        <p>Ud. no está autenticado. Podrá solo visualizar aquellos proyectos que son públicos</p>
+      {% endif %}
+    </div>
+
+  {% else %}
+    <fieldset>
+      <legend><h4>Proyecto: {{project_select.name}}</h4></legend>
+    {% if project_select.description %}
+      <br>
+      <h3>Descripción del proyecto: {{project_select.description}}</h3>
+    {% endif %}
+    <input type="text" name="id_project" id="id_project" value="{{project_select.id}}" hidden/>
+    <br>
+
+    <div>
+      {% if languages%}
+        Idioma de búsqueda:
+        {% for language in languages %}
+            <a href="?q={{project_select.id}}/{{language}}">{{language}}</a>
+        {% endfor %}
+      {% else %}
+        <p>Este proyecto no contiene archivos con metadato: "Lengua" para realizar la concordancia</p>
+      {% endif %}
+      <input type="text" name="lang_select" id="lang_select" value="{{lang_select}}" hidden/>
+    </div>
+    <br>
+
+    <div id="contenido" style="display:{{style_display}};">
+      <div>
+        Petición de búsqueda:
+        <input type="text" name="search_petition" id="search_petition" value="{{search_petition}}" style="width:70%;"/>
+        <a href="javascript:mostrar_cerrar();"><img width="18px" height="18px" src="{% static 'img/ayuda.jpg' %}">Ayuda</a>
+      </div>
+
+      <script>
+        function mostrar_cerrar(){
+          var elem_display = document.getElementById('petition_help').style.display;
+          if (elem_display == 'none'){
+            document.getElementById('petition_help').style.display='';       
+          }
+          else{
+            document.getElementById('petition_help').style.display='none';
+          }
+        }
+      </script>
+
+      <div id="petition_help" style="display:none;">
+        <br>
+        <table style="margin-left: 1%; margin-right: 1%;">
+          <caption>La petición de búsqueda puede ser una o varias palabras. Cada palabra de la petición puede tener un modificador diferente</caption>
+          <tr bgcolor= "#eeeeee" align="left">
+            <th>Modificador</th>
+            <th>Descripción</th>
+            <th>Ejemplo de petición</th>
+            <th>Ejemplos de resultados</th>
+          </tr>
+          <tr>
+            <td>Sin modificador</td>
+            <td>Forma concreta</td>
+            <td>avión</td>
+            <td>Avión, avión</td>
+          </tr>
+          <tr bgcolor= "#eeeeee">
+            <td>Corchetes</td>
+            <td>Buscar lema</td>
+            <td>[vivir]</td>
+            <td>viví, vive, vivió</td>
+          </tr>
+          <tr>
+            <td>Signos menor y mayor qué</td>
+            <td>Buscar  <a href="http://blade10.cs.upc.edu/freeling-old/doc/tagsets/tagset-es.html"  target="_blank" title="ETIQUETAS EAGLES">etiqueta POS</a></td>
+            <td><VMIS3S0></td>
+            <td>dijo, habló, tomó</td>
+          </tr>
+          <tr bgcolor= "#eeeeee">
+            <td>Asterisco</td>
+            <td>Comodín, varias letras</td>
+            <td>*ito</td>
+            <td>chiquito, banquito, chorrito</td>
+          </tr>
+          <tr>
+            <td>Asterisco</td>
+            <td>Comodín, varias letras</td>
+            <td>ca*</td>
+            <td>casa, carro, carnaval</td>
+          </tr>
+          <tr bgcolor= "#eeeeee">
+            <td>Asterisco</td>
+            <td>Comodín, una palabra</td>
+            <td>de * y *</td>
+            <td>de carne y hueso, de oro y plata</td>
+          </tr>
+          <tr>
+            <td>Signo de interrogación</td>
+            <td>Comodín, una letra</td>
+            <td>p?lo</td>
+            <td>palo, pelo, polo</td>
+          </tr>
+          <tr bgcolor= "#eeeeee">
+            <td>Llaves</td>
+            <td>Buscar en una distancia de X palabras</td>
+            <td>un {2} de</td>
+            <td>un servicio público de, un amor platónico de</td>
+          </tr>
+          <tr>
+            <td>Llaves</td>
+            <td>Buscar en una distancia de X a Y palabras</td>
+            <td>un {1-4} de</td>
+            <td>un vaso de, un plato de alimentos de</td>
+          </tr>
+        </table>
+      </div>
+      
+      <div>
+        Alineamiento:
+        {% for a in alignment %}
+          {% if a in alignment_select %}
+            <label id="{{a}}"><input type="checkbox" checked name="alignment" value="{{a}}">{{a}}</label>
+          {% else %}
+            <label id="{{a}}"><input type="checkbox" name="alignment" value="{{a}}">{{a}}</label>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <div style="float:left;">
+        Anotación Posicional:
+        {% for p_a in positional_annotation%}
+          {% with val=p_a.0 check_anot=p_a.1 sty=p_a.2 %}
+          <label id="{{val}}" style="display:{{sty}};"><input type="checkbox" {{check_anot}} 
+            name="positional" value="{{val}}">{{val}}</label>
+          {% endwith %}
+        {% endfor %}
+      </div>
+
+      <div style="float:left; margin-left:5%;">
+        Vista máxima:
+        <select id="max_view" name="max_view" style="width:70px; height:45px;">
+          {% with '- 5 10 25 30 40' as view_value %}
+          {% for v_v in view_value.split %}
+            {% ifequal v_v max_view %}
+              <option value="{{v_v}}" selected>{{v_v}}</option>
+            {% else %}
+              <option value="{{v_v}}">{{v_v}}</option>
+            {% endifequal %}
+          {% endfor %}
+          {% endwith %}
+        </select>
+      </div>
+
+      <div style="float:left; margin-left:5%;">
+        Ventana:
+        {% with 'Vertical Horizontal KWIC' as window_value %}
+        {% for w_v in window_value.split %}
+          {% ifequal w_v window %}
+            <label id="{{w_v}}"><input type="radio" checked name="window" value="{{w_v}}">{{w_v}}</label>
+          {% else %}
+            <label id="{{w_v}}"><input type="radio" name="window" value="{{w_v}}">{{w_v}}</label>
+          {% endifequal %}
+        {% endfor %}
+        {% endwith %}
+      </div>
+     
+      {% if filter_metadato %}
+        <div style="clear:both;">
+          Filtros:
+          <br>
+          {% for f_m in filter_metadato %}
+            {{f_m.1}}
+            <select id="{{f_m.0}}" name="{{f_m.0}}" style="width:150px; height:45px;">
+              
+              {% if filter_select|length == 0 %}
+                <option value="-" selected>-</option>
+                {% for v_f_m in f_m.2 %}
+                  <option value="{{v_f_m}}">{{v_f_m}}</option>
+                {% endfor %}
+
+              {% else %}
+                <option value="-">-</option>
+                {% for v_f_m in f_m.2 %}
+                  {% with k=f_m.0|stringformat:"i" %}      
+                    {% if k in filter_select %}
+                        {% if filter_select|get_item:k == v_f_m %}
+                          <option value="{{v_f_m}}" selected>{{v_f_m}}</option>
+                        {% else %}
+                          <option value="{{v_f_m}}">{{v_f_m}}</option>
+                        {% endif %}
+                    {% else %}
+                      <option value="{{v_f_m}}">{{v_f_m}}</option> 
+                    {% endif %}
+                  {% endwith %}
+                {% endfor %}
+              {% endif %}
+            </select>
+          {% endfor %}       
+        </div>
+      {% endif %}
+
+      <br>
+      
+      <div style="float:right; margin-right:5%;">
+        <input type="submit" value="Buscar" />
+      </div>
+
+    </div>
+    </fieldset>
+  {% endif %}
+</form>
+
+<br>
+<div id="contenido" style="display:{{style_display}};">
+  {% if results|length == 0 %}
+    <p align="center">No hay resultados</p>
+  {% else %}
+    <table style="width:98%; margin-left: 1%; margin-right: 1%;" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
+      {% ifequal window 'Vertical' %}
+        <caption>Resultados: {{visualize|a_sub_b:1}} de {{results|length|a_sub_b:1}}</caption>
+      {% else %}
+        <caption>Resultados: {{visualize}} de {{results|length}}</caption>
+      {% endifequal %}
+      
+      {% for result in results %}
+        {% if forloop.counter0 < visualize %}
+          {% ifequal window 'Vertical' %}
+            {% ifequal forloop.counter0 0 %}
+              <tr bgcolor= "#dfdfdf">
+                {% for x in result %}
+                  <th>{{x}}</th>
+                {% endfor %}
+              </tr>
+            {% else %}
+              <tr>
+                {% for x in result %}
+                  <td>{{x}}</td>
+                {% endfor %}
+              </tr>
+            {% endifequal %}
+          {% endifequal %}
+
+          {% ifequal window 'Horizontal' %}
+            {% for x in result %}
+              {% ifequal forloop.counter0 0 %}
+                <tr bgcolor= "#dfdfdf">
+              {% else %}
+                <tr>
+              {% endifequal %}
+                <td style="font-weight: bold;">{{x.0}}</td>
+                <td>{{x.1}}</td>
+              </tr>
+            {% endfor %}          
+          {% endifequal %}
+
+          {% ifequal window 'KWIC' %}
+            {% for x in result %}
+              {% ifequal forloop.counter0 0 %}
+                <tr bgcolor= "#dfdfdf">
+                  <td style="font-weight: bold;">{{x.0}}</td>
+                  <td style="text-align: right;">{{x.1.0}}</td>
+                  <td style="text-align: center; font-weight: bold;">{{x.1.1}}</td>
+                  <td style="text-align: left;">{{x.1.2}}</td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td style="font-weight: bold;">{{x.0}}</td>
+                  <td colspan="3" style="text-align: center;">{{x.1}}</td>
+                </tr>
+              {% endifequal %}
+            {% endfor %}
+          {% endifequal %}
+        {% endif %}
+      {% endfor %}
+    </table>
+  {% endif %}
+</div>
+<br>
+{% endblock content %}

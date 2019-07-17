@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 from users.views import *
 from corpus.views import *
+from apps.concordanciaParalelo.views import *
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
@@ -27,5 +28,6 @@ urlpatterns = [
     path('dashboard/add_collaborator/', add_collaborator_view, name = 'add_collaborator'),
     path('list_user_projects/', list_user_projects_view, name = 'list_user_proyects'),
     path('dashboard/upload_document/', document_view.as_view(), name = 'document'),
+    path('concordance_paralle/', concordance_paralle_view , name= 'concordance_paralle')
 
 ]

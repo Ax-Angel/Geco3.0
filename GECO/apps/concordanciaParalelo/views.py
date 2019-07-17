@@ -1,0 +1,246 @@
+import traceback
+
+from django.shortcuts import render, redirect
+from django.db.models import Q
+from django.http import HttpResponseBadRequest
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from corpus.models import *
+from users.models import User
+from apps.concordanciaParalelo.function import *
+
+#Show interface for the parallel corpus concordance
+def concordance_paralle_view(request):
+    project = []
+    project_public = []
+    project_select = None
+    languages = []
+    lang_select = ''
+    style_display = 'none'
+    search_petition = ''
+    positional_annotation = [['palabra', 'checked', ''], ['lemma', '', ''], ['POS', '', '']]
+    alignment = []
+    alignment_select = []
+    max_view = '-'
+    visualize = 0
+    window = 'Vertical'
+    filter_metadato = []
+    filter_select = {}
+    results = []
+
+    if request.user.is_authenticated:
+        project = Project.objects.filter(parallel_status = True).filter(Q(owner = request.user) | Q(project_members=request.user)).order_by('id')
+        project_public = Project.objects.filter(parallel_status = True).filter(public_status = True).exclude(Q(owner = request.user) | Q(project_members=request.user)).order_by('id')
+
+    else:
+        project_public = Project.objects.filter(parallel_status = True).filter(public_status = True).order_by('id') 
+    
+    metadata_idioma = Metadata.objects.get(name='Lengua')
+
+    if request.method == 'GET':
+
+        if request.GET.get('q',False):
+            #'q' in request.GET
+            query_string = request.GET.get('q')
+            query_list = query_string.split('/')
+
+            if len(query_list) == 0:
+                return HttpResponseBadRequest('Invalid Search')
+            
+            #In case that select it one project
+            #format of send -> ?q={{project.id}}
+            if len(query_list) >=1:
+                style_display = 'none'
+                project_select = Project.objects.get(id=int(query_list[0]))
+                dct = {'project_select':project_select, 'metadata_idioma':metadata_idioma}
+                if Document.objects.filter(project_id=dct['project_select'].id).exists():
+                    docs = Document.objects.filter(project_id=dct['project_select'].id)
+                    dct.update({'docs':docs})
+                else:
+                    dct.update({'docs':[]})
+                languages = type_search_languages(dct)
+                
+            #In case that select it one search language
+            #format of send -> ?q={{project.id}}/{{lang_select}}
+            if len(query_list) >= 2:
+                style_display = '' 
+                lang_select = query_list[1]
+                dct.update({'lang_select':lang_select})
+                positional_annotation = type_positicional_annotation(dct)                    
+                alignment = type_alignment(dct)
+                project_metadato = Metadata.objects.filter(project=dct['project_select'])
+                dct.update({'project_metadato':project_metadato})
+                filter_metadato = filter_metadata(dct)['filter_metadato']
+                            
+    #Sending search request for concordance
+    elif request.method == 'POST':
+        style_display = ''
+        project_select = Project.objects.get(id=int(request.POST['id_project']))
+        lang_select = request.POST['lang_select']
+        docs = Document.objects.filter(project_id=project_select.id)
+        project_metadato = Metadata.objects.filter(project=project_select)
+        dct = {'project_select':project_select,'metadata_idioma':metadata_idioma, 'docs':docs,
+                'lang_select':lang_select, 'project_metadato':project_metadato}
+        
+        languages = type_search_languages(dct)
+        alignment = type_alignment(dct)
+        alignment_select = request.POST.getlist('alignment')        
+        positional = request.POST.getlist('positional')
+        dct.update({'positional':positional})
+        positional_annotation = type_positicional_annotation(dct)
+        max_view = request.POST['max_view']
+        search_petition = request.POST['search_petition']
+        window = request.POST['window']
+        dct.update({'alignment':alignment})
+        dct.update({'alignment_select':alignment_select})
+        
+        r_f = filter_metadata(dct)
+        filter_metadato = r_f['filter_metadato']
+        id_metadato_filter_project_select = r_f['id_metadato']
+        if id_metadato_filter_project_select:
+            for i in id_metadato_filter_project_select:
+                if str(i) in request.POST.keys() and request.POST[str(i)] and request.POST[str(i)]!='-':
+                    filter_select.update({str(i): request.POST[str(i)]})
+        dct.update({'filter_select':filter_select})
+        dicc_file = find_files(dct)
+        _file = dicc_file['_file']
+        files_corpus = dicc_file['files_corpus']
+        
+        dicc_search = type_search(search_petition)
+        
+        if bool(dicc_search):
+            for i,path in enumerate(_file):
+                pathes = files_corpus[i]
+                results = search_request(path, pathes, alignment_select.copy(), dicc_search, window, results)
+        else:
+            results = []
+        
+        if max_view=='-':
+            visualize = len(results)
+        else:
+            if window == 'Vertical':
+                visualize = int(max_view)+1
+            else:
+                visualize = int(max_view)
+
+    contexto = {'project':project, 'project_public':project_public, 'languages':languages,
+                'project_select':project_select, 'style_display':style_display, 'lang_select':lang_select,
+                'positional_annotation':positional_annotation, 'alignment':alignment, 'visualize':visualize,
+                'alignment_select':alignment_select, 'max_view':max_view, 'window':window, 'filter_metadato':filter_metadato,
+                'filter_select':filter_select, 'search_petition':search_petition, 'results':results}
+
+    return render(request, 'concordance_paralle_form.html', contexto)
+
+#Type of positional annotation
+def type_positicional_annotation(dct):
+    if dct['lang_select'] in ['ES', 'EN', 'FR', 'IT']:
+        positional_annotation = [['palabra', 'checked', ''], ['lemma', '', ''], ['POS', '', '']]
+    elif dct['lang_select'] in ['NH', 'MX', 'OT', 'MY', 'CTU', 'AZG', 'MZ', 'CA', 'EO']:
+        positional_annotation = [['palabra', 'checked', ''], ['lemma', '', 'none'], ['POS', '', 'none']]
+    elif dct['lang_select'] in ['DE']:
+        positional_annotation = [['palabra', 'checked', ''], ['lemma', '', ''], ['POS', '', 'none']]
+    else:
+        positional_annotation = [['palabra', 'checked', ''], ['lemma', '', 'none'], ['POS', '', 'none']]
+    
+    if 'positional' in dct.keys():
+        for p in positional_annotation:
+            if p[0] in dct['positional']:
+                p[1]='checked'
+            else:
+                p[1]=''
+    return positional_annotation
+
+#Type of search languages
+def type_search_languages(dct):
+    languages = set()
+    for d in dct['docs']:
+        files = File.objects.filter(document_id=d.id)
+        for f in files: 
+            data = DocumentMetadataRelation.objects.filter(metadata_id=dct['metadata_idioma'].id, file_id=f.id)
+            if data.exists():
+                languages.add(data[0].data)
+    languages = list(languages)
+    return languages
+
+#Type of alignment
+def type_alignment(dct):
+    alignment = set()
+    for d in dct['docs']:
+        files = File.objects.filter(document_id=d.id)
+        lang = set()
+        for f in files:
+            data = DocumentMetadataRelation.objects.filter(metadata_id=dct['metadata_idioma'].id, file_id=f.id)
+            if data.exists():
+                lang.add(data[0].data)
+        if len(lang)!=0 and dct['lang_select'] in lang:
+            lang.discard(dct['lang_select'])
+            alignment.update(lang)
+    alignment = list(alignment)
+    return alignment
+
+#Find the file types for the concordance
+def find_files(dct):
+    _file = []
+    files_corpus = []
+                
+    for d in dct['docs']:
+        files = File.objects.filter(document_id=d.id)
+        tuple_file = ()
+        array_files = []
+        for f in files:
+            dato = DocumentMetadataRelation.objects.filter(file_id=f.id)
+            
+            if dato.filter(metadata_id=dct['metadata_idioma'].id, data=dct['lang_select']).exists():
+                if dct['filter_select']:
+                    exist_file_filtro = False
+                    for k,v in dct['filter_select'].items():
+                        if dato.filter(metadata_id=int(k), data=v).exists():
+                            exist_file_filtro = True
+                        else:
+                            exist_file_filtro = False
+                    if exist_file_filtro:
+                        tuple_file = (f.file.path, dct['lang_select'])
+                else:
+                    tuple_file = (f.file.path, dct['lang_select'])
+            else:
+                t_aux = ()
+                dato = dato.filter(metadata_id=dct['metadata_idioma'].id)
+                if dato[0].data in dct['alignment_select']:
+                    t_aux = (f.file.path, dato[0].data)
+                    array_files.append(t_aux)
+        if len(tuple_file)!=0 and len(array_files)==len(dct['alignment_select']):
+            _file.append(tuple_file)
+            files_corpus.append(array_files)
+
+    return {'_file':_file, 'files_corpus':files_corpus}
+
+#Show metadata values for filtering
+def filter_metadata(dct):
+    filter_metadato = []
+    id_metadato =[]
+    
+    if dct['project_metadato'].exists():        
+        for p_m in dct['project_metadato']:
+            if p_m.id!=dct['metadata_idioma'].id:
+                id_metadato.append(p_m.id)
+                filter_metadato.append([p_m.id, p_m.name, set()])
+        
+        for d in dct['docs']:
+            files = File.objects.filter(document_id=d.id)
+            for f in files:
+                dato_file = DocumentMetadataRelation.objects.filter(file_id=f.id)
+                if dato_file.filter(metadata_id=dct['metadata_idioma'].id, data=dct['lang_select']).exists():
+                    for _d_f in dato_file:
+                        if _d_f.metadata.id in id_metadato:
+                            i = id_metadato.index(_d_f.metadata.id)
+                            filter_metadato[i][2].add(_d_f.data)
+        j = 0
+        k = len(filter_metadato)
+        while j < k:
+            if filter_metadato[j][2]:
+                filter_metadato[j][2] = list(filter_metadato[j][2])
+                j+=1
+            else:
+                del filter_metadato[j]
+                k-=1
+    return {'filter_metadato':filter_metadato, 'id_metadato':id_metadato}

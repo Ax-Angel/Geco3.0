@@ -2,24 +2,47 @@
 
 {% block content %}
 
-    <div id="content">
-<div class="container_form">
-<h1>Registro de usuario</h1>
+<div id="content">
+  <div class="container_form">
+  <h1>Registro de usuario</h1>
 
-{% if user.is_authenticated %}
-<p>  Hola {{ user.username }}! </p>
-<p>  Estas loggueado </p>
-  <p><a href="{% url 'logout' %}">cerrar sesión</a></p>
-{% else %}
+  {% if user.is_authenticated %}
+  <p>  Hola {{ user.username }}! </p>
+  <p>  Estas loggueado </p>
+    <p><a href="{% url 'logout' %}">cerrar sesión</a></p>
+  {% else %}
 
-  <form method="post"> {% csrf_token %}
-    <div class="row">	  
-	  {{ form.as_p }}
-    </div>
-    <div class="row">
-  <button type="submit">Enviar</button>
-    </div>
-  </form>
+    <form method="post">
+      {% csrf_token %}
+      <div class="row">
+        <p><b>Nombre de ususario*</b></p>	  
+        {{ form.username }}
+      </div>
+      <div class="row">
+        <p><b>Correo Electrónico*</b></p>	  
+        {{ form.email }}
+      </div>
+      <div class="row">
+        <p><b>Contraseña*</b></p>	  
+        {{ form.password }}
+      </div>
+      <div class="row">
+        <p><b>Institución</b></p>	  
+        {{ form.institution }}
+      </div>
+      <div class="row">
+        <p><b>Grado escolar</b></p>	  
+        {{ form.degree }}
+      </div>
+      <div class="row">
+        <p><b>País</b></p>	  
+        {{ form.country }}
+      </div>
+      <p><b>*</b> Significa que los datos son obligatorios para que tu registro sea exitoso</p>
+      <div class="row">
+        <input style="margin-top:1em;" type="submit" value="Enviar" />
+      </div>
+    </form>
 </div>
 {% endif %}
 

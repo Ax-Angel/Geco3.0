@@ -28,6 +28,8 @@ urlpatterns = [
     path('dashboard/add_collaborator/', add_collaborator_view, name = 'add_collaborator'),
     path('list_user_projects/', list_user_projects_view, name = 'list_user_proyects'),
     path('dashboard/upload_document/', document_view.as_view(), name = 'document'),
-    path('concordance_paralle/', concordance_paralle_view , name= 'concordance_paralle')
-
+    path('concordance_paralle/', concordance_paralle_view , name= 'concordance_paralle'),
+    path('export/csv/', export_search_csv, name='export_search_csv'),
+    path('export/xls/', export_search_xls, name='export_search_xls'),
+    path('help/', help_view, name='help_view')
 ]

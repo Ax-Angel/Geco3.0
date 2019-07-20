@@ -1,0 +1,169 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+{% load static %}
+<h2 align="center">Página de Ayuda de GECO</h2>
+
+ <div id="lateral">
+    <div class="menuv" id="menuv">
+        <h3>Ayuda sobre...</h3>
+        <ul>      
+            <li><a href="javascript:Mostrar_a();">Archivos y Carpetas</a></li>
+            <li><a href="javascript:Mostrar_p();">Proyecto</a></li>
+        </ul>
+        <h4><a href="javascript:Mostrar_q();">Quiero preguntar...</a></h4>
+    </div>
+</div>
+
+<script>
+    function Mostrar_a(){
+        document.getElementById('archivo').style.display='';
+        document.getElementById('proyecto').style.display='none';
+        document.getElementById('preguntar').style.display='none';
+    }
+    function Mostrar_p(){
+        document.getElementById('archivo').style.display='none';
+        document.getElementById('proyecto').style.display='';
+        document.getElementById('preguntar').style.display='none';
+    }
+    function Mostrar_q(){
+        document.getElementById('archivo').style.display='none';
+        document.getElementById('proyecto').style.display='none';
+        document.getElementById('preguntar').style.display='';
+    }
+    </script>
+
+<div id="contenido_help">
+
+    <div id="archivo" style="display:none">
+        <h3>Preguntas más frecuentes...</h3>
+        <ul>
+            <li><a href="#tema1">¿Qué formatos de archivos son aceptados?</a></li>
+            <li><a href="#tema2">¿Cómo puedo subir archivos a GECO?</a></li>
+            <li><a href="#tema3">¿Cómo puedo subir archivos que ya tengo organizados en mi PC por carpetas, conservando dicha organización?</a></li>
+            <li><a href="#tema4">¿Cómo uso la funcionalidad de creación de metadatos automáticamente?</a></li>
+            <li><a href="#tema5">¿Cuál es la diferencia entre una carpeta privada y una pública?</a></li>
+            <li><a href="#tema6">¿Qué son los metadatos?</a></li>
+        </ul>
+
+        <h3 id="tema1">¿Qué formatos de archivos son aceptados?</h3>
+        <p style="text-align: justify;">Para mejores resultados se recomienda usar archivos de texto plano (.txt) sin embargo también son aceptados los formatos .pdf y 
+        .docx y el sistema hará lo posible por extraer el texto de estos archivos. También hay soporte limitado para archivos de imágenes. 
+        Puedes subir documentos que en realidad sean imágenes, por ejemplo textos escaneados. GECO contiene un OCR simple que tratará de 
+        extraer el texto, pero para mejores resultados se recomienda usar un OCR comercial antes de subir documentos a GECO.</p>
+
+        <h3 id="tema2">¿Cómo puedo subir archivos a GECO?</h3>
+        <p style="text-align: justify;">Esto se hace desde la sección Gestión de Documentos y Proyectos y existen dos maneras de hacerlo. Para ambas maneras es 
+        requisito estar posicionado primero dentro de una carpeta cualquiera. Los archivos cargados se guardarán dentro de la carpeta activa.</p>
+        <p style="text-align: justify;">Primera manera: Haciendo click en el botón verde "Subir archivos". Se abrirá el diálogo de selección de archivos del sistema 
+        operativo. Se pueden seleccionar uno o más archivos a cargar.</p>
+        <p style="text-align: justify;">Segunda manera: Se arrastra el archivo a cargar y se suelta dentro de la ventana del navegador.</p>
+
+        <h3 id="tema3">¿Cómo puedo subir archivos que ya tengo organizados en mi PC por carpetas, conservando dicha organización?</h3>
+        <p style="text-align: justify;">Para cargar archivos conservando una estructura de carpetas ya existente es necesario comprimir la carpeta padre en un archivo 
+        ZIP (otros formatos como .rar no son aceptados por el momento). Este archivo ZIP, que contiene toda la estructura de carpetas y 
+        archivos, al ser subido a GECO (de la misma manera que se sube un archivo normal) se descomprimirá automáticamente y creará las 
+        carpetas necesarias para replicar la misma estructura.</p>
+
+        <h3 id="tema4">¿Cómo uso la funcionalidad de creación de metadatos automáticamente?</h3>
+        <p style="text-align: justify;">Esta funcionalidad permite asignar metadatos a los archivos usando como base la estructura de carpetas en donde se encuentran 
+        colocados. Por ejemplo supongamos que en una carpeta llamada Mis Documentos existen dos sub-carpetas: Matemáticas y Biología. 
+        Usando esta funcionalidad puede asignarse a todos los documentos de la primer subcarpeta el metadato Materia=Matemáticas y a 
+        todos los de la segunda Materia=Biología. Esto se hace haciendo una relación entre el nombre del metadato y el nivel de las 
+        sub-carpetas. A partir de la carpeta Mis Documentos se considera que las carpetas Matemáticas y Biología se encuentran en el 
+        primer nivel (las sub-carpetas de estas carpetas se considerarían en el segundo nivel y así sucesivamente). El procedimiento 
+        es el siguiente. Posicionado sobre la carpeta Mis Documentos, se elige la opción de creación de metadatos automáticos y en el 
+        diálogo emergente se asocia el metadato Materia al primer nivel escribiendo en el campo de texto correspondiente el nombre del 
+        metadato (Materia).</p>
+        <p style="text-align: justify;">Además de relacionar los metadatos al nivel de la carpeta, se pueden asociar metadatos que se encuentren codificados en el 
+        nombre del archivo en sí, siempre que haya un patrón regular del cual puedan ser extraídos.</p>
+
+        <h3 id="tema5">¿Cuál es la diferencia entre una carpeta privada y una pública?</h3>
+        <p style="text-align: justify;">Una carpeta pública es visible por todos los usuarios del sistema. Esto significa que pueden ver los contenidos y 
+        seleccionar los documentos contenidos en ellas para integrarlos a sus propios proyectos, sin embargo no pueden editar la 
+        carpeta ni colocar documentos en ella. Las carpetas privadas son aquellas que solo son visibles por el creador de la carpeta y 
+        por aquellos usuarios a quienes el propietario les haya dado permiso explícitamente. Hay dos niveles de permisos en el caso de las 
+        carpetas privadas: Propietario y Colaborador. Los usuarios con el permiso de Propietario tienen total control sobre la carpeta, 
+        pueden eliminarla, especificar su nivel de acceso (pública o privada), asignar permisos sobre la carpeta a otros usuarios, más 
+        todos los permisos de Colaborador (el creador de la carpeta tiene el permiso de Propietario). Los usuarios con el permiso de 
+        Colaborador pueden: colocar documentos en la carpeta, editar los metadatos de los documentos de la carpeta y crear sub-carpetas 
+        dentro de la carpeta.</p>
+
+        <h3 id="tema6">¿Qué son los metadatos?</h3>
+        <p style="text-align: justify;">Los archivos pueden tener asociados uno o varios metadatos que permiten proporcionar información acerca de un texto como 
+        por ejemplo su autor, su género literario, su temática o cualquier otro dato relevante. Permiten en primera instancia búsquedas 
+        rápidas gracias a que es posible filtrar el listado de documentos de acuerdo a los valores de sus diversos metadatos. Además pueden 
+        ser explotados por otras aplicaciones, como es el caso del Sistema Automático de Estudios Estilométricos (SAUTEE), cuyo 
+        funcionamiento se basa en la visualización de datos y genera una gráfica con puntos que pueden ser coloreados de acuerdo a estos 
+        valores.</p>
+
+        <br>
+    </div>
+
+    <div id="proyecto" style="display:none;">
+        <h3>Preguntas más frecuentes...</h3>
+        <ul>        
+            <li><a href="#tema7">¿Qué son los proyectos?</a></li>
+            <li><a href="#tema8">¿Cuál es la diferencia entre un proyecto privado y uno público?</a></li>
+            <li><a href="#tema9">¿Cómo creo un proyecto?</a></li>
+            <li><a href="#tema10">¿Cómo edito un proyecto?</a></li>
+        </ul>
+        
+        <h3 id="tema7">¿Qué son los proyectos?</h3>
+        <p style="text-align: justify;">Los proyectos son colecciones que pueden contener documentos de una o más carpetas 
+        (ya sean de carpetas propias o de cualquiera en la cual tengas acceso). 
+        Crear un proyecto es el equivalente a crear un corpus. Las aplicaciones que utilizan GECO para analizar documentos 
+        trabajan sobre los proyectos, no directamente sobre las carpetas tal como existen en el sistema. 
+        Por ejemplo, al ingresar al Sistema Automático para Estudios Estilométricos, el usuario podrá elegir un proyecto 
+        para realizar los análisis, mas no podrá buscar directamente en la estructura de carpetas los documentos. 
+        Los proyectos pueden ser públicos o privados.</p>
+
+        <h3 id="tema8">¿Cuál es la diferencia entre un proyecto privado y uno público?</h3>
+        <p style="text-align: justify;">Los proyectos privados no aparecen en el listado de proyectos cuando un usuario no tiene sesión iniciada. 
+        Por ejemplo al entrar en el Sistema Automático para Estudios Estilométricos (SAUTEE) sin tener una sesión iniciada, 
+        estarán disponibles únicamente los proyectos públicos para su análisis. Por otro lado los proyectos privados solo son 
+        visibles para aquellos que tengan permiso explícito. Hay dos tipos de permiso sobre un proyecto: Propietario y Colaborador. 
+        Los usuarios con permiso de Propietario tienen total control sobre el proyecto: pueden especificar su nivel de acceso y 
+        designar permisos sobre él, además de todos los permisos de Colaborador (el creador del proyecto tiene este permiso siempre). 
+        Los usuarios con permiso de Colaborador pueden editar el conjunto de los documento que conforman el proyecto, es decir pueden 
+        quitar documentos del proyecto y añadir otros.</p>
+
+        <h3 id="tema9">¿Cómo creo un proyecto?</h3>
+        <p style="text-align: justify;">Primero es necesario marcar los documentos que se quieren incorporar al proyecto (usando los cuadros a la izquierda de 
+        cada documento). Se pueden marcar documentos de múltiples carpetas, es decir, la selección no se pierde al cambiar de carpeta. 
+        Una vez que todos los documentos deseados han sido marcados, se oprime el botón "Crear proyecto con los documentos seleccionados". 
+        El sistema pedirá que se capture el nombre del proyecto.</p>
+
+        <h3 id="tema10">¿Cómo edito un proyecto?</h3>
+        <p style="text-align: justify;">Para editar datos como el nombre, descripción y permisos:</p>
+        <p style="text-align: justify;"> - Seleccionar el proyecto de la lista parte inferior izquierda de la pantalla y hacer click sobre el botón "Editar proyecto", 
+        esto abrirá un diálogo con todas las opciones que pueden ser modificadas.</p>
+        <p style="text-align: justify;">Para modificar los documentos que conforman el proyecto:</p>
+        <p style="text-align: justify;">Primero se selecciona el proyecto de la lista de la parte inferior izquierda de la pantalla. Al hacer esto aparecerán en la 
+        lista de la derecha todos los documentos que lo conforman. Mientras el proyecto esté seleccionado, la acción de marcar o desmarcar 
+        un documento de la lista equivaldrá a agregarlo o quitarlo del proyecto. Se puede navegar la estructura de carpetas mientras 
+        un proyecto esté seleccionado, la selección anterior no se perderá. Los cambios no se guardan automáticamente, sino que una vez 
+        que se han hecho los cambios deseados, se debe presionar el botón "Guardar cambios".</p>
+        <br>
+    </div>
+
+    <div id="preguntar" style="display:'';">
+        <h3>¿No encuentras lo que estás buscando?</h3> 
+        <p style="text-align: justify;">Si tienes alguna otra pregunta no contemplada en esta ayuda, o deseas reportar un problema, envíanos un mensaje.</p>
+        <div class="row">
+            <p><b>Tu e-mail*</b></p>	  
+            <input type="text" name="email" id="email"/>
+        </div>
+        <div class="row">
+            <p><b>Tu pregunta*</b></p>
+            <textarea name="pregunta" id="pregunta" rows="10" cols="50" placeholder="Escriba aquí su pregunta..."></textarea>  
+        </div>
+        <div class="row">
+            <input style="margin-top:1em;" type="submit" value="Enviar" />
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -157,3 +157,6 @@ def add_collaborator_view(request):
         error = ""
         form = add_collaborator_form()
     return render(request, 'add_collaborator_form.html', {'form': form, 'error': error})
+
+def help_view(request):
+    return render(request, 'help.html')

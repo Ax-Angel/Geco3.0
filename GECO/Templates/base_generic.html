@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
   {% block title %}<title>GECO 3</title>{% endblock %}
 
 <!--[if lt IE 9]>
@@ -11,18 +12,18 @@
 
  {% load static %}
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="shortcut icon" href="{% static 'img/geco.png' %}" type="image/x-icon" />
 </head>
 
 <body>
 <div id="fixed-header">
-			<a href="#">
+			<a href="{% url 'index' %}">
  <img src="{% static 'img/geco.png' %}" width="38" height="34" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco_00.jpg">
- 			</a>
-			<a href="#">Inicio</a>
-            <a href="#">Proyectos</a>
-            <a href="#">Desarrollos</a>
-            <a href="#">Portales</a>
-            <a href="#">Ayuda</a>
+ 			Inicio</a>
+      <a href="{% url 'dashboard' %}">Proyectos</a>
+      <a href="#">Desarrollos</a>
+      <a href="#">Portales</a>
+      <a href="{% url 'help_view' %}">Ayuda</a>
 </div>
 
 {% block sidebar %}

@@ -1,13 +1,16 @@
 import traceback
+import csv
+import datetime
+import xlwt
 
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from django.http import HttpResponseBadRequest
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponseBadRequest, HttpResponse
 
 from corpus.models import *
 from users.models import User
 from apps.concordanciaParalelo.function import *
+
 
 #Show interface for the parallel corpus concordance
 def concordance_paralle_view(request):
@@ -23,9 +26,10 @@ def concordance_paralle_view(request):
     alignment_select = []
     max_view = '-'
     visualize = 0
-    window = 'Vertical'
+    window = request.session.get('window', 'Vertical')
     filter_metadato = []
     filter_select = {}
+    results = request.session.get('results')
     results = []
 
     if request.user.is_authenticated:
@@ -128,6 +132,9 @@ def concordance_paralle_view(request):
                 'positional_annotation':positional_annotation, 'alignment':alignment, 'visualize':visualize,
                 'alignment_select':alignment_select, 'max_view':max_view, 'window':window, 'filter_metadato':filter_metadato,
                 'filter_select':filter_select, 'search_petition':search_petition, 'results':results}
+    
+    request.session['window'] = window
+    request.session['results'] = results
 
     return render(request, 'concordance_paralle_form.html', contexto)
 
@@ -244,3 +251,67 @@ def filter_metadata(dct):
                 del filter_metadato[j]
                 k-=1
     return {'filter_metadato':filter_metadato, 'id_metadato':id_metadato}
+
+def export_search_csv(request):
+    currentDT = datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
+    name_file = currentDT+".csv"
+    response = HttpResponse(content_type='text/csv')  
+    response['Content-Disposition'] = 'attachment; filename='+name_file 
+    writer = csv.writer(response)
+    response.write(u'\ufeff'.encode('utf8'))
+    window = request.session.get('window')
+    results = request.session.get('results')
+    if window == 'Vertical':
+        for r in results:
+             writer.writerow(r)   
+    elif window == 'Horizontal':
+        for r in results:
+            for x in r:
+                writer.writerow(x)       
+    elif window == 'KWIC':
+        for r in results:
+            for i,x in enumerate(r):
+                if i==0:
+                    writer.writerow([x[0], x[1][0], x[1][1], x[1][2]])
+                else:
+                    writer.writerow(x)
+    return response  
+
+def export_search_xls(request):
+    currentDT = datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
+    name_file = currentDT+".xls"
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename='+name_file 
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Concordancia')
+    window = request.session.get('window')
+    results = request.session.get('results')
+    row = 0
+    if window == 'Vertical':
+        for res in results:
+            for i,x in enumerate(res):
+                ws.write(row, i, x)
+            row += 1
+    elif window == 'Horizontal':
+        for res in results:
+            for r in res:
+                for i,x in enumerate(r):
+                    ws.write(row, i, x)
+                row += 1            
+    elif window == 'KWIC':
+        for res in results:
+            for i,r in enumerate(res):
+                if i==0:
+                    for j,x in enumerate(r):
+                        if j==0:
+                            ws.write(row, j, x)
+                        else:
+                            for k,y in enumerate(x):
+                                ws.write(row, k+1, y)
+                else:
+                    for j,x in enumerate(r):
+                        ws.write(row, j, x)
+                row += 1
+    wb.save(response)
+    return response
+

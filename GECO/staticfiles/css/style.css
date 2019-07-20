@@ -181,6 +181,11 @@ Tags: corpus lingüístico
         cursor: pointer;
         float: left;
     }
+
+    #submit_cancel {
+        background-color: red;
+        margin-right: 1%;
+    }
     
     input[type=text],
     input[type=password],
@@ -203,6 +208,17 @@ Tags: corpus lingüístico
         margin-left: 70%;
       }
       
+    .button_export {
+        font: bold 11px Arial;
+        text-decoration: none;
+        background-color: #EEEEEE;
+        color: #333333;
+        padding: 9px 10px 9px 10px;
+        border-top: 1px solid #CCCCCC;
+        border-right: 1px solid #333333;
+        border-bottom: 1px solid #333333;
+        border-left: 1px solid #CCCCCC;
+    }
 
     /* Style the container */
     
@@ -243,4 +259,23 @@ Tags: corpus lingüístico
             width: 100%;
             margin-top: 0;
         }
+    }
+
+    #lateral {
+        float:left;
+        width:20%;
+        margin-left: 10%;
+    }
+    .menuv{
+        margin: 5px 10px 20px 20px;   
+    }
+    #contenido_help {
+        float:left;
+        width:60%;
+        padding: 5px 0 20px 0;
+        margin-right: 10%;
+    }
+    textarea[name=pregunta]{
+        width: 80%;
+        border-radius: 5px;
     }

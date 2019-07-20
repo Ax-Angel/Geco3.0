@@ -38,8 +38,9 @@
         <p><b>País</b></p>	  
         {{ form.country }}
       </div>
-      <p><b>*</b> Significa que los datos son obligatorios para que tu registro sea exitoso</p>
+      <p><b>*</b>Campos obligatorios para que su registro sea exitoso</p>
       <div class="row">
+        <input style="margin-top:1em;" type="submit" id="submit_cancel" onClick ="window.location.href = '{% url 'index' %}'" value="Cancelar" />
         <input style="margin-top:1em;" type="submit" value="Enviar" />
       </div>
     </form>

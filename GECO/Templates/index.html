@@ -14,7 +14,7 @@
         <img src="{% static 'img/geco.png' %}" width="204" height="186" align="left">
         <p>&nbsp;</p>
         <h3>¡Es necesario tener una cuenta para usar GECO!</h3>
-        <input style="margin-right:2px;" type="submit" value="Registrar" onClick ="window.location.href = '{% url 'register' %}'" />
+        <input style="margin-right:2px;" type="submit" id="submit_cancel" value="Registrar" onClick ="window.location.href = '{% url 'register' %}'" />
         &nbsp;
         <input type="submit" value="Iniciar sesión" onClick ="window.location.href = '{% url 'login' %}'" />
         <p>&nbsp;</p>

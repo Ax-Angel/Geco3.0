@@ -149,19 +149,28 @@
     </div>
 
     <div id="preguntar" style="display:'';">
-        <h3>¿No encuentras lo que estás buscando?</h3> 
-        <p style="text-align: justify;">Si tienes alguna otra pregunta no contemplada en esta ayuda, o deseas reportar un problema, envíanos un mensaje.</p>
-        <div class="row">
-            <p><b>Tu e-mail*</b></p>	  
-            <input type="text" name="email" id="email"/>
-        </div>
-        <div class="row">
-            <p><b>Tu pregunta*</b></p>
-            <textarea name="pregunta" id="pregunta" rows="10" cols="50" placeholder="Escriba aquí su pregunta..."></textarea>  
-        </div>
-        <div class="row">
-            <input style="margin-top:1em;" type="submit" value="Enviar" />
-        </div>
+        <form method="post">
+        {% csrf_token %}
+            <h3>¿No encuentras lo que estás buscando?</h3> 
+            <p style="text-align: justify;">Si tienes alguna otra pregunta no contemplada en esta ayuda, o deseas reportar un problema, envíanos un mensaje.</p>
+            <div class="row">
+                <p><b>{{form.name.label}}</b></p>	  
+                {{form.name}}{{form.name.errors}}
+            </div>
+            <div class="row">
+                <p><b>{{form.email.label}}*</b></p>	  
+                {{form.email}}{{form.email.errors}} 
+            </div>
+            <div class="row">
+                <p><b>{{form.message.label}}*</b></p>	  
+                <div id="pregunta">{{form.message}}</div>{{form.message.errors}} 
+            </div>
+            <div class="row">
+                <input style="margin-top:1em;" type="submit" value="Enviar" />
+            </div>
+            <br>
+        </form>
+        <br>
     </div>
 
 </div>

@@ -275,7 +275,7 @@ Tags: corpus lingüístico
         padding: 5px 0 20px 0;
         margin-right: 10%;
     }
-    textarea[name=pregunta]{
+    #pregunta{
         width: 80%;
         border-radius: 5px;
     }

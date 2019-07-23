@@ -14,3 +14,9 @@ class add_collaborator_form(forms.Form):
 class document_form(forms.Form):
 	project_name = forms.CharField(max_length=100)
 	files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+ 
+class contact_form(forms.Form):
+	name = forms.CharField(label='Su nombre*', max_length=50)
+	email = forms.EmailField(label='Su e-mail*')
+	message = forms.CharField(label='Su pregunta*', widget=forms.Textarea(attrs={'rows': '10','cols': '50', 
+                                                                              'placeholder': 'Escriba aquí su pregunta...'}))

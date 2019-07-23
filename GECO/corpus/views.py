@@ -5,6 +5,8 @@ from django.db import IntegrityError
 import traceback
 from users.models import User
 from django.views.generic.edit import FormView
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
 
 # Create your views here.
 def index_view(request):
@@ -159,4 +161,21 @@ def add_collaborator_view(request):
     return render(request, 'add_collaborator_form.html', {'form': form, 'error': error})
 
 def help_view(request):
-    return render(request, 'help.html')
+    if request.method == 'POST':
+        form = contact_form(request.POST)
+        if form.is_valid():
+            validatedData = form.cleaned_data
+            name = validatedData['name']
+            from_email = validatedData['email']
+            message = validatedData['message']
+            
+            subject='Mensaje de usuario GECO'
+            body_message = 'Usted ha recibido un nuevo mensaje de un usuario'+'\n'+'Nombre: '+name+'\n'+'Correo elecrónico: '+from_email+'\n'+'Mensaje: '+message
+            email = EmailMessage(subject, body_message, from_email, to=['gil@iingen.unam.mx'], 
+                                 reply_to=[from_email])
+            email.send()
+            
+    form = contact_form()
+    return render(request, 'help.html', {'form': form})
+    
+    

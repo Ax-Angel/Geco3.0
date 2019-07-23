@@ -13,13 +13,21 @@
     <div>
         <img src="{% static 'img/geco.png' %}" width="204" height="186" align="left">
         <p>&nbsp;</p>
-        <h3>¡Es necesario tener una cuenta para usar GECO!</h3>
-        <input style="margin-right:2px;" type="submit" id="submit_cancel" value="Registrar" onClick ="window.location.href = '{% url 'register' %}'" />
-        &nbsp;
-        <input type="submit" value="Iniciar sesión" onClick ="window.location.href = '{% url 'login' %}'" />
+        {% if user.is_authenticated %}
+            <br>
+            &nbsp;
+            <input style="margin-right:2px;" type="submit" id="submit_cancel" value="Cerrar sesión" onClick ="window.location.href = '{% url 'logout' %}'" />
+            <br>
+            <br>
+        {% else %}
+            <h3>¡Es necesario tener una cuenta para usar GECO!</h3>
+            <input style="margin-right:2px;" type="submit" id="submit_cancel" value="Registrar" onClick ="window.location.href = '{% url 'register' %}'" />
+            &nbsp;
+            <input type="submit" value="Iniciar sesión" onClick ="window.location.href = '{% url 'login' %}'" />
+        {% endif %}
         <p>&nbsp;</p>
         <p>&nbsp;</p>
-        <p><a href="http://www.iling.unam.mx/corpus/" target="_blank">Visita el sitio de los corpus lingüísticos de la UNAM</a>      </p>
+        <p><a href="http://www.iling.unam.mx/corpus/" target="_blank">Visite el sitio de los corpus lingüísticos de la UNAM</a>      </p>
         <p>&nbsp;</p>
         <p>&nbsp;</p>
     </div>

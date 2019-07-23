@@ -27,7 +27,7 @@
   <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
 																	<!-- Aquí van los contenidos del menú izquierdo -->
   <fieldset>
-    <legend>Mis proyectos</legend>
+    <legend><b>Mis proyectos</b></legend>
     {% for p in project %}
       <a href="?q={{ p.id }}">{{ p.name }}
       {% if p.public_status %} 
@@ -52,7 +52,7 @@
   </fieldset>
 
   <fieldset>
-    <legend>Proyectos públicos</legend>
+    <legend><b>Proyectos públicos</b></legend>
     {% for p in project_public %}   
       <a href="?q={{ p.id }}">{{ p.name }}
       {% if p.public_status %} 
@@ -82,16 +82,17 @@
 <div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0;" id="rightMenu">
   <button onclick="closeRightMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
 																	<!-- Aquí van los contenidos del menú derecho -->
-  <a href="#" class="w3-bar-item w3-button">Editar perfil</a>
-  <a href="{% url 'logout' %}" class="w3-bar-item w3-button">Cerrar sesión</a>
+  {% if user.is_authenticated %}
+    <a href="#" class="w3-bar-item w3-button">Editar perfil</a>
+    <a href="{% url 'logout' %}" class="w3-bar-item w3-button">Cerrar sesión</a>
+  {% else %}
+    <a href="{% url 'login' %}" class="w3-bar-item w3-button">Iniciar sesión</a>
+  {% endif %}
 </div>
 
 <div class="w3-dark-grey">
   <button class="w3-button dark-grey w3-medium w3-left" onclick="openLeftMenu()">&#9776; Proyectos</button>
-  {% if user.is_authenticated %}
-    <button class="w3-button dark-grey w3-medium w3-right" onclick="openRightMenu()">Perfil de usuario &#9776;</button>
-  {% endif %}
-  
+  <button class="w3-button dark-grey w3-medium w3-right" onclick="openRightMenu()">Perfil de usuario &#9776;</button>
 </div>
 
 <script>
@@ -342,6 +343,7 @@ function closeRightMenu() {
 <div id="contenido" style="display:{{style_display}};">
   {% if results|length == 0 %}
     <p align="center">No hay resultados</p>
+    &nbsp;
   {% else %}
     <div style="margin-left: 1%;">
       <a class="button_export" href="{% url 'export_search_csv' %}"><img width="18px" height="18px" src="{% static 'img/down.jpg' %}"> CSV</a>

@@ -31,7 +31,7 @@ def user_dashboard_view(request):
             result = []
             project = None
     else:
-        return redirect('index')
+        return redirect('login')
 
     user_projects = []
     public_projects = []

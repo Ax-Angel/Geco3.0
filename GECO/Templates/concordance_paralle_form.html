@@ -137,17 +137,17 @@ function closeRightMenu() {
 
   {% else %}
     <fieldset>
-      <legend><h4>Proyecto: {{project_select.name}}</h4></legend>
+      <legend><h4><b>Proyecto: </b>{{project_select.name}}</h4></legend>
     {% if project_select.description %}
       <br>
-      <h3>Descripción del proyecto: {{project_select.description}}</h3>
+      <p><b>Descripción del proyecto: </b>{{project_select.description}}</p>
     {% endif %}
     <input type="text" name="id_project" id="id_project" value="{{project_select.id}}" hidden/>
     <br>
 
     <div>
       {% if languages%}
-        Idioma de búsqueda:
+        <b>Idioma de búsqueda:</b>
         {% for language in languages %}
             <a href="?q={{project_select.id}}/{{language}}">{{language}}</a>
         {% endfor %}
@@ -160,9 +160,13 @@ function closeRightMenu() {
 
     <div id="contenido" style="display:{{style_display}};">
       <div>
-        Petición de búsqueda:
-        <input type="text" name="search_petition" id="search_petition" value="{{search_petition}}" style="width:70%;"/>
-        <a href="javascript:mostrar_cerrar();"><img width="18px" height="18px" src="{% static 'img/ayuda.jpg' %}">Ayuda</a>
+        <b>Petición de búsqueda:</b>
+        <div style="display: inline">
+          <input type="text" name="search_petition" id="search_petition" value="{{search_petition}}" style="width:70%;"/>
+        </div>
+        <div style="display: inline-block;">
+          <a href="javascript:mostrar_cerrar();"><img width="18px" height="18px" src="{% static 'img/ayuda.jpg' %}">Ayuda</a>
+        </div>
       </div>
 
       <script>
@@ -243,95 +247,100 @@ function closeRightMenu() {
           </tr>
         </table>
       </div>
-      
+    
       <div>
-        Alineamiento:
-        {% for a in alignment %}
-          {% if a in alignment_select %}
-            <label id="{{a}}"><input type="checkbox" checked name="alignment" value="{{a}}">{{a}}</label>
-          {% else %}
-            <label id="{{a}}"><input type="checkbox" name="alignment" value="{{a}}">{{a}}</label>
-          {% endif %}
-        {% endfor %}
-      </div>
-
-      <div style="float:left;">
-        Anotación Posicional:
-        {% for p_a in positional_annotation%}
-          {% with val=p_a.0 check_anot=p_a.1 sty=p_a.2 %}
-          <label id="{{val}}" style="display:{{sty}};"><input type="checkbox" {{check_anot}} 
-            name="positional" value="{{val}}">{{val}}</label>
-          {% endwith %}
-        {% endfor %}
-      </div>
-
-      <div style="float:left; margin-left:5%;">
-        Vista máxima:
-        <select id="max_view" name="max_view" style="width:70px; height:45px;">
-          {% with '- 5 10 25 30 40' as view_value %}
-          {% for v_v in view_value.split %}
-            {% ifequal v_v max_view %}
-              <option value="{{v_v}}" selected>{{v_v}}</option>
-            {% else %}
-              <option value="{{v_v}}">{{v_v}}</option>
-            {% endifequal %}
+        <div style="display: inline-block;">
+          <b>Anotación Posicional:</b>
+          {% for p_a in positional_annotation%}
+            {% with val=p_a.0 check_anot=p_a.1 sty=p_a.2 %}
+            <label id="{{val}}" style="display:{{sty}};"><input type="checkbox" {{check_anot}} 
+              name="positional" value="{{val}}">{{val}}</label>
+            {% endwith %}
           {% endfor %}
-          {% endwith %}
-        </select>
+        </div>
+
+        <div style="display: inline-block; margin-left:1%;">
+          <b>Alineamiento:</b>
+          {% for a in alignment %}
+            {% if a in alignment_select %}
+              <label id="{{a}}"><input type="checkbox" checked name="alignment" value="{{a}}">{{a}}</label>
+            {% else %}
+              <label id="{{a}}"><input type="checkbox" name="alignment" value="{{a}}">{{a}}</label>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
 
-      <div style="float:left; margin-left:5%;">
-        Ventana:
-        {% with 'Vertical Horizontal KWIC' as window_value %}
-        {% for w_v in window_value.split %}
-          {% ifequal w_v window %}
-            <label id="{{w_v}}"><input type="radio" checked name="window" value="{{w_v}}">{{w_v}}</label>
-          {% else %}
-            <label id="{{w_v}}"><input type="radio" name="window" value="{{w_v}}">{{w_v}}</label>
-          {% endifequal %}
-        {% endfor %}
-        {% endwith %}
-      </div>
-     
       {% if filter_metadato %}
-        <div style="clear:both;">
-          Filtros:
+        <div>
+          <b>Filtros:</b>
           <br>
           {% for f_m in filter_metadato %}
-            {{f_m.1}}
-            <select id="{{f_m.0}}" name="{{f_m.0}}" style="width:150px; height:45px;">
-              
-              {% if filter_select|length == 0 %}
-                <option value="-" selected>-</option>
-                {% for v_f_m in f_m.2 %}
-                  <option value="{{v_f_m}}">{{v_f_m}}</option>
-                {% endfor %}
+            <div style="display: inline-block;">
+              {{f_m.1}}
+              <select id="{{f_m.0}}" name="{{f_m.0}}" style="width:150px; height:45px;">
+                
+                {% if filter_select|length == 0 %}
+                  <option value="-" selected>-</option>
+                  {% for v_f_m in f_m.2 %}
+                    <option value="{{v_f_m}}">{{v_f_m}}</option>
+                  {% endfor %}
 
-              {% else %}
-                <option value="-">-</option>
-                {% for v_f_m in f_m.2 %}
-                  {% with k=f_m.0|stringformat:"i" %}      
-                    {% if k in filter_select %}
-                        {% if filter_select|get_item:k == v_f_m %}
-                          <option value="{{v_f_m}}" selected>{{v_f_m}}</option>
-                        {% else %}
-                          <option value="{{v_f_m}}">{{v_f_m}}</option>
-                        {% endif %}
-                    {% else %}
-                      <option value="{{v_f_m}}">{{v_f_m}}</option> 
-                    {% endif %}
-                  {% endwith %}
-                {% endfor %}
-              {% endif %}
-            </select>
+                {% else %}
+                  <option value="-">-</option>
+                  {% for v_f_m in f_m.2 %}
+                    {% with k=f_m.0|stringformat:"i" %}      
+                      {% if k in filter_select %}
+                          {% if filter_select|get_item:k == v_f_m %}
+                            <option value="{{v_f_m}}" selected>{{v_f_m}}</option>
+                          {% else %}
+                            <option value="{{v_f_m}}">{{v_f_m}}</option>
+                          {% endif %}
+                      {% else %}
+                        <option value="{{v_f_m}}">{{v_f_m}}</option> 
+                      {% endif %}
+                    {% endwith %}
+                  {% endfor %}
+                {% endif %}
+              </select>
+            </div>
           {% endfor %}       
         </div>
       {% endif %}
-
+    
       <br>
-      
-      <div style="float:right; margin-right:5%;">
-        <input type="submit" value="Buscar" />
+      <div>
+        <div style="display: inline-block;">
+          <input type="submit" value="Buscar" />
+        </div>
+
+        <div style="display: inline-block; margin-left:1%;">
+          <b>Vista máxima:</b>
+          <select id="max_view" name="max_view" style="width:70px; height:45px;">
+            {% with '- 5 10 25 30 40' as view_value %}
+            {% for v_v in view_value.split %}
+              {% ifequal v_v max_view %}
+                <option value="{{v_v}}" selected>{{v_v}}</option>
+              {% else %}
+                <option value="{{v_v}}">{{v_v}}</option>
+              {% endifequal %}
+            {% endfor %}
+            {% endwith %}
+          </select>
+        </div>
+
+        <div style="display: inline-block; margin-left:1%;">
+          <b>Ventana:</b>
+          {% with 'Vertical Horizontal KWIC' as window_value %}
+          {% for w_v in window_value.split %}
+            {% ifequal w_v window %}
+              <label id="{{w_v}}"><input type="radio" checked name="window" value="{{w_v}}">{{w_v}}</label>
+            {% else %}
+              <label id="{{w_v}}"><input type="radio" name="window" value="{{w_v}}">{{w_v}}</label>
+            {% endifequal %}
+          {% endfor %}
+          {% endwith %}
+        </div>
       </div>
 
     </div>
@@ -342,72 +351,77 @@ function closeRightMenu() {
 <br>
 <div id="contenido" style="display:{{style_display}};">
   {% if results|length == 0 %}
-    <p align="center">No hay resultados</p>
-    &nbsp;
+    <div>
+      <p align="center" style="color:red;"><b>No hay resultados</b></p>
+      <br>
+      <br>
+    </div>
   {% else %}
     <div style="margin-left: 1%;">
       <a class="button_export" href="{% url 'export_search_csv' %}"><img width="18px" height="18px" src="{% static 'img/down.jpg' %}"> CSV</a>
       <a class="button_export" href="{% url 'export_search_xls' %}"><img width="18px" height="18px" src="{% static 'img/down.jpg' %}"> EXCEL</a>
     </div>
     
-    <table style="width:98%; margin-left: 1%; margin-right: 1%;" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
-      {% ifequal window 'Vertical' %}
-        <caption>Resultados: {{visualize|a_sub_b:1}} de {{results|length|a_sub_b:1}}</caption>
-      {% else %}
-        <caption>Resultados: {{visualize}} de {{results|length}}</caption>
-      {% endifequal %}
-      
-      {% for result in results %}
-        {% if forloop.counter0 < visualize %}
-          {% ifequal window 'Vertical' %}
-            {% ifequal forloop.counter0 0 %}
-              <tr bgcolor= "#dfdfdf">
-                {% for x in result %}
-                  <th>{{x}}</th>
-                {% endfor %}
-              </tr>
-            {% else %}
-              <tr>
-                {% for x in result %}
-                  <td>{{x}}</td>
-                {% endfor %}
-              </tr>
+    <div>
+      <table style="width:98%; margin-left: 1%; margin-right: 1%;" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
+        {% ifequal window 'Vertical' %}
+          <caption>Resultados: {{visualize|a_sub_b:1}} de {{results|length|a_sub_b:1}}</caption>
+        {% else %}
+          <caption>Resultados: {{visualize}} de {{results|length}}</caption>
+        {% endifequal %}
+        
+        {% for result in results %}
+          {% if forloop.counter0 < visualize %}
+            {% ifequal window 'Vertical' %}
+              {% ifequal forloop.counter0 0 %}
+                <tr bgcolor= "#dfdfdf">
+                  {% for x in result %}
+                    <th>{{x}}</th>
+                  {% endfor %}
+                </tr>
+              {% else %}
+                <tr>
+                  {% for x in result %}
+                    <td>{{x}}</td>
+                  {% endfor %}
+                </tr>
+              {% endifequal %}
             {% endifequal %}
-          {% endifequal %}
 
-          {% ifequal window 'Horizontal' %}
-            {% for x in result %}
-              {% ifequal forloop.counter0 0 %}
-                <tr bgcolor= "#dfdfdf">
-              {% else %}
-                <tr>
-              {% endifequal %}
-                <td style="font-weight: bold;">{{x.0}}</td>
-                <td>{{x.1}}</td>
-              </tr>
-            {% endfor %}          
-          {% endifequal %}
+            {% ifequal window 'Horizontal' %}
+              {% for x in result %}
+                {% ifequal forloop.counter0 0 %}
+                  <tr bgcolor= "#dfdfdf">
+                {% else %}
+                  <tr>
+                {% endifequal %}
+                  <td style="font-weight: bold;">{{x.0}}</td>
+                  <td>{{x.1}}</td>
+                </tr>
+              {% endfor %}          
+            {% endifequal %}
 
-          {% ifequal window 'KWIC' %}
-            {% for x in result %}
-              {% ifequal forloop.counter0 0 %}
-                <tr bgcolor= "#dfdfdf">
-                  <td style="font-weight: bold;">{{x.0}}</td>
-                  <td style="text-align: right;">{{x.1.0}}</td>
-                  <td style="text-align: center; font-weight: bold;">{{x.1.1}}</td>
-                  <td style="text-align: left;">{{x.1.2}}</td>
-                </tr>
-              {% else %}
-                <tr>
-                  <td style="font-weight: bold;">{{x.0}}</td>
-                  <td colspan="3" style="text-align: center;">{{x.1}}</td>
-                </tr>
-              {% endifequal %}
-            {% endfor %}
-          {% endifequal %}
-        {% endif %}
-      {% endfor %}
-    </table>
+            {% ifequal window 'KWIC' %}
+              {% for x in result %}
+                {% ifequal forloop.counter0 0 %}
+                  <tr bgcolor= "#dfdfdf">
+                    <td style="font-weight: bold;">{{x.0}}</td>
+                    <td style="text-align: right;">{{x.1.0}}</td>
+                    <td style="text-align: center; font-weight: bold;">{{x.1.1}}</td>
+                    <td style="text-align: left;">{{x.1.2}}</td>
+                  </tr>
+                {% else %}
+                  <tr>
+                    <td style="font-weight: bold;">{{x.0}}</td>
+                    <td colspan="3" style="text-align: center;">{{x.1}}</td>
+                  </tr>
+                {% endifequal %}
+              {% endfor %}
+            {% endifequal %}
+          {% endif %}
+        {% endfor %}
+      </table>
+    </div>
   {% endif %}
 </div>
 <br>

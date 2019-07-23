@@ -276,18 +276,18 @@ function closeRightMenu() {
           <b>Filtros:</b>
           <br>
           {% for f_m in filter_metadato %}
-            <div style="display: inline-block;">
-              {{f_m.1}}
-              <select id="{{f_m.0}}" name="{{f_m.0}}" style="width:150px; height:45px;">
+            <div class="select-wrap" style="display: inline-block;">
+              <label>{{f_m.1}}</label>
+              <select id="{{f_m.0}}" name="{{f_m.0}}">
                 
                 {% if filter_select|length == 0 %}
-                  <option value="-" selected>-</option>
+                  <option value="Seleccione..." selected>Seleccione...</option>
                   {% for v_f_m in f_m.2 %}
                     <option value="{{v_f_m}}">{{v_f_m}}</option>
                   {% endfor %}
 
                 {% else %}
-                  <option value="-">-</option>
+                  <option value="Seleccione...">Seleccione...</option>
                   {% for v_f_m in f_m.2 %}
                     {% with k=f_m.0|stringformat:"i" %}      
                       {% if k in filter_select %}
@@ -308,15 +308,14 @@ function closeRightMenu() {
         </div>
       {% endif %}
     
-      <br>
-      <div>
+      <div><br>
         <div style="display: inline-block;">
           <input type="submit" value="Buscar" />
         </div>
 
-        <div style="display: inline-block; margin-left:1%;">
-          <b>Vista máxima:</b>
-          <select id="max_view" name="max_view" style="width:70px; height:45px;">
+        <div class="select-wrap" style="display: inline-block; margin-left:1%; width:100px;">
+          <label><b>Vista máxima</b></label> 
+          <select id="max_view" name="max_view">
             {% with '- 5 10 25 30 40' as view_value %}
             {% for v_v in view_value.split %}
               {% ifequal v_v max_view %}
@@ -361,7 +360,7 @@ function closeRightMenu() {
       <a class="button_export" href="{% url 'export_search_csv' %}"><img width="18px" height="18px" src="{% static 'img/down.jpg' %}"> CSV</a>
       <a class="button_export" href="{% url 'export_search_xls' %}"><img width="18px" height="18px" src="{% static 'img/down.jpg' %}"> EXCEL</a>
     </div>
-    
+
     <div>
       <table style="width:98%; margin-left: 1%; margin-right: 1%;" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
         {% ifequal window 'Vertical' %}

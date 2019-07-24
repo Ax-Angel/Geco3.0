@@ -215,7 +215,8 @@ def find_files(dct):
                 if dato[0].data in dct['alignment_select']:
                     t_aux = (f.file.path, dato[0].data)
                     array_files.append(t_aux)
-        if len(tuple_file)!=0 and len(array_files)==len(dct['alignment_select']):
+        #if len(tuple_file)!=0 and len(array_files)==len(dct['alignment_select']):
+        if len(tuple_file)!=0:
             _file.append(tuple_file)
             files_corpus.append(array_files)
 

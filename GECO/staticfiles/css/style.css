@@ -88,9 +88,17 @@ Tags: corpus lingüístico
         bottom: 0;
         width: 100%;
         background: #FFF;
+        height: 2em;
         margin: 0px auto;
         color: #000;
         text-align: center;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+    
+    .icon {
+        width: 2em;
     }
     /* Containers */
     
@@ -99,19 +107,19 @@ Tags: corpus lingüístico
         background: #FFF;
         margin: 0px auto;
     }
-
+    
     #content-index {
         width: 99%;
         background: #FFF;
         margin-left: 20%;
         margin-right: 20%;
     }
-
+    
     #content-index h1 {
         margin-left: -40%;
-        text-align: center; 
+        text-align: center;
     }
-
+    
     #dashboard {
         margin-left: 9%;
         margin-right: 9%;
@@ -179,9 +187,8 @@ Tags: corpus lingüístico
         border: none;
         border-radius: 4px;
         cursor: pointer;
-        float: left;
     }
-
+    
     #submit_cancel {
         background-color: red;
         margin-right: 1%;
@@ -194,7 +201,7 @@ Tags: corpus lingüístico
         height: 2em;
         border-radius: 5px;
     }
-
+    
     .button {
         font: bold 11px Arial;
         text-decoration: none;
@@ -206,8 +213,8 @@ Tags: corpus lingüístico
         border-bottom: 1px solid #333333;
         border-left: 1px solid #CCCCCC;
         margin-left: 70%;
-      }
-      
+    }
+    
     .button_export {
         font: bold 11px Arial;
         text-decoration: none;
@@ -219,7 +226,6 @@ Tags: corpus lingüístico
         border-bottom: 1px solid #333333;
         border-left: 1px solid #CCCCCC;
     }
-
     /* Style the container */
     
     .container_form {
@@ -260,22 +266,48 @@ Tags: corpus lingüístico
             margin-top: 0;
         }
     }
-
+    
     #lateral {
-        float:left;
-        width:20%;
+        float: left;
+        width: 20%;
         margin-left: 10%;
     }
-    .menuv{
-        margin: 5px 10px 20px 20px;   
+    
+    .menuv {
+        margin: 5px 10px 20px 20px;
     }
+    
     #contenido_help {
-        float:left;
-        width:60%;
+        float: left;
+        width: 60%;
         padding: 5px 0 20px 0;
         margin-right: 10%;
     }
-    #pregunta{
+    
+    #pregunta {
         width: 80%;
         border-radius: 5px;
+    }
+    
+    .select-wrap {
+        border: 1px solid #777;
+        border-radius: 10px;
+        padding: 0 5px;
+        width: 200px;
+        background-color: #fff;
+        position: relative;
+    }
+    
+    .select-wrap label {
+        font-size: 8px;
+        text-transform: uppercase;
+        color: #777;
+        padding: 0 0;
+        position: absolute;
+        top: 3px;
+    }
+    
+    select {
+        border: 0px;
+        font-size: 16px;
     }

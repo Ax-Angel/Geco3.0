@@ -103,7 +103,7 @@ def concordance_paralle_view(request):
         id_metadato_filter_project_select = r_f['id_metadato']
         if id_metadato_filter_project_select:
             for i in id_metadato_filter_project_select:
-                if str(i) in request.POST.keys() and request.POST[str(i)] and request.POST[str(i)]!='-':
+                if str(i) in request.POST.keys() and request.POST[str(i)] and request.POST[str(i)]!='Seleccione...':
                     filter_select.update({str(i): request.POST[str(i)]})
         dct.update({'filter_select':filter_select})
         dicc_file = find_files(dct)
@@ -215,7 +215,8 @@ def find_files(dct):
                 if dato[0].data in dct['alignment_select']:
                     t_aux = (f.file.path, dato[0].data)
                     array_files.append(t_aux)
-        if len(tuple_file)!=0 and len(array_files)==len(dct['alignment_select']):
+        #if len(tuple_file)!=0 and len(array_files)==len(dct['alignment_select']):
+        if len(tuple_file)!=0:
             _file.append(tuple_file)
             files_corpus.append(array_files)
 

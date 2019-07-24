@@ -15,16 +15,20 @@
     <form method="post">
       {% csrf_token %}
       <div class="row">
-        <p><b>Nombre de ususario*</b></p>	  
-        {{ form.username }}
+        <p><b>Nombre del usuario*</b></p>	  
+        <input type="text" name="username" placeholder="Juan Sánchez Segura" required>
       </div>
       <div class="row">
-        <p><b>Correo Electrónico*</b></p>	  
-        {{ form.email }}
+        <p><b>Correo electrónico*</b></p>	  
+        <input type="email" name="email" placeholder="test@test.com" required>
       </div>
       <div class="row">
         <p><b>Contraseña*</b></p>	  
-        {{ form.password }}
+        <input type="password" name="password" required>
+      </div>
+      <div class="row">
+        <p><b>Confirmar contraseña*</b></p>	  
+        <input type="password" name="confirm" required>
       </div>
       <div class="row">
         <p><b>Institución</b></p>	  

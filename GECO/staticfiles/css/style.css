@@ -1,0 +1,335 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+
+/*
+Name: GECO
+Author: Grupo de Ingeniería Lingüística
+Author URI: http://www.corpus.unam.mx/
+Description: Sitio con aplicaciones específicas para el tratamiento de corpus lingüísticos
+Version: 3
+License: n/a
+Text Domain: Grupo de Ingeniería Lingüística
+Tags: corpus lingüístico
+*/
+
+html {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.15;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0px;
+    font-size: 0.9em;
+    background-color: #FFF;
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+article,
+aside,
+figure,
+footer,
+header,
+nav,
+main,
+section {
+    display: block;
+}
+
+a:link {
+    color: black;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:visited {
+    color: black;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: red;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+a:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+
+/* Header */
+
+#fixed-header,
+#fixed-footer {
+    width: 100%;
+    position: fixed;
+    background: #FFF;
+    padding: 1px 0;
+    color: #000;
+    border: 1px solid #000;
+}
+
+#fixed-header {
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #FFF;
+    margin: 0px auto;
+    color: #000;
+    text-align: center;
+}
+
+
+/* Footer */
+
+#fixed-footer {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #FFF;
+    height: 2em;
+    margin: 0px auto;
+    color: #000;
+    text-align: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.icon {
+    width: 2em;
+}
+
+
+/* Containers */
+
+#content {
+    width: 99%;
+    background: #FFF;
+    margin: 0px auto;
+}
+
+#content-index {
+    width: 99%;
+    background: #FFF;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+#content-index h1 {
+    margin-left: -40%;
+    text-align: center;
+}
+
+#dashboard {
+    margin-left: 9%;
+    margin-right: 9%;
+}
+
+section {
+    margin: 5px;
+    padding: 10px;
+    background-color: lightgrey;
+}
+
+article {
+    margin: 5px;
+    padding: 10px;
+    background-color: white;
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+
+/* Navigation */
+
+nav ul {
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 5px;
+}
+
+
+/* Sidebars */
+
+.sidebar-nav {
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+
+/* Forms */
+
+
+/* Style inputs, select elements and textareas */
+
+input[type=text],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+
+/* Style the label to display next to the inputs */
+
+label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+
+/* Style the submit button */
+
+input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#submit_cancel {
+    background-color: red;
+    margin-right: 1%;
+}
+
+input[type=text],
+input[type=password],
+input[type=email] {
+    width: 80%;
+    height: 2em;
+    border-radius: 5px;
+}
+
+.button {
+    font: bold 11px Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+    margin-left: 70%;
+}
+
+.button_export {
+    font: bold 11px Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 9px 10px 9px 10px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+}
+
+
+/* Style the container */
+
+.container_form {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px 60px 20px 60px;
+    margin-left: 30%;
+    margin-right: 30%;
+}
+
+
+/* Floating column for labels: 25% width */
+
+.col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+}
+
+
+/* Floating column for inputs: 75% width */
+
+.col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+}
+
+
+/* Clear floats after the columns */
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/* Responsive layout */
+
+@media screen and (max-width: 600px) {
+    .col-25,
+    .col-75,
+    input[type=submit] {
+        width: 100%;
+        margin-top: 0;
+    }
+}
+
+#lateral {
+    float: left;
+    width: 20%;
+    margin-left: 10%;
+}
+
+.menuv {
+    margin: 5px 10px 20px 20px;
+}
+
+#contenido_help {
+    float: left;
+    width: 60%;
+    padding: 5px 0 20px 0;
+    margin-right: 10%;
+}
+
+#pregunta {
+    width: 80%;
+    border-radius: 5px;
+}
+
+.select-wrap label {
+    font-size: 8px;
+    text-transform: uppercase;
+    color: #777;
+    padding: 0 0;
+    position: absolute;
+    top: 3px;
+}
+
+select {
+    border: 0px;
+    font-size: 16px;
+}

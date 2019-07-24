@@ -14,7 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import include, path
+from django.conf.urls import url
 from users.views import *
 from corpus.views import *
 from apps.concordanciaParalelo.views import *
@@ -31,5 +33,19 @@ urlpatterns = [
     path('concordance_paralle/', concordance_paralle_view , name= 'concordance_paralle'),
     path('export/csv/', export_search_csv, name='export_search_csv'),
     path('export/xls/', export_search_xls, name='export_search_xls'),
-    path('help/', help_view, name='help_view')
+    path('help/', help_view, name='help_view'),
+    
+    url(r'^reset/password_reset',
+        auth_views.PasswordResetView.as_view(template_name='registration/password_reset_form.html', 
+                                             email_template_name='registration/password_reset_email.html'), 
+        name='password_reset'),
+    url(r'^reset/password_reset_done',
+        auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'),
+        name='password_reset_done'),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
+        auth_views.PasswordResetConfirmView.as_view(template_name='registration/password_reset_confirm.html'),
+        name='password_reset_confirm'),
+    url(r'^reset/done',
+        auth_views.PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete.html'),
+        name='password_reset_complete'),
 ]

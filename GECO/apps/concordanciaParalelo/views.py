@@ -11,11 +11,8 @@ from corpus.models import *
 from users.models import User
 from apps.concordanciaParalelo.function import *
 
-
 #Show interface for the parallel corpus concordance
 def concordance_paralle_view(request):
-    project = []
-    project_public = []
     project_select = None
     languages = []
     lang_select = ''
@@ -31,23 +28,23 @@ def concordance_paralle_view(request):
     filter_select = {}
     results = request.session.get('results')
     results = []
-
+    
     if request.user.is_authenticated:
         project = Project.objects.filter(parallel_status = True).filter(Q(owner = request.user) | Q(project_members=request.user)).order_by('id')
         project_public = Project.objects.filter(parallel_status = True).filter(public_status = True).exclude(Q(owner = request.user) | Q(project_members=request.user)).order_by('id')
-
     else:
+        project = []
         project_public = Project.objects.filter(parallel_status = True).filter(public_status = True).order_by('id') 
     
     metadata_idioma = Metadata.objects.get(name='Lengua')
 
     if request.method == 'GET':
-
+        project_select = None
         if request.GET.get('q',False):
             #'q' in request.GET
             query_string = request.GET.get('q')
             query_list = query_string.split('/')
-
+            
             if len(query_list) == 0:
                 return HttpResponseBadRequest('Invalid Search')
             
@@ -75,7 +72,7 @@ def concordance_paralle_view(request):
                 project_metadato = Metadata.objects.filter(project=dct['project_select'])
                 dct.update({'project_metadato':project_metadato})
                 filter_metadato = filter_metadata(dct)['filter_metadato']
-                            
+                               
     #Sending search request for concordance
     elif request.method == 'POST':
         style_display = ''
@@ -118,7 +115,7 @@ def concordance_paralle_view(request):
                 results = search_request(path, pathes, alignment_select.copy(), dicc_search, window, results)
         else:
             results = []
-        
+            
         if max_view=='-':
             visualize = len(results)
         else:
@@ -126,16 +123,16 @@ def concordance_paralle_view(request):
                 visualize = int(max_view)+1
             else:
                 visualize = int(max_view)
-
+        
+    request.session['window'] = window    
+    request.session['results'] = results
+    
     contexto = {'project':project, 'project_public':project_public, 'languages':languages,
                 'project_select':project_select, 'style_display':style_display, 'lang_select':lang_select,
                 'positional_annotation':positional_annotation, 'alignment':alignment, 'visualize':visualize,
                 'alignment_select':alignment_select, 'max_view':max_view, 'window':window, 'filter_metadato':filter_metadato,
                 'filter_select':filter_select, 'search_petition':search_petition, 'results':results}
     
-    request.session['window'] = window
-    request.session['results'] = results
-
     return render(request, 'concordance_paralle_form.html', contexto)
 
 #Type of positional annotation

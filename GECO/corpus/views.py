@@ -178,4 +178,100 @@ def help_view(request):
     form = contact_form()
     return render(request, 'help.html', {'form': form})
     
+
+def add_metadata_project(request):
+    error=""
+    if request.method == 'POST':
+        form = metadata_project_form(request.POST)
+        if request.user.is_authenticated:
+            if form.is_valid():
+                validatedData = form.cleaned_data
+                
+
+                try:
+                    project = Project.objects.get(name = str(validatedData['project_name']))
+
+                except:
+                    error = "Proyecto no encontrado"
+                    return
+
+                users = Project.objects.values_list('project_members', flat=True)
+                if request.user.pk in users:
+                    list_md = validatedData['metadata_list']
+                    for md in list_md:
+                        meta = Metadata.objects.get(pk=md)
+                        meta.project.add(project)
+                        meta.save()
+
+                    return redirect('/dashboard/?q='+str(validatedData['project_name']))
+                    
+    else:
+        form = metadata_project_form()
+        
+    return render(request, 'add_metadata_project.html', {'form': form, 'error': error})
+
+def add_metadata_document(request):
+    error=""
+    if request.method == 'POST':
+        print(request.POST)
+        if request.user.is_authenticated:
+        
+
+            try:
+                project = Project.objects.get(name = str(request.POST['project_name']))
+
+            except:
+                error = "Proyecto no encontrado"
+                return
+
+            try:
+                file = File.objects.get(pk = int(request.POST['document']))
+
+            except:
+                error = "Archivo no encontrado"
+                return
+
+            try:
+                meta = Metadata.objects.get(pk = int(request.POST['metadata']))
+
+            except:
+                error = "Metadato no encontrado"
+                return
+
+            users = Project.objects.values_list('project_members', flat=True)
+            if request.user.pk in users:                
+
+                rel = DocumentMetadataRelation(metadata = meta,
+                                                file = file,
+                                                data = str(request.POST['data'])
+                    )
+                rel.save()
+
+                return redirect('/dashboard/?q='+str(request.POST['project_name']))
+                    
+    elif request.method == 'GET' and request.GET.get('q',False):
+        project = str(request.GET.get('q', ''))
+        projectObj = Project.objects.get(name=project)
+        documents = Document.objects.filter(project=projectObj)
+        metadata = Metadata.objects.filter(project=projectObj)
+
+        doc_list = []
+        for doc in documents:
+            files = File.objects.filter(document=doc)
+            for f in files:
+                doc_list.append(f)
+
+        tp = []
+        for doc in doc_list:
+            tp.append((doc.pk, doc.name))
+        choices_doc = tuple(tp)
+
+        tp = []
+        for md in metadata:
+            tp.append((md.pk, md.name))
+        choices_md = tuple(tp)
+
+        form = data_document_form(choices_doc=choices_doc, choices_md=choices_md, initial={'project_name': projectObj.name})
+
+    return render(request, 'add_data_document.html', {'form': form, 'error': error})    
     

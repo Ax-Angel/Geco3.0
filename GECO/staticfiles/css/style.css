@@ -301,8 +301,7 @@ input[type=email] {
 
 #lateral {
     float: left;
-    width: 20%;
-    margin-left: 10%;
+    margin-left: 5%;
 }
 
 .menuv {
@@ -314,11 +313,16 @@ input[type=email] {
     width: 60%;
     padding: 5px 0 20px 0;
     margin-right: 10%;
+    margin-left: 9%
 }
 
 #pregunta {
     width: 80%;
     border-radius: 5px;
+}
+
+#preguntar {
+    margin-left: 9%;
 }
 
 .select-wrap {

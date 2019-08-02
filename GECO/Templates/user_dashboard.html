@@ -23,7 +23,7 @@
 <body>
 {% csrf_token %}
 
-<div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="leftMenu">
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none;min-width:200px;width:20%;" id="leftMenu">
   <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
 																	<!-- Aquí van los contenidos del menú izquierdo -->
   <fieldset>
@@ -33,24 +33,24 @@
     {% for p in user_projects %}
       <a href="?q={{ p.name }}">{{ p.name }}</a>
       {% if p.public_status %} 
-        <img width="18px" height="18px" src="{% static 'img/publico.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/publico.jpg' %}">
       {% else %}
-        <img width="18px" height="18px" src="{% static 'img/personal.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/personal.jpg' %}">
       {% endif %}
 
       {% if p.parallel_status %} 
-        <img width="18px" height="18px" src="{% static 'img/paral.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/paral.jpg' %}">
       {% else %}
-        <img width="18px" height="18px" src="{% static 'img/monol.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/monol.jpg' %}">
       {% endif %}
 
       {% if p.collab_status %} 
-        <img width="18px" height="18px" src="{% static 'img/compartido.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/compartido.jpg' %}">
       {% else %}
-        <img width="18px" height="18px" src="{% static 'img/personal.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/personal.jpg' %}">
       {% endif %}
+      <br>
     {% endfor %}
-      
   </fieldset>
 
   <fieldset>
@@ -58,28 +58,28 @@
     {% for p in public_projects %}   
     <a href="?q={{ p.name }}">{{ p.name }}</a>
     {% if p.public_status %} 
-        <img width="18px" height="18px" src="{% static 'img/publico.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/publico.jpg' %}">
       {% else %}
-        <img width="18px" height="18px" src="{% static 'img/personal.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/personal.jpg' %}">
       {% endif %}
 
       {% if p.parallel_status %} 
-        <img width="18px" height="18px" src="{% static 'img/paral.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/paral.jpg' %}">
       {% else %}
-        <img width="18px" height="18px" src="{% static 'img/monol.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/monol.jpg' %}">
       {% endif %}
 
       {% if p.collab_status %} 
-        <img width="18px" height="18px" src="{% static 'img/compartido.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/compartido.jpg' %}">
       {% else %}
-        <img width="18px" height="18px" src="{% static 'img/personal.jpg' %}">
+        <img width="3%" height="3%" src="{% static 'img/personal.jpg' %}">
       {% endif %}
     {% endfor %}
   </fieldset>
     
 </div>
 
-<div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0;" id="rightMenu">
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0;min-width:160px;width:15%;" id="rightMenu">
   <button onclick="closeRightMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
 																	<!-- Aquí van los contenidos del menú derecho -->
   <a href="#" class="w3-bar-item w3-button">Editar perfil</a>
@@ -114,7 +114,7 @@ function closeRightMenu() {
 
 {% block content %}
 {% if user.is_authenticated %}
-<div id="dashboard">
+<div id="dashboard" onclick="closeLeftMenu(),closeRightMenu()">
   Hi {{ user.username }}!
   Estas loggueado
   

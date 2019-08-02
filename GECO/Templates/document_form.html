@@ -1,16 +1,32 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-{% if user.is_authenticated %}
-Hi {{ user.username }}!
-Estas loggueado
+    <div id="content">
 
+<h1>Subir documento</h1>    
+{% if user.is_authenticated %}
+
+<p>  Hola {{ user.username }}! </p>
+<p>  Estas loggueado </p>
+
+<div class="container_form">
 <form method="post" enctype="multipart/form-data" method="post">
   {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Enviar</button>
+   <div class="row">
+      <p><b>Nombre del proyecto</b></p>	  
+      {{ form.project_name }}
+    </div>
+    <div class="row" style="margin-top:1rem;">
+      <p style="color:red;">{{form.files.label}}:</p>
+      {{form.files}}
+    </div>
+    <div class="row" style="margin-top:3rem;">
+      <input style="margin-top:1em;" type="submit" id="submit_cancel" onClick ="window.location.href = '{% url 'index' %}'" value="Cancelar" />
+      <input style="margin-top:1em;" type="submit" value="Enviar" />
+    </div>
 </form>
-
-<p><a href="{% url 'logout' %}">logout</a></p>
+</div>
+<p><a href="{% url 'logout' %}">Cerrar sesión</a></p>
 {% endif %}
+</div>
 {% endblock %}

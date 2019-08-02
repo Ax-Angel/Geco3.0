@@ -1,16 +1,32 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-{% if user.is_authenticated %}
-Hi {{ user.username }}!
-Estas loggueado
+    <div id="content">
 
+<h1>Agregar colaborador</h1>
+
+{% if user.is_authenticated %} </p>
+<p> Hi {{ user.username }}! </p>
+<p> Estas loggueado
+
+<div class="container_form">
 <form method="post">
   {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Enviar</button>
+    <div class="row">
+      <p><b>Nombre del proyecto</b></p>
+      {{form.project_name}}
+    </div>
+    <div class="row">
+      <p><b>Añadir a usuario</b></p>	  
+      {{form.project_member}}
+    </div>
+    <div class="row">
+      <input style="margin-top:1em;" type="submit" id="submit_cancel" onClick ="window.location.href = '{% url 'dashboard' %}'" value="Cancelar" />
+      <input style="margin-top:1em;" type="submit" value="Enviar" />
+    </div>
 </form>
-
-<p><a href="{% url 'logout' %}">logout</a></p>
+</div>
+<p><a href="{% url 'logout' %}">Cerrar sesión</a></p>
 {% endif %}
+</div>
 {% endblock %}

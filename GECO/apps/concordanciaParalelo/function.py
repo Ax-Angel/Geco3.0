@@ -1,5 +1,7 @@
 import re
 
+from django.utils.safestring import mark_safe
+
 #Read a text
 def read_text_txt(path):
     input_file = open(path, 'r', encoding='utf8')
@@ -277,12 +279,26 @@ def search_request(path_search, path_files, languages, dicc_search, window, resu
         #tuple_search = search_pattern(dicc_search)        
         #if tuple_search[0]:
         if search_pattern(dicc_search):
+            list_pattern = dicc_search['pattern']
             
             if window == 'Vertical' or window == 'Horizontal':
+                text = line
+                for pattern in list_pattern:                
+                    it = re.finditer(pattern, dicc_search['line'])                
+                    while iter(it):
+                        try:
+                            match = next(it)
+                            text = re.sub(r'\b'+line[match.start():match.end()]+r'\b', '<strong>'+line[match.start():match.end()]+'</strong>', text)
+                            text = mark_safe(text)
+                        except:
+                            break  
+                
                 if window == 'Vertical':
-                    array_tmp[0]=line
+                    array_tmp[0]=text
+                    #array_tmp[0]=line
                 elif window == 'Horizontal':
-                    array_tmp[0]=(languages[0], line)
+                    array_tmp[0]=(languages[0], text)
+                    #array_tmp[0]=(languages[0], line)
                 
                 for j,file in enumerate(files_list):
                     
@@ -303,7 +319,7 @@ def search_request(path_search, path_files, languages, dicc_search, window, resu
             
             #result = [ [(lang1, [izq, cen, der]), (lang2, line2), (lang3, line3), ...], [], ...]
             elif window == 'KWIC':                
-                list_pattern = dicc_search['pattern']
+                #list_pattern = dicc_search['pattern']
                 
                 for pattern in list_pattern:                
                     it = re.finditer(pattern, dicc_search['line'])                

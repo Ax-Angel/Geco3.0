@@ -2,6 +2,7 @@ import traceback
 import csv
 import datetime
 import xlwt
+import re
 
 from django.shortcuts import render, redirect
 from django.db.models import Q
@@ -261,10 +262,14 @@ def export_search_csv(request):
     results = request.session.get('results')
     if window == 'Vertical':
         for r in results:
-             writer.writerow(r)   
+            r = re.sub(r'<strong>', '', r)
+            r = re.sub(r'</strong>', '', r)
+            writer.writerow(r)   
     elif window == 'Horizontal':
         for r in results:
             for x in r:
+                x = re.sub(r'<strong>', '', x)
+                x = re.sub(r'</strong>', '', x)
                 writer.writerow(x)       
     elif window == 'KWIC':
         for r in results:
@@ -288,12 +293,16 @@ def export_search_xls(request):
     if window == 'Vertical':
         for res in results:
             for i,x in enumerate(res):
+                x = re.sub(r'<strong>', '', x)
+                x = re.sub(r'</strong>', '', x)
                 ws.write(row, i, x)
             row += 1
     elif window == 'Horizontal':
         for res in results:
             for r in res:
                 for i,x in enumerate(r):
+                    x = re.sub(r'<strong>', '', x)
+                    x = re.sub(r'</strong>', '', x)
                     ws.write(row, i, x)
                 row += 1            
     elif window == 'KWIC':

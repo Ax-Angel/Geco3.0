@@ -274,4 +274,6 @@ def add_metadata_document(request):
         form = data_document_form(choices_doc=choices_doc, choices_md=choices_md, initial={'project_name': projectObj.name})
 
     return render(request, 'add_data_document.html', {'form': form, 'error': error})    
-    
+
+def apps_view(request):
+    return render(request, 'applications.html')

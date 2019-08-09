@@ -134,6 +134,21 @@ a:active {
     margin-right: 9%;
 }
 
+.figs {
+    margin: 5% 1%;
+}
+
+.box {
+    float: left;
+    margin: 0% 2%
+}
+
+.fig {
+    float: left;
+    margin: 0% 5%;
+    border: 1px solid #333333;
+}
+
 section {
     margin: 5px;
     padding: 10px;

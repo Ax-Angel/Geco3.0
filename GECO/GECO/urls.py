@@ -34,6 +34,7 @@ urlpatterns = [
     path('export/csv/', export_search_csv, name='export_search_csv'),
     path('export/xls/', export_search_xls, name='export_search_xls'),
     path('help/', help_view, name='help_view'),
+    path('applications/', apps_view, name='applications'),
     
     url(r'^reset/password_reset',
         auth_views.PasswordResetView.as_view(template_name='registration/password_reset_form.html', 

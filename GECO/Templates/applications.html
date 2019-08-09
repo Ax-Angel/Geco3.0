@@ -1,0 +1,41 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    {% load static %}
+    <div id="content-index">
+        <h1>Catalogo de aplicaciones</h1>
+        <div class="figs">
+            <div class="box"> 
+                <div class="fig">
+                    <img src="{% static 'img/desarrollos/saute.png' %}">
+                </div>
+                <p><a href="http://www.corpus.unam.mx/saute/">Saute</a></p>
+            </div>
+            <div class="box"> 
+                <div class="fig">
+                    <img src="{% static 'img/desarrollos/lupa.png' %}">
+                </div>
+                <p><a href="http://www.corpus.unam.mx/concordancias/">Concordancias</a></p>
+            </div>
+            <div class="box"> 
+                <div class="fig">
+                    <img src="{% static 'img/desarrollos/t.png' %}">
+                </div>
+                <p><a href="http://www.corpus.unam.mx/termext/">Termext</a></p>
+            </div>
+            <div class="box"> 
+                <div class="fig">
+                    <img src="{% static 'img/desarrollos/similitud.png' %}">
+                </div>
+                <p><a href="http://www.corpus.unam.mx/similitud/">Similitud</a></p>
+            </div>
+            <div class="box"> 
+                <div class="fig">
+                    <img src="{% static 'img/desarrollos/ecode.png' %}">
+                </div>
+                <p><a href="http://www.corpus.unam.mx/geco/default/ecode">Ecode</a></p>
+        </div></
+        div>
+    </div>
+
+{% endblock content %}

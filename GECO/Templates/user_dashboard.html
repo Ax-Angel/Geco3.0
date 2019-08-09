@@ -33,21 +33,21 @@
     {% for p in user_projects %}
       <a href="?q={{ p.name }}">{{ p.name }}</a>
       {% if p.public_status %} 
-        <img width="3%" height="3%" src="{% static 'img/publico.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/publico.jpg' %}">
       {% else %}
-        <img width="3%" height="3%" src="{% static 'img/personal.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/personal.jpg' %}">
       {% endif %}
 
       {% if p.parallel_status %} 
-        <img width="3%" height="3%" src="{% static 'img/paral.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/paral.jpg' %}">
       {% else %}
-        <img width="3%" height="3%" src="{% static 'img/monol.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/monol.jpg' %}">
       {% endif %}
 
       {% if p.collab_status %} 
-        <img width="3%" height="3%" src="{% static 'img/compartido.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/compartido.jpg' %}">
       {% else %}
-        <img width="3%" height="3%" src="{% static 'img/personal.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/personal.jpg' %}">
       {% endif %}
       <br>
     {% endfor %}
@@ -58,21 +58,21 @@
     {% for p in public_projects %}   
     <a href="?q={{ p.name }}">{{ p.name }}</a>
     {% if p.public_status %} 
-        <img width="3%" height="3%" src="{% static 'img/publico.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/publico.jpg' %}">
       {% else %}
-        <img width="3%" height="3%" src="{% static 'img/personal.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/personal.jpg' %}">
       {% endif %}
 
       {% if p.parallel_status %} 
-        <img width="3%" height="3%" src="{% static 'img/paral.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/paral.jpg' %}">
       {% else %}
-        <img width="3%" height="3%" src="{% static 'img/monol.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/monol.jpg' %}">
       {% endif %}
 
       {% if p.collab_status %} 
-        <img width="3%" height="3%" src="{% static 'img/compartido.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/compartido.jpg' %}">
       {% else %}
-        <img width="3%" height="3%" src="{% static 'img/personal.jpg' %}">
+        <img width="5%" height="5%" src="{% static 'img/personal.jpg' %}">
       {% endif %}
     {% endfor %}
   </fieldset>

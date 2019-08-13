@@ -3,33 +3,34 @@
 {% block content %}
 
 {% load static %}
-<div id="content-index">      
+<div class="container">      
     
-    <div>
+    <div class="text-center">
         <h1>GECO</h1>
-        <h2>Bienvenido al Sistema de Gestión de Corpus del Grupo de Ingeniería Lingüística</h2>
+        <h3>Bienvenido al Sistema de Gestión de Corpus del Grupo de Ingeniería Lingüística</h3>
     </div>
 
-    <div>
-        <img src="{% static 'img/geco.png' %}" width="204" height="186" align="left">
-        <p>&nbsp;</p>
-        {% if user.is_authenticated %}
-            <br>
-            &nbsp;
-            <input style="padding-left:2%;padding-right:2%;padding-top:1%;padding-bottom:1%;" type="submit" id="submit_cancel" value="Cerrar sesión" onClick ="window.location.href = '{% url 'logout' %}'" />
-            <br>
-            <br>
-        {% else %}
-            <h3>¡Es necesario tener una cuenta para usar GECO!</h3>
-            <input style="padding-left:2%;padding-right:2%;padding-top:1%;padding-bottom:1%;" type="submit" id="submit_cancel" value="Registrar" onClick ="window.location.href = '{% url 'register' %}'" />
-            &nbsp;
-            <input style="padding-left:2%;padding-right:2%;padding-top:1%;padding-bottom:1%;" type="submit" value="Iniciar sesión" onClick ="window.location.href = '{% url 'login' %}'" />
-        {% endif %}
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <p><a href="http://www.iling.unam.mx/corpus/" target="_blank">Visite el sitio de los corpus lingüísticos de la UNAM</a>      </p>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
+    <div class="row text-center">
+        <div class="col-lg-3 col-sm-4">
+            <img src="{% static 'img/geco.png' %}" style="width:80%;">
+        </div>
+        
+        <div class="col-lg-9 col-sm-8 text-left">
+            <p>&nbsp;</p>
+            {% if user.is_authenticated %}
+                <br>
+                <input type="submit" class="btn btn-danger" value="Cerrar sesión" onClick ="window.location.href = '{% url 'logout' %}'" />
+                <br>
+                <br>
+            {% else %}
+                <h3>¡Es necesario tener una cuenta para usar GECO!</h3>
+                <input type="submit" class="btn btn-success" value="Registrar" onClick ="window.location.href = '{% url 'register' %}'" />
+                &nbsp;
+                <input type="submit" class="btn btn-danger" value="Iniciar sesión" onClick ="window.location.href = '{% url 'login' %}'" />
+            {% endif %}
+            <p>&nbsp;</p>
+            <p><a href="http://www.iling.unam.mx/corpus/" target="_blank">Visite el sitio de los corpus lingüísticos de la UNAM</a></p>
+        </div>
     </div>
 
 </div>

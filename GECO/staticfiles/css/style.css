@@ -75,30 +75,22 @@ a:active {
     padding: 1px 0;
     color: #000;
     border: 1px solid #000;
+    margin: 0px auto;
+    left: 0;
+    text-align: center;
+    z-index: 10;
 }
 
 #fixed-header {
-    left: 0;
     top: 0;
-    width: 100%;
-    background: #FFF;
-    margin: 0px auto;
-    color: #000;
-    text-align: center;
 }
 
 
 /* Footer */
 
 #fixed-footer {
-    left: 0;
     bottom: 0;
-    width: 100%;
-    background: #FFF;
     height: 2em;
-    margin: 0px auto;
-    color: #000;
-    text-align: center;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -111,12 +103,19 @@ a:active {
 
 /* Containers */
 
+.formulario {
+    padding: 3% 3% 3% 3%;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+}
+
 #content {
-    width: 99%;
     background: #FFF;
     margin: 0px auto;
 }
 
+
+/*
 #content-index {
     width: 99%;
     background: #FFF;
@@ -128,26 +127,27 @@ a:active {
     margin-left: -40%;
     text-align: center;
 }
+*/
 
 #dashboard {
     margin-left: 9%;
     margin-right: 9%;
 }
 
-.figs {
+
+/*.figs {
     margin: 5% 1%;
 }
-
-.box {
-    float: left;
-    margin: 0% 2%
-}
-
 .fig {
     float: left;
     margin: 0% 5%;
     border: 1px solid #333333;
 }
+
+.box {
+    float: left;
+    margin: 0% 2%
+}*/
 
 section {
     margin: 5px;
@@ -192,7 +192,7 @@ nav ul li {
 /* Forms */
 
 
-/* Style inputs, select elements and textareas */
+/* Style inputs, select elements and textareas 
 
 input[type=text],
 select,
@@ -206,20 +206,22 @@ textarea {
 }
 
 
-/* Style the label to display next to the inputs */
+Style the label to display next to the inputs 
 
 label {
     padding: 12px 12px 12px 0;
     display: inline-block;
 }
+*/
 
 
 /* Style the submit button */
 
-input[type=submit] {
+
+/*input[type=submit] {
     background-color: #4CAF50;
     color: white;
-    padding: 2% 5%;
+    padding: 0.5% 1%;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -230,12 +232,12 @@ input[type=submit] {
     background-color: red;
     margin-right: 1%;
 }
+*/
 
 input[type=text],
 input[type=password],
 input[type=email] {
-    width: 80%;
-    height: 2em;
+    width: 85%;
     border-radius: 5px;
 }
 
@@ -331,16 +333,8 @@ input[type=email] {
     margin-left: 9%
 }
 
-#pregunta {
-    width: 80%;
-    border-radius: 5px;
-}
 
-#preguntar {
-    margin-left: 9%;
-}
-
-.select-wrap {
+/*.select-wrap {
     border: 1px solid #777;
     border-radius: 10px;
     padding: 0 5px;
@@ -361,4 +355,4 @@ input[type=email] {
 select {
     border: 0px;
     font-size: 16px;
-}
+}*/

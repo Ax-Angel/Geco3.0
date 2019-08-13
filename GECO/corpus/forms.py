@@ -18,8 +18,7 @@ class document_form(forms.Form):
 class contact_form(forms.Form):
     name = forms.CharField(label='Su nombre*', max_length=50)
     email = forms.EmailField(label='Su e-mail*')
-    message = forms.CharField(label='Su pregunta*', widget=forms.Textarea(attrs={'rows': '10','cols': '50', 
-                                                                              'placeholder': 'Escriba aquí su pregunta...'}))
+    message = forms.CharField(label='Su pregunta*', widget=forms.Textarea(attrs={'placeholder': 'Escriba aquí su pregunta...'}))
 METADATA = (
     (1, "Lengua"),
     (2, "Titulo"),

@@ -3,53 +3,90 @@
 {% block content %}
 
 <div id="content">
-  <div class="container_form">
-  <h1 style="font-size:170%;">Registro de usuario</h1>
+  <div class="container text-center">
+    
+    {% if user.is_authenticated %}
+      <p>  Hola {{ user.username }}! </p>
+      <p>  Estas loggueado </p>
+      <p><a href="{% url 'logout' %}">cerrar sesión</a></p>
 
-  {% if user.is_authenticated %}
-  <p>  Hola {{ user.username }}! </p>
-  <p>  Estas loggueado </p>
-    <p><a href="{% url 'logout' %}">cerrar sesión</a></p>
-  {% else %}
+    {% else %}
+      <div class="formulario">
 
-    <form method="post">
-      {% csrf_token %}
-      <div class="row">
-        <p><b>Nombre del usuario*</b></p>	  
-        <input type="text" name="username" placeholder="Juan Sánchez Segura" required>
+        <h2>Registro de usuario</h2>
+        <p>&nbsp;</p>
+
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group row text-left">
+            <label class="col-sm-3 col-form-label"><b>Nombre del usuario*</b></label>
+            <div class="col-sm-9">
+                <input type="text" name="username" placeholder="Juan Sánchez Segura" required>
+            </div>	              
+          </div>
+
+          <div class="form-group row text-left">
+            <label class="col-sm-3 col-form-label"><b>Correo electrónico*</b></label>
+            <div class="col-sm-9">
+                <input type="email" name="email" placeholder="test@test.com" required>
+            </div>
+          </div>
+
+          <div class="form-group row text-left">
+            <label class="col-sm-3 col-form-label"><b>Contraseña*</b></label>
+            <div class="col-sm-9">
+                <input type="password" name="password" required>
+            </div>   
+          </div>
+
+          <div class="form-group row text-left">
+            <label class="col-sm-3 col-form-label"><b>Confirmar contraseña*</b></label>
+            <div class="col-sm-9">
+                <input type="password" name="confirm" required>
+            </div>  
+          </div>
+
+          <div class="form-group row text-left">
+            <label class="col-sm-3 col-form-label"><b>Institución</b></label>
+            <div class="col-sm-9">
+                {{ form.institution }}
+            </div> 
+          </div>
+
+          <div class="form-group row text-left">
+            <label class="col-sm-3 col-form-label"><b>Grado escolar</b></label>
+            <div class="col-sm-9">
+                {{ form.degree }}
+            </div>   
+          </div>
+
+          <div class="form-group row text-left">
+            <label class="col-sm-3 col-form-label"><b>País</b></label>
+            <div class="col-sm-9">
+                {{ form.country }}
+            </div>
+          </div>
+
+          <div class="form-group row text-left">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+                <p><b>*</b>Campos obligatorios para que su registro sea exitoso</p>
+            </div>
+          </div>
+
+          <div class="form-group row text-left">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9"> 
+                <input type="submit" class="btn btn-danger" onClick ="window.location.href = '{% url 'index' %}'" value="Cancelar" /> 
+                &nbsp;
+                <input type="submit" class="btn btn-success" value="Enviar" />
+            </div>
+          </div>
+          
+        </form>
       </div>
-      <div class="row">
-        <p><b>Correo electrónico*</b></p>	  
-        <input type="email" name="email" placeholder="test@test.com" required>
-      </div>
-      <div class="row">
-        <p><b>Contraseña*</b></p>	  
-        <input type="password" name="password" required>
-      </div>
-      <div class="row">
-        <p><b>Confirmar contraseña*</b></p>	  
-        <input type="password" name="confirm" required>
-      </div>
-      <div class="row">
-        <p><b>Institución</b></p>	  
-        {{ form.institution }}
-      </div>
-      <div class="row">
-        <p><b>Grado escolar</b></p>	  
-        {{ form.degree }}
-      </div>
-      <div class="row">
-        <p><b>País</b></p>	  
-        {{ form.country }}
-      </div>
-      <p><b>*</b>Campos obligatorios para que su registro sea exitoso</p>
-      <div class="row">
-        <input style="margin-top:1em;" type="submit" id="submit_cancel" onClick ="window.location.href = '{% url 'index' %}'" value="Cancelar" />
-        <input style="margin-top:1em;" type="submit" value="Enviar" />
-      </div>
-    </form>
-</div>
+  </div>
 {% endif %}
-
+  </div>
 </div>
 {% endblock %}

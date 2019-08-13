@@ -134,9 +134,8 @@ function closeRightMenu() {
         <p>Ud. no está autenticado. Podrá solo visualizar aquellos proyectos que son públicos</p>
       {% endif %}
     </div>
-
   {% else %}
-    <fieldset>
+    <div class="container">
       <legend><h4><b>Proyecto: </b>{{project_select.name}}</h4></legend>
     {% if project_select.description %}
       <br>
@@ -168,6 +167,7 @@ function closeRightMenu() {
           <a href="javascript:mostrar_cerrar();"><img width="18px" height="18px" src="{% static 'img/ayuda.jpg' %}">Ayuda</a>
         </div>
       </div>
+      <br>
 
       <script>
         function mostrar_cerrar(){
@@ -273,20 +273,24 @@ function closeRightMenu() {
 
       {% if filter_metadato %}
         <div>
+        <br>
           <b>Filtros:</b>
           <br>
           {% for f_m in filter_metadato %}
-            <div class="select-wrap" style="display: inline-block;">
-              <label>{{f_m.1}}</label>
-              <select id="{{f_m.0}}" name="{{f_m.0}}">
-                
-                {% if filter_select|length == 0 %}
+            <div style="display: inline-block;">
+
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">{{f_m.1}}</label>
+                </div>
+                <select class="custom-select" id="{{f_m.0}}" name="{{f_m.0}}">
+                  {% if filter_select|length == 0 %}
                   <option value="Seleccione..." selected>Seleccione...</option>
                   {% for v_f_m in f_m.2 %}
                     <option value="{{v_f_m}}">{{v_f_m}}</option>
                   {% endfor %}
 
-                {% else %}
+                  {% else %}
                   <option value="Seleccione...">Seleccione...</option>
                   {% for v_f_m in f_m.2 %}
                     {% with k=f_m.0|stringformat:"i" %}      
@@ -302,48 +306,57 @@ function closeRightMenu() {
                     {% endwith %}
                   {% endfor %}
                 {% endif %}
-              </select>
+                </select>
+              </div>
             </div>
           {% endfor %}       
         </div>
       {% endif %}
     
-      <div><br>
-        <div style="padding-left:2%;padding-right:2%;padding-top:1%;padding-bottom:1%;display:inline-block;">
-          <input type="submit" value="Buscar" />
+        <br>
+
+        <div style="display:inline-block;">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelect01"><b>Vista máxima</b></label>
+            </div>
+            <select class="custom-select" id="max_view" name="max_view">
+              {% with '- 5 10 25 30 40' as view_value %}
+              {% for v_v in view_value.split %}
+                {% ifequal v_v max_view %}
+                  <option value="{{v_v}}" selected>{{v_v}}</option>
+                {% else %}
+                  <option value="{{v_v}}">{{v_v}}</option>
+                {% endifequal %}
+              {% endfor %}
+              {% endwith %}
+            </select>
+            <div style="margin-left:4%;">
+              <b>Ventana:</b>
+              {% with 'Vertical Horizontal KWIC' as window_value %}
+              {% for w_v in window_value.split %}
+                {% ifequal w_v window %}
+                  <label id="{{w_v}}"><input type="radio" checked name="window" value="{{w_v}}">{{w_v}}</label>
+                {% else %}
+                  <label id="{{w_v}}"><input type="radio" name="window" value="{{w_v}}">{{w_v}}</label>
+                {% endifequal %}
+              {% endfor %}
+              {% endwith %}
+            </div>
+            <div><br>
+              <div style="display:inline-block;">
+                <input class="btn btn-success" type="submit" value="Buscar" />
+              </div>
+            </div>
+          </div>
+
+          
         </div>
 
-        <div class="select-wrap" style="display: inline-block; margin-left:1%; width:100px;">
-          <label><b>Vista máxima</b></label> 
-          <select id="max_view" name="max_view">
-            {% with '- 5 10 25 30 40' as view_value %}
-            {% for v_v in view_value.split %}
-              {% ifequal v_v max_view %}
-                <option value="{{v_v}}" selected>{{v_v}}</option>
-              {% else %}
-                <option value="{{v_v}}">{{v_v}}</option>
-              {% endifequal %}
-            {% endfor %}
-            {% endwith %}
-          </select>
-        </div>
-
-        <div style="display: inline-block; margin-left:1%;">
-          <b>Ventana:</b>
-          {% with 'Vertical Horizontal KWIC' as window_value %}
-          {% for w_v in window_value.split %}
-            {% ifequal w_v window %}
-              <label id="{{w_v}}"><input type="radio" checked name="window" value="{{w_v}}">{{w_v}}</label>
-            {% else %}
-              <label id="{{w_v}}"><input type="radio" name="window" value="{{w_v}}">{{w_v}}</label>
-            {% endifequal %}
-          {% endfor %}
-          {% endwith %}
-        </div>
-      </div>
+        
 
     </div>
-    </fieldset>
+    </div>
   {% endif %}
 </form>
 
@@ -363,7 +376,7 @@ function closeRightMenu() {
 
     <div>
       <br>
-      <table style="width:98%; margin-left: 1%; margin-right: 1%;" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
+      <table style="width:98%; margin-left: 1%; margin-right: 1%;" class="table table-bordered">
         {% ifequal window 'Vertical' %}
           <caption>Resultados: {{visualize|a_sub_b:1}} de {{results|length|a_sub_b:1}}</caption>
         {% else %}
@@ -374,7 +387,7 @@ function closeRightMenu() {
           {% if forloop.counter0 < visualize %}
             {% ifequal window 'Vertical' %}
               {% ifequal forloop.counter0 0 %}
-                <tr bgcolor= "#dfdfdf">
+                <tr bgcolor= "#eee">
                   {% for x in result %}
                     <th>{{x}}</th>
                   {% endfor %}
@@ -391,7 +404,7 @@ function closeRightMenu() {
             {% ifequal window 'Horizontal' %}
               {% for x in result %}
                 {% ifequal forloop.counter0 0 %}
-                  <tr bgcolor= "#dfdfdf">
+                  <tr bgcolor= "#eee">
                 {% else %}
                   <tr>
                 {% endifequal %}
@@ -404,7 +417,7 @@ function closeRightMenu() {
             {% ifequal window 'KWIC' %}
               {% for x in result %}
                 {% ifequal forloop.counter0 0 %}
-                  <tr bgcolor= "#dfdfdf">
+                  <tr bgcolor= "#eee">
                     <td style="font-weight: bold;">{{x.0}}</td>
                     <td style="text-align: right;">{{x.1.0}}</td>
                     <td style="text-align: center; font-weight: bold;">{{x.1.1}}</td>

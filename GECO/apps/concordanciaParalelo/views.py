@@ -113,6 +113,7 @@ def concordance_paralle_view(request):
         if bool(dicc_search):
             for i,path in enumerate(_file):
                 pathes = files_corpus[i]
+                dicc_search.update({'language':lang_select})
                 results = search_request(path, pathes, alignment_select.copy(), dicc_search, window, results)
         else:
             results = []
@@ -214,7 +215,7 @@ def find_files(dct):
                     t_aux = (f.file.path, dato[0].data)
                     array_files.append(t_aux)
         #if len(tuple_file)!=0 and len(array_files)==len(dct['alignment_select']):
-        if len(tuple_file)!=0 and len(array_files)!=0:
+        if len(tuple_file)!=0 and (dct['alignment_select']==[] or len(array_files)!=0):
             _file.append(tuple_file)
             files_corpus.append(array_files)
 

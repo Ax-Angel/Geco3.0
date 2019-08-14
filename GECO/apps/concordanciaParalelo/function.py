@@ -28,6 +28,7 @@ def read_txt_files(files):
     7. Signo de interrogación 	Comodín, una letra 	p?lo
     8. Llaves     Buscar en una distancia de X palabras     se {2} como
     9. Llaves     Buscar en una distancia de X a Y palabras     se {1-5} como
+    10. Comillas  Busca las diferentes variantes de escribir la palabra en ciertas lenguas   avion   ávíón, avïón, ävíòn
 '''
 
 #Identify type of search 
@@ -46,6 +47,7 @@ def type_search(search_p):
     pattern_s = r'\?'
     pattern_d = r'{\d*}'
     pattern_ds = r'{\d*-\d*}'
+    pattern_c = r'"'
     
     pattern1 = pattern_i+pattern_w1+pattern_f
     pattern2 = pattern_i+pattern_c1+pattern_w1+pattern_c2+pattern_f
@@ -56,10 +58,18 @@ def type_search(search_p):
     pattern7 = pattern_i+pattern_w1+pattern_s+pattern_w1+pattern_f
     pattern8 = pattern_i+pattern_w1+pattern_e+pattern_d+pattern_e+pattern_w1+pattern_f
     pattern9 = pattern_i+pattern_w1+pattern_e+pattern_ds+pattern_e+pattern_w1+pattern_f
+    pattern10 = pattern_c+pattern_w1+pattern_c+pattern_f
     
     dicc_search = dict()
     
-    if re.search(pattern9, search_p):
+    if re.search(pattern10, search_p):
+        r = re.split(pattern_c, search_p, 2)
+        word1 = r[1]
+        dicc_search.update({'condiction':'condiction10'})
+        dicc_search.update({'word1':word1})
+        print(dicc_search)
+    
+    elif re.search(pattern9, search_p):
         r = re.split(pattern_e+pattern_ds+pattern_e, search_p, 1)
         word1 = r[0]
         word2 = r[1]
@@ -260,8 +270,41 @@ def search_pattern(dic):
             pattern0 += pattern4
             word1 = word1.lower()
             x+=1    
+            
+    elif dic['condiction']=='condiction10':
+        word = letter_change(dic['language'], word1)
+        pattern = pattern1+word+pattern1
+        if re.search(pattern, dic['line']):
+            list_pattern.append(pattern)
+            dic.update( {'pattern' : list_pattern} )
+            search = True
+        
+        word1 = word1.capitalize()
+        word = letter_change(dic['language'], word1)
+        pattern_other = pattern1+word+pattern1
+        if re.search(pattern_other, dic['line']):
+            list_pattern.append(pattern_other)
+            dic.update( {'pattern' : list_pattern} )
+            search = True
     
     return search
+
+def letter_change(language, busq):
+    
+    if language == 'MX':
+        if 'a' in busq:
+            busq = re.sub('a|A', '[a|á|ā|a̠|à|A|Á]', busq)
+        if 'e' in busq:
+            busq = re.sub('e|E', '[e|é|ē|e̠|è|E|É]', busq)
+        if 'i' in busq:
+            busq = re.sub('i|I', '[i|í|ī|i̠|ì|ɨ|ɨ̄|ɨ̠|I|Í]', busq)
+        if 'o' in busq:
+            busq = re.sub('o|O', '[o|ó|ō|o̠|ò|O|Ó]', busq)
+        if 'u' in busq:
+            busq = re.sub('u|U', '[u|ú|ū|u̠|ù|U|Ú]', busq)
+    
+    return busq
+    
 
 #Return the search according to parameters
 def search_request(path_search, path_files, languages, dicc_search, window, result):

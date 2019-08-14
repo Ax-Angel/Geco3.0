@@ -343,17 +343,14 @@ function closeRightMenu() {
               {% endfor %}
               {% endwith %}
             </div>
-            <div><br>
-              <div style="display:inline-block;">
-                <input class="btn btn-success" type="submit" value="Buscar" />
-              </div>
-            </div>
           </div>
-
-          
         </div>
 
-        
+        <div>
+          <div>
+            <input class="btn btn-success" type="submit" value="Buscar" />
+          </div>
+        </div>
 
     </div>
     </div>
@@ -378,7 +375,7 @@ function closeRightMenu() {
       <br>
       <table style="width:98%; margin-left: 1%; margin-right: 1%;" class="table table-bordered">
         {% ifequal window 'Vertical' %}
-          <caption>Resultados: {{visualize|a_sub_b:1}} de {{results|length|a_sub_b:1}}</caption>
+          <caption style="caption-side: top;">Resultados: {{visualize|a_sub_b:1}} de {{results|length|a_sub_b:1}}</caption>
         {% else %}
           <caption>Resultados: {{visualize}} de {{results|length}}</caption>
         {% endifequal %}

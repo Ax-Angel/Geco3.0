@@ -377,7 +377,7 @@ function closeRightMenu() {
         {% ifequal window 'Vertical' %}
           <caption style="caption-side: top;">Resultados: {{visualize|a_sub_b:1}} de {{results|length|a_sub_b:1}}</caption>
         {% else %}
-          <caption>Resultados: {{visualize}} de {{results|length}}</caption>
+          <caption style="caption-side: top;">Resultados: {{visualize}} de {{results|length}}</caption>
         {% endifequal %}
         
         {% for result in results %}

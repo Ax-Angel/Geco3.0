@@ -13,7 +13,6 @@ class Project(models.Model):
     parallel_status = models.BooleanField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-
     def is_public(self):
         return bool(self.public_status)
 
@@ -60,8 +59,8 @@ class Metadata(models.Model):
     name = models.CharField(max_length=100, null=False, unique=True)
     project = models.ManyToManyField(Project, blank=True)
 
-class DocumentMetadataRelation(models.Model):
+class File_Metadata_Relation(models.Model):
     metadata = models.ForeignKey(Metadata, related_name='metadata', on_delete=models.CASCADE)
     file = models.ForeignKey(File, related_name='metadata_file', on_delete=models.CASCADE)
-    data = models.CharField(max_length=100, blank=True, null=True)
+    data = models.CharField(max_length=250, blank=True, null=True)
 

@@ -162,7 +162,7 @@ def type_search_languages(dct):
     for d in dct['docs']:
         files = File.objects.filter(document_id=d.id)
         for f in files: 
-            data = DocumentMetadataRelation.objects.filter(metadata_id=dct['metadata_idioma'].id, file_id=f.id)
+            data = File_Metadata_Relation.objects.filter(metadata_id=dct['metadata_idioma'].id, file_id=f.id)
             if data.exists():
                 languages.add(data[0].data)
     languages = list(languages)
@@ -175,7 +175,7 @@ def type_alignment(dct):
         files = File.objects.filter(document_id=d.id)
         lang = set()
         for f in files:
-            data = DocumentMetadataRelation.objects.filter(metadata_id=dct['metadata_idioma'].id, file_id=f.id)
+            data = File_Metadata_Relation.objects.filter(metadata_id=dct['metadata_idioma'].id, file_id=f.id)
             if data.exists():
                 lang.add(data[0].data)
         if len(lang)!=0 and dct['lang_select'] in lang:
@@ -194,7 +194,7 @@ def find_files(dct):
         tuple_file = ()
         array_files = []
         for f in files:
-            dato = DocumentMetadataRelation.objects.filter(file_id=f.id)
+            dato = File_Metadata_Relation.objects.filter(file_id=f.id)
             
             if dato.filter(metadata_id=dct['metadata_idioma'].id, data=dct['lang_select']).exists():
                 if dct['filter_select']:
@@ -235,7 +235,7 @@ def filter_metadata(dct):
         for d in dct['docs']:
             files = File.objects.filter(document_id=d.id)
             for f in files:
-                dato_file = DocumentMetadataRelation.objects.filter(file_id=f.id)
+                dato_file = File_Metadata_Relation.objects.filter(file_id=f.id)
                 if dato_file.filter(metadata_id=dct['metadata_idioma'].id, data=dct['lang_select']).exists():
                     for _d_f in dato_file:
                         if _d_f.metadata.id in id_metadato:

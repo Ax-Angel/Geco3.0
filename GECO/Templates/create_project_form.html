@@ -6,8 +6,6 @@
 <h1>Creación de proyectos</h1>
 
 {% if user.is_authenticated %}
-<p>  Hola {{ user.username }}! </p>
-<p>  Estas loggueado </p>
   {% if error %}
     <div>{{ error }}</div>
   {% else %}  
@@ -31,13 +29,20 @@
 	<form method="post"> {% csrf_token %}
     <div class="row">		  
 		  {{ form.as_p }}
+          {{ form2.as_p }}
     </div>
-    <div class="row">
-	<button type="submit">Enviar</button>
+    
+    <div class="form-group row text-left">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-9"> 
+        <input type="submit" class="btn btn-danger" onClick ="window.location.href = '{% url 'dashboard' %}'" value="Cancelar" /> 
+        &nbsp;
+        <input type="submit" class="btn btn-success" value="Enviar" />
     </div>
+    </div>
+
 	</form>
 </div>
-  <p><a href="{% url 'logout' %}">Cerrar sesión</a></p>
 
 {% endif %}
 </div>

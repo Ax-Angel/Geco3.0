@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from corpus.forms import *
 from .models import *
 from django.db import IntegrityError
@@ -16,10 +17,10 @@ def index_view(request):
 def user_dashboard_view(request):
     if request.user.is_authenticated:
         if request.method == 'GET' and request.GET.get('q',False):
-            project = str(request.GET.get('q', ''))
-            projectObj = Project.objects.get(name=project)
-            print(projectObj)
-            documents = Document.objects.filter(project=projectObj)
+            name_project = str(request.GET.get('q', ''))
+            project = Project.objects.get(name=name_project)
+            print(project)
+            documents = Document.objects.filter(project=project)
 
             result = []
             for doc in documents:
@@ -50,28 +51,39 @@ def create_project_view(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = create_project_form(request.POST)
-            if form.is_valid():
+            form2 = metadata_project_form(request.POST)
+            if form.is_valid() and form2.is_valid():
                 validatedData = form.cleaned_data
-                print(validatedData)
-
+                validatedData2 = form2.cleaned_data
+                
                 try:
-                    project = Project(owner = request.user,
-                                                name = str(validatedData['name']),
-                                                public_status = validatedData['is_public'],
-                                                collab_status = validatedData['is_collab'],
-                                                parallel_status = validatedData['is_parallel']
-                                                )
-                    project.save()
-                    project.project_members.add(request.user)
-                    return redirect('dashboard')
+                    p = Project(owner = request.user,
+                                name = str(validatedData['name']),
+                                description = str(validatedData['description']),
+                                public_status = validatedData['is_public'],
+                                collab_status = validatedData['is_collab'],
+                                parallel_status = validatedData['is_parallel'])
+                    p.save()
+                    p.project_members.add(request.user)
+                    
+                    list_md = validatedData2['metadata_list']
+                    for md in list_md:
+                        meta = Metadata.objects.get(id=int(md))
+                        meta.project.add(p)
+                        meta.save()                       
+                    return redirect(reverse('dashboard')+'?q='+validatedData['name'])
                 except IntegrityError as e:
-                    traceback.print_exc()
-                    return render(request, 'create_project_form.html', {'form': form, 'error': str(traceback.print_exception)})
+                    #traceback.print_exc()
+                    error = 'Compruebe que el nombre y la descripción de su proyecto sean únicos. Ya existe un proyecto con esos valores.'
+                    return render(request, 'create_project_form.html', {'form': form, 'form2': form2, 'error': error})
+                    #return render(request, 'create_project_form.html', {'form': form, 'form2': form2, 'error': str(traceback.print_exception)})
         else:
             form = create_project_form()
+            form2 = metadata_project_form()
     else:
         return redirect('index')
-    return render(request, 'create_project_form.html', {'form': form, 'error': False})
+    return render(request, 'create_project_form.html', {'form': form, 'form2': form2, 'error': False})
+
 
 class document_view(FormView): 
     form_class = document_form
@@ -131,6 +143,7 @@ def list_user_projects_view(request):
 
     return render(request, 'list_user_projects.html', {'result': result})
 
+
 def add_collaborator_view(request):
     if request.method == 'POST':
         form = add_collaborator_form(request.POST)
@@ -160,55 +173,6 @@ def add_collaborator_view(request):
         form = add_collaborator_form()
     return render(request, 'add_collaborator_form.html', {'form': form, 'error': error})
 
-def help_view(request):
-    if request.method == 'POST':
-        form = contact_form(request.POST)
-        if form.is_valid():
-            validatedData = form.cleaned_data
-            name = validatedData['name']
-            from_email = validatedData['email']
-            message = validatedData['message']
-            
-            subject='Mensaje de usuario GECO'
-            body_message = 'Usted ha recibido un nuevo mensaje de un usuario'+'\n'+'Nombre: '+name+'\n'+'Correo elecrónico: '+from_email+'\n'+'Mensaje: '+message
-            email = EmailMessage(subject, body_message, from_email, to=['gil@iingen.unam.mx'], 
-                                 reply_to=[from_email])
-            email.send()
-            
-    form = contact_form()
-    return render(request, 'help.html', {'form': form})
-    
-
-def add_metadata_project(request):
-    error=""
-    if request.method == 'POST':
-        form = metadata_project_form(request.POST)
-        if request.user.is_authenticated:
-            if form.is_valid():
-                validatedData = form.cleaned_data
-                
-
-                try:
-                    project = Project.objects.get(name = str(validatedData['project_name']))
-
-                except:
-                    error = "Proyecto no encontrado"
-                    return
-
-                users = Project.objects.values_list('project_members', flat=True)
-                if request.user.pk in users:
-                    list_md = validatedData['metadata_list']
-                    for md in list_md:
-                        meta = Metadata.objects.get(pk=md)
-                        meta.project.add(project)
-                        meta.save()
-
-                    return redirect('/dashboard/?q='+str(validatedData['project_name']))
-                    
-    else:
-        form = metadata_project_form()
-        
-    return render(request, 'add_metadata_project.html', {'form': form, 'error': error})
 
 def add_metadata_document(request):
     error=""
@@ -241,7 +205,7 @@ def add_metadata_document(request):
             users = Project.objects.values_list('project_members', flat=True)
             if request.user.pk in users:                
 
-                rel = DocumentMetadataRelation(metadata = meta,
+                rel = File_Metadata_Relation(metadata = meta,
                                                 file = file,
                                                 data = str(request.POST['data'])
                     )
@@ -274,6 +238,26 @@ def add_metadata_document(request):
         form = data_document_form(choices_doc=choices_doc, choices_md=choices_md, initial={'project_name': projectObj.name})
 
     return render(request, 'add_data_document.html', {'form': form, 'error': error})    
+
+
+def help_view(request):
+    if request.method == 'POST':
+        form = contact_form(request.POST)
+        if form.is_valid():
+            validatedData = form.cleaned_data
+            name = validatedData['name']
+            from_email = validatedData['email']
+            message = validatedData['message']
+            
+            subject='Mensaje de usuario GECO'
+            body_message = 'Usted ha recibido un nuevo mensaje de un usuario'+'\n'+'Nombre: '+name+'\n'+'Correo elecrónico: '+from_email+'\n'+'Mensaje: '+message
+            email = EmailMessage(subject, body_message, from_email, to=['gil@iingen.unam.mx'], 
+                                 reply_to=[from_email])
+            email.send()
+            
+    form = contact_form()
+    return render(request, 'help.html', {'form': form})
+
 
 def apps_view(request):
     return render(request, 'applications.html')

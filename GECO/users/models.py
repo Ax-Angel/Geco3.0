@@ -8,11 +8,13 @@ from .managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin, IndexedTimeStampedModel):
-    email = models.EmailField(max_length=255, unique=True)
-    username = models.CharField(max_length=100, unique=True)
-    institution = models.CharField(max_length=100)
-    degree = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100, unique=True)
+    username = models.CharField(max_length=20, unique=True)
+    first_name = models.CharField(max_length=80)
+    last_name = models.CharField(max_length=80)
+    institution = models.CharField(max_length=100, null=True)
+    degree = models.CharField(max_length=100, null=True)
+    country = models.CharField(max_length=100, null=True)
     is_staff = models.BooleanField(
         default=False,
         help_text=_('Designates whether the user can log into this admin '

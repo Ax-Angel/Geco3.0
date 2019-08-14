@@ -17,12 +17,14 @@ def register_user_view(request):
         form = register_user_form(request.POST)
         if form.is_valid():
             try:
-                usr = User.objects.create_user(username=str(form.cleaned_data['username']),
-                                            email=str(form.cleaned_data['email']),
-                                            password=str(form.cleaned_data['password']),
-                                            institution=str(form.cleaned_data['institution']),
-                                            degree=str(form.cleaned_data['degree']),
-                                            country=str(form.cleaned_data['country']),)
+                User.objects.create_user(first_name=str(form.cleaned_data['first_name']),
+                                         last_name=str(form.cleaned_data['last_name']),
+                                         username=str(form.cleaned_data['username']),
+                                         email=str(form.cleaned_data['email']),
+                                         password=str(form.cleaned_data['password']),
+                                         institution=str(form.cleaned_data['institution']),
+                                         degree=str(form.cleaned_data['degree']),
+                                         country=str(form.cleaned_data['country']),)
             
             except:
                 print(traceback.format_exc())

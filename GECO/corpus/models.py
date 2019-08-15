@@ -4,7 +4,7 @@ from .validators import validate_file_extension
 
 # Create your models here.
 class Project(models.Model):
-    name = models.CharField(max_length=100, null=False, unique=True)
+    name_project = models.CharField(max_length=100, null=False, unique=True)
     description = models.CharField(max_length=250, null=False, unique=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='owner_normalproject', on_delete=models.CASCADE)
     project_members = models.ManyToManyField(settings.AUTH_USER_MODEL)
@@ -44,7 +44,7 @@ class Document(models.Model):
 
 class File(models.Model):
     file = models.FileField(blank=False, null=False, upload_to='mediafiles/', validators=[validate_file_extension])
-    name = models.CharField(max_length=100, null=False, unique=True)
+    name_file = models.CharField(max_length=100, null=False, unique=True)
     document = models.ForeignKey(Document, related_name='file_document', on_delete=models.CASCADE)
     tagged_doc = models.FileField(max_length=100, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -56,11 +56,11 @@ class File(models.Model):
         self.file = file_url
 
 class Metadata(models.Model):
-    name = models.CharField(max_length=100, null=False, unique=True)
+    name_metadata = models.CharField(max_length=100, null=False, unique=True)
     project = models.ManyToManyField(Project, blank=True)
 
 class File_Metadata_Relation(models.Model):
     metadata = models.ForeignKey(Metadata, related_name='metadata', on_delete=models.CASCADE)
     file = models.ForeignKey(File, related_name='metadata_file', on_delete=models.CASCADE)
-    data = models.CharField(max_length=250, blank=True, null=True)
+    data_value = models.CharField(max_length=250, blank=True, null=True)
 

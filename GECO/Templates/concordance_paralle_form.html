@@ -29,7 +29,7 @@
   <fieldset>
     <legend><b>Mis proyectos</b></legend>
     {% for p in project %}
-      <a href="?q={{ p.id }}">{{ p.name }}
+      <a href="?q={{ p.id }}">{{ p.name_project }}
       {% if p.public_status %} 
         <img width="5%" height="5%" src="{% static 'img/publico.jpg' %}">
       {% else %}
@@ -54,7 +54,7 @@
   <fieldset>
     <legend><b>Proyectos públicos</b></legend>
     {% for p in project_public %}   
-      <a href="?q={{ p.id }}">{{ p.name }}
+      <a href="?q={{ p.id }}">{{ p.name_project }}
       {% if p.public_status %} 
         <img width="5%" height="5%" src="{% static 'img/publico.jpg' %}">
       {% else %}
@@ -116,7 +116,7 @@ function closeLeftMenu() {
     </div>
   {% else %}
     <div class="container">
-      <legend><h4><b>Proyecto: </b>{{project_select.name}}</h4></legend>
+      <legend><h4><b>Proyecto: </b>{{project_select.name_project}}</h4></legend>
     {% if project_select.description %}
       <br>
       <p><b>Descripción del proyecto: </b>{{project_select.description}}</p>
@@ -186,7 +186,7 @@ function closeLeftMenu() {
           <tr>
             <td>Signos menor y mayor qué</td>
             <td>Buscar  <a href="http://blade10.cs.upc.edu/freeling-old/doc/tagsets/tagset-es.html"  target="_blank" title="ETIQUETAS EAGLES">etiqueta POS</a></td>
-            <td><VMIS3S0></td>
+            <td>< VMIS3S0 >></td>
             <td>dijo, habló, tomó</td>
           </tr>
           <tr bgcolor= "#eeeeee">

@@ -3,91 +3,91 @@
       "model": "corpus.metadata",
       "pk": 1,
       "fields": {
-        "name": "Lengua"
+        "name_metadata": "Lengua"
       }
     },
     {
         "model": "corpus.metadata",
         "pk": 2,
         "fields": {
-          "name": "Título"
+          "name_metadata": "Título"
         }
     },
     {
       "model": "corpus.metadata",
       "pk": 3,
       "fields": {
-        "name": "Autor"
+        "name_metadata": "Autor"
       }
     },
     {
         "model": "corpus.metadata",
         "pk": 4,
         "fields": {
-          "name": "Editorial"
+          "name_metadata": "Editorial"
         }
     },
     {
       "model": "corpus.metadata",
       "pk": 5,
       "fields": {
-        "name": "Variante en el texto"
+        "name_metadata": "Variante en el texto"
       }
     },
     {
         "model": "corpus.metadata",
         "pk": 6,
         "fields": {
-          "name": "Variantes de la lengua en norma ISO"
+          "name_metadata": "Variantes de la lengua en norma ISO"
         }
     },
     {
       "model": "corpus.metadata",
       "pk": 7,
       "fields": {
-        "name": "Año"
+        "name_metadata": "Año"
       }
     },
     {
         "model": "corpus.metadata",
         "pk": 8,
         "fields": {
-          "name": "País"
+          "name_metadata": "País"
         }
     },
     {
       "model": "corpus.metadata",
       "pk": 9,
       "fields": {
-        "name": "Estado"
+        "name_metadata": "Estado"
       }
     },
     {
         "model": "corpus.metadata",
         "pk": 10,
         "fields": {
-          "name": "División regional"
+          "name_metadata": "División regional"
         }
     },
     {
       "model": "corpus.metadata",
       "pk": 11,
       "fields": {
-        "name": "Comunidad a la que pertenece"
+        "name_metadata": "Comunidad a la que pertenece"
       }
     },
     {
         "model": "corpus.metadata",
         "pk": 12,
         "fields": {
-          "name": "Clasificación genérica"
+          "name_metadata": "Clasificación genérica"
         }
     },
     {
       "model": "corpus.metadata",
       "pk": 13,
       "fields": {
-        "name": "Notas"
+        "name_metadata": "Notas"
       }
     }
 ]

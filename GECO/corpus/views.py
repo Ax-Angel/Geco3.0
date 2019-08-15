@@ -1,13 +1,20 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from corpus.forms import *
-from .models import *
-from django.db import IntegrityError
-import traceback
-from users.models import User
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormView
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
+from django.db import IntegrityError
+
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.urls import reverse
+
+from corpus.forms import *
+from .models import *
+from users.models import User
+
+import traceback
+
 
 # Create your views here.
 def index_view(request):
@@ -18,7 +25,7 @@ def user_dashboard_view(request):
     if request.user.is_authenticated:
         if request.method == 'GET' and request.GET.get('q',False):
             name_project = str(request.GET.get('q', ''))
-            project = Project.objects.get(name=name_project)
+            project = Project.objects.get(name_project=name_project)
             print(project)
             documents = Document.objects.filter(project=project)
 
@@ -47,6 +54,61 @@ def user_dashboard_view(request):
     return render(request, 'user_dashboard.html', {'user_projects': user_projects, 'public_projects': public_projects, 'project': project, 'documents': result})
 
 
+class Project_Create(CreateView):
+    model = Project
+    template_name = 'create_project_form.html'
+    form_class = create_project_form
+    second_form_class = metadata_project_form    
+    success_url = reverse_lazy('dashboard')
+
+    #enviar el contexto a la vista
+    def get_context_data(self, **kwargs):
+        context = super(Project_Create, self).get_context_data(**kwargs)
+        if 'form' not in context:
+            context['form'] = self.form_class(self.request.GET)
+        if 'form2' not in context:
+            context['form2'] = self.second_form_class(self.request.GET)
+        if 'error' not in context:
+            context['error'] = False
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object #se accede al objeto
+        # se recoge de los 2 formularios la información que se introduce
+        form = self.form_class(request.POST)
+        form2 = self.second_form_class(request.POST)
+        error = ''
+        # se validan ambos 2 formularios para poderlos guardar
+        if form.is_valid() and form2.is_valid():
+            validatedData = form.cleaned_data
+            validatedData2 = form2.cleaned_data
+            print(validatedData2)
+            try:
+                p = Project(owner = request.user,
+                            name_project = str(validatedData['name_project']),
+                            description = str(validatedData['description']),
+                            public_status = validatedData['public_status'],
+                            collab_status = validatedData['collab_status'],
+                            parallel_status = validatedData['parallel_status'])
+                p.save()
+                p.project_members.add(request.user)
+
+                list_md = validatedData2['name_metadata']
+                for md in list_md:
+                    meta = Metadata.objects.get(id=int(md))
+                    meta.project.add(p)
+                    meta.save()  
+                return HttpResponseRedirect(self.get_success_url()+'?q='+validatedData['name_project'])
+            
+            except IntegrityError as e:
+                error = 'Ya existe un proyecto con ese nombre. Compruebe que sea único.'
+                return self.render_to_response(self.get_context_data(form=form, form2=form2, error=error))
+        
+        else: #en caso de no ser válidos se muestra el contexto en blanco
+            return self.render_to_response(self.get_context_data(form=form, form2=form2, error=error))
+
+
+
 def create_project_view(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -58,7 +120,7 @@ def create_project_view(request):
                 
                 try:
                     p = Project(owner = request.user,
-                                name = str(validatedData['name']),
+                                name_project = str(validatedData['name_project']),
                                 description = str(validatedData['description']),
                                 public_status = validatedData['is_public'],
                                 collab_status = validatedData['is_collab'],
@@ -66,12 +128,12 @@ def create_project_view(request):
                     p.save()
                     p.project_members.add(request.user)
                     
-                    list_md = validatedData2['metadata_list']
+                    list_md = validatedData2['name_metadata']
                     for md in list_md:
                         meta = Metadata.objects.get(id=int(md))
                         meta.project.add(p)
                         meta.save()                       
-                    return redirect(reverse('dashboard')+'?q='+validatedData['name'])
+                    return redirect(reverse('dashboard')+'?q='+validatedData['name_project'])
                 except IntegrityError as e:
                     #traceback.print_exc()
                     error = 'Compruebe que el nombre y la descripción de su proyecto sean únicos. Ya existe un proyecto con esos valores.'
@@ -105,8 +167,8 @@ class document_view(FormView):
                                                 owner=request.user)
                             doc.save()
                             file = File(file = f,
-                                            name = f.name,
-                                            document = doc)
+                                        name_file = f.name,
+                                        document = doc)
                             file.save()
 
                         except:
@@ -153,7 +215,7 @@ def add_collaborator_view(request):
                 print(validatedData)
 
                 try:
-                    project = Project.objects.get(name = str(validatedData['project_name']))
+                    project = Project.objects.get(name_project = str(validatedData['project_name']))
 
                 except:
                     error = "Proyecto no encontrado"
@@ -182,7 +244,7 @@ def add_metadata_document(request):
         
 
             try:
-                project = Project.objects.get(name = str(request.POST['project_name']))
+                project = Project.objects.get(name_project = str(request.POST['project_name']))
 
             except:
                 error = "Proyecto no encontrado"
@@ -206,8 +268,8 @@ def add_metadata_document(request):
             if request.user.pk in users:                
 
                 rel = File_Metadata_Relation(metadata = meta,
-                                                file = file,
-                                                data = str(request.POST['data'])
+                                             file = file,
+                                             data_value = str(request.POST['data'])
                     )
                 rel.save()
 
@@ -215,7 +277,7 @@ def add_metadata_document(request):
                     
     elif request.method == 'GET' and request.GET.get('q',False):
         project = str(request.GET.get('q', ''))
-        projectObj = Project.objects.get(name=project)
+        projectObj = Project.objects.get(name_project=project)
         documents = Document.objects.filter(project=projectObj)
         metadata = Metadata.objects.filter(project=projectObj)
 

@@ -37,7 +37,7 @@ def concordance_paralle_view(request):
         project = []
         project_public = Project.objects.filter(parallel_status = True).filter(public_status = True).order_by('id') 
     
-    metadata_idioma = Metadata.objects.get(name='Lengua')
+    metadata_idioma = Metadata.objects.get(name_metadata='Lengua')
 
     if request.method == 'GET':
         project_select = None
@@ -164,7 +164,7 @@ def type_search_languages(dct):
         for f in files: 
             data = File_Metadata_Relation.objects.filter(metadata_id=dct['metadata_idioma'].id, file_id=f.id)
             if data.exists():
-                languages.add(data[0].data)
+                languages.add(data[0].data_value)
     languages = list(languages)
     return languages
 
@@ -177,7 +177,7 @@ def type_alignment(dct):
         for f in files:
             data = File_Metadata_Relation.objects.filter(metadata_id=dct['metadata_idioma'].id, file_id=f.id)
             if data.exists():
-                lang.add(data[0].data)
+                lang.add(data[0].data_value)
         if len(lang)!=0 and dct['lang_select'] in lang:
             lang.discard(dct['lang_select'])
             alignment.update(lang)
@@ -196,11 +196,11 @@ def find_files(dct):
         for f in files:
             dato = File_Metadata_Relation.objects.filter(file_id=f.id)
             
-            if dato.filter(metadata_id=dct['metadata_idioma'].id, data=dct['lang_select']).exists():
+            if dato.filter(metadata_id=dct['metadata_idioma'].id, data_value=dct['lang_select']).exists():
                 if dct['filter_select']:
                     exist_file_filtro = False
                     for k,v in dct['filter_select'].items():
-                        if dato.filter(metadata_id=int(k), data=v).exists():
+                        if dato.filter(metadata_id=int(k), data_value=v).exists():
                             exist_file_filtro = True
                         else:
                             exist_file_filtro = False
@@ -211,8 +211,8 @@ def find_files(dct):
             else:
                 t_aux = ()
                 dato = dato.filter(metadata_id=dct['metadata_idioma'].id)
-                if dato[0].data in dct['alignment_select']:
-                    t_aux = (f.file.path, dato[0].data)
+                if dato[0].data_value in dct['alignment_select']:
+                    t_aux = (f.file.path, dato[0].data_value)
                     array_files.append(t_aux)
         #if len(tuple_file)!=0 and len(array_files)==len(dct['alignment_select']):
         if len(tuple_file)!=0 and (dct['alignment_select']==[] or len(array_files)!=0):
@@ -236,11 +236,11 @@ def filter_metadata(dct):
             files = File.objects.filter(document_id=d.id)
             for f in files:
                 dato_file = File_Metadata_Relation.objects.filter(file_id=f.id)
-                if dato_file.filter(metadata_id=dct['metadata_idioma'].id, data=dct['lang_select']).exists():
+                if dato_file.filter(metadata_id=dct['metadata_idioma'].id, data_value=dct['lang_select']).exists():
                     for _d_f in dato_file:
                         if _d_f.metadata.id in id_metadato:
                             i = id_metadato.index(_d_f.metadata.id)
-                            filter_metadato[i][2].add(_d_f.data)
+                            filter_metadato[i][2].add(_d_f.data_value)
         j = 0
         k = len(filter_metadato)
         while j < k:

@@ -1,49 +1,25 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <div id="content">
-
-<h1>Creación de proyectos</h1>
-
-{% if user.is_authenticated %}
-  {% if error %}
-    <div>{{ error }}</div>
-  {% else %}  
-      {% if form.errors %}
-        {% for field in form %}
-            {% for error in field.errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-            {% endfor %}
-        {% endfor %}
-        {% for error in form.non_field_errors %}
-            <div class="alert alert-danger">
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}
-      {% endif %}
-   {% endif %}
-
 <div class="container_form">
-	<form method="post"> {% csrf_token %}
+	<form method="post">
+    {% csrf_token %}
+    <h1>Creación de proyectos</h1>
     <div class="row">		  
 		  {{ form.as_p }}
           {{ form2.as_p }}
     </div>
     
     <div class="form-group row text-left">
-    <div class="col-sm-3"></div>
-    <div class="col-sm-9"> 
-        <input type="submit" class="btn btn-danger" onClick ="window.location.href = '{% url 'dashboard' %}'" value="Cancelar" /> 
-        &nbsp;
-        <input type="submit" class="btn btn-success" value="Enviar" />
-    </div>
+        <div class="col-sm-3"></div>
+        <div class="col-sm-9"> 
+            <a class="btn btn-danger" href="{% url 'dashboard' %}">Cancelar</a> 
+            &nbsp;
+            <button type="submit" class="btn btn-success">Enviar</button>
+        </div>
     </div>
 
 	</form>
 </div>
 
-{% endif %}
-</div>
 {% endblock %}

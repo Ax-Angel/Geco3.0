@@ -333,6 +333,12 @@ input[type=email] {
     margin-left: 9%
 }
 
+@media screen and (max-width: 768px) {
+    .nuevo {
+        margin-top: 17%;
+    }
+}
+
 
 /*.select-wrap {
     border: 1px solid #777;

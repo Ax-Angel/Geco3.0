@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container_form">
+	<form method="post">
+		{% csrf_token %}
+		<h3>¿Desea eliminar el proyecto: "{{ object.name_project }}"?</h3>
+		<a class= "btn btn-danger" href="{% url 'dashboard' %}">Cancelar</a>
+		<button class="btn btn-success" type="submit">Aceptar</button>
+	</form>
+</div>
+
+{% endblock %}

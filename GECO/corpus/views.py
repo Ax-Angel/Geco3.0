@@ -94,6 +94,7 @@ class Project_Create(CreateView):
                 p.project_members.add(request.user)
 
                 list_md = validatedData2['name_metadata']
+                print(list_md)
                 for md in list_md:
                     meta = Metadata.objects.get(id=int(md))
                     meta.project.add(p)
@@ -107,9 +108,71 @@ class Project_Create(CreateView):
         else: #en caso de no ser válidos se muestra el contexto en blanco
             return self.render_to_response(self.get_context_data(form=form, form2=form2, error=error))
 
+class Project_Update(UpdateView):
+    model = Project
+    second_model = Metadata # se llama el segundo modelo
+    template_name = 'create_project_form.html'
+    form_class = create_project_form
+    second_form_class = metadata_project_form    
+    success_url = reverse_lazy('dashboard')
+
+    def get_context_data(self, **kwargs): #para poder llamar los objectos de los modelos y se rendericen los atributos de c/u
+        context = super(Project_Update, self).get_context_data(**kwargs)
+        pk = self.kwargs.get('pk', 0) #se obtienen las llaves
+        solicitud = self.model.objects.get(id=pk) #contiene el objeto de la solicitud a editar
+        persona = self.second_model.objects.get(id=solicitud.persona_id) #contiene el objeto de Persona relacionada a la solicitud
+        if 'form' not in context: #validar que los form esten en el contexto y luego asignarlos
+            context['form'] = self.form_class()
+        if 'form2' not in context:
+            context['form2'] = self.second_form_class(instance=persona) #se instancia a la persona que se obtiene
+        context['id'] = pk
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object #se obtiene el objeto
+        id_solicitud = kwargs['pk'] #obtiene el id que se envío por url
+        solicitud = self.model.objects.get(id=id_solicitud)
+        persona = self.second_model.objects.get(id=solicitud.persona_id)
+        # se recoge de los 2 formularios la información que se introduce, instanciado
+        form = self.form_class(request.POST, instance=solicitud)
+        form2 = self.second_form_class(request.POST, instance=persona)
+        #se validan los formularios y se guarda la información
+        if form.is_valid() and form2.is_valid():
+            form.save()
+            form2.save()
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return HttpResponseRedirect(self.get_success_url())
+
+   # De igual manera, pensar el editar proyecto,! cuando se edita un proyecto
+   # verificar que si se editaron los metadatos, entonces esos metadatos si
+   # si son nuevos agregarlos en la relación y luego agregarlos en la relacion
+   # con los Files-Metadatos con valor nulos!
+   # si no son nuevos mantenerlos
+   # si los que están no estaban con relación a los anteriores, entonces 
+   # borrárlos en la relación Projecto - Metadato y File - Metadato
 
 
-def create_project_view(request):
+class Project_Delete(DeleteView):
+    model = Project
+    template_name = 'delete_project_from.html'
+    success_url = reverse_lazy('dashboard')
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object #se obtiene el objeto
+        id_project = kwargs['pk'] #obtiene el id que se envío por url
+        project = self.model.objects.get(id=id_project)
+   
+   #tengo que analizar la BD, porque al borrar un proyecto se eliminan 
+   # todas las dependencias de él, dígase la relación con metadatos
+   # la relación con documentos, y de los documentos con los Files
+   # y los files con sus valores en la relación con los metadatos
+   # y a su vez la carpeta creada en el repositorio
+   # todo se eliminar
+   
+    
+#ya esta función no sirve
+'''def create_project_view(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = create_project_form(request.POST)
@@ -145,7 +208,7 @@ def create_project_view(request):
     else:
         return redirect('index')
     return render(request, 'create_project_form.html', {'form': form, 'form2': form2, 'error': False})
-
+'''
 
 class document_view(FormView): 
     form_class = document_form
@@ -170,11 +233,9 @@ class document_view(FormView):
                                         name_file = f.name,
                                         document = doc)
                             file.save()
-
                         except:
                             print('error')
                     return self.form_valid(form)
-
                 else:
                     print(form.errors)
                     return self.form_invalid(form)
@@ -202,7 +263,6 @@ def list_user_projects_view(request):
             print(result)       
     else:
         result = []
-
     return render(request, 'list_user_projects.html', {'result': result})
 
 
@@ -241,38 +301,28 @@ def add_metadata_document(request):
     if request.method == 'POST':
         print(request.POST)
         if request.user.is_authenticated:
-        
-
             try:
                 project = Project.objects.get(name_project = str(request.POST['project_name']))
-
             except:
                 error = "Proyecto no encontrado"
                 return
-
             try:
                 file = File.objects.get(pk = int(request.POST['document']))
-
             except:
                 error = "Archivo no encontrado"
                 return
-
             try:
                 meta = Metadata.objects.get(pk = int(request.POST['metadata']))
-
             except:
                 error = "Metadato no encontrado"
                 return
-
             users = Project.objects.values_list('project_members', flat=True)
             if request.user.pk in users:                
-
                 rel = File_Metadata_Relation(metadata = meta,
                                              file = file,
                                              data_value = str(request.POST['data'])
                     )
                 rel.save()
-
                 return redirect('/dashboard/?q='+str(request.POST['project_name']))
                     
     elif request.method == 'GET' and request.GET.get('q',False):
@@ -298,7 +348,6 @@ def add_metadata_document(request):
         choices_md = tuple(tp)
 
         form = data_document_form(choices_doc=choices_doc, choices_md=choices_md, initial={'project_name': projectObj.name})
-
     return render(request, 'add_data_document.html', {'form': form, 'error': error})    
 
 

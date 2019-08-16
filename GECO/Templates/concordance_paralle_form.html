@@ -277,13 +277,13 @@ function closeLeftMenu() {
                       {% if k in filter_select %}
                           {% if filter_select|get_item:k == v_f_m %}
                             <option value="{{v_f_m}}" selected>{{v_f_m}}</option>
-                          {% else %}
-                            <option value="{{v_f_m}}">{{v_f_m}}</option>
-                          {% endif %}
-                      {% else %}
-                        <option value="{{v_f_m}}">{{v_f_m}}</option> 
-                      {% endif %}
-                    {% endwith %}
+                      a_sub_b    {% else %}
+                      a_sub_b      <option value="{{v_f_m}}">{{v_f_m}}</option>
+                      a_sub_b    {% endif %}
+                      a_sub_b{% else %}
+                      a_sub_b  <option value="{{v_f_m}}">{{v_f_m}}</option> 
+                      a_sub_b{% endif %}
+                    {%a_sub_b endwith %}
                   {% endfor %}
                 {% endif %}
                 </select>

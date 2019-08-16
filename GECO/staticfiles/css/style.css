@@ -339,6 +339,14 @@ input[type=email] {
     }
 }
 
+.option {
+    margin-left: 6%;
+}
+
+.navbar {
+    background-color: #CCCCCC !important;
+}
+
 
 /*.select-wrap {
     border: 1px solid #777;

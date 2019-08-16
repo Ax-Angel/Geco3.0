@@ -10,3 +10,7 @@ def get_item(dictionary, index):
 @register.filter(name='a_sub_b')
 def a_sub_b(a, b):
     return a-b
+
+@register.filter(name='convert_int')
+def convert_int(a):
+    return int(a)

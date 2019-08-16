@@ -4,6 +4,12 @@ from django.forms.widgets import CheckboxSelectMultiple
 from .models import *
 
 class create_project_form(forms.ModelForm):
+
+    name_project = forms.CharField(label='Nombre del proyecto', max_length=100, widget=forms.TextInput(attrs={'style':'width:100%;'}))
+    description = forms.CharField(label='Descripción del proyecto', max_length=250, widget=forms.Textarea(attrs={'placeholder': 'Escriba aquí la descripción del proyecto...', 'rows':'3', 'style':'width:100%;'}))
+    public_status = forms.BooleanField(label='¿Será público?', required=False, initial=False, widget="")
+    collab_status = forms.BooleanField(label='¿Será colaborativo?', required=False, initial=False)
+    parallel_status = forms.BooleanField(label='¿Será para corpus paralelo?', required=False, initial=False)
     
     class Meta:
         model = Project
@@ -14,20 +20,7 @@ class create_project_form(forms.ModelForm):
             'collab_status',
             'parallel_status',
         ]
-        labels = {
-            'name_project': 'Nombre del proyecto',
-            'description': 'Descripción del proyecto',
-            'public_status': '¿Será público?',
-            'collab_status': '¿Será colaborativo?',
-            'parallel_status': '¿Será para corpus paralelo?',
-        }
-        widgets = {
-            'name_project': forms.TextInput(),
-            'description': forms.Textarea(attrs={'placeholder': 'Escriba aquí la descripción del proyecto...'}),
-            'public_status': forms.NullBooleanSelect(),
-            'collab_status': forms.NullBooleanSelect(),
-            'parallel_status': forms.NullBooleanSelect(),
-        }
+        
 
 
 class metadata_project_form(forms.ModelForm):
@@ -49,7 +42,8 @@ class metadata_project_form(forms.ModelForm):
             (11, "Comunidad a la que pertenece"),
             (12, "Clasificación genérica"),
             (13, "Notas"),
-            )
+            ),
+        required=True
     )
     
     class Meta:

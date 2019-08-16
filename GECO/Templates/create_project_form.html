@@ -1,25 +1,107 @@
 {% extends "base_generic.html" %}
 
-{% block content %}
-<div class="container_form">
-	<form method="post">
-    {% csrf_token %}
-    <h1>Creación de proyectos</h1>
-    <div class="row">		  
-		  {{ form.as_p }}
-          {{ form2.as_p }}
-    </div>
-    
-    <div class="form-group row text-left">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-9"> 
-            <a class="btn btn-danger" href="{% url 'dashboard' %}">Cancelar</a> 
-            &nbsp;
-            <button type="submit" class="btn btn-success">Enviar</button>
-        </div>
-    </div>
+{% load my_filters %}
 
-	</form>
+{% block content %}
+<div class="container">
+    <div class="formulario">
+        <form method="post">
+        {% csrf_token %}
+        <h1>Creación de proyectos</h1>
+        <br>
+        <div class="form-group row">
+            <label class="col-sm-3 col-lg-3"><b>{{form.name_project.label}}</b></label>
+            <div class="col-sm-9 col-lg-9">
+                {{form.name_project}}
+            </div>	              
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-3"><b>{{form.description.label}}</b></label>
+            <div class="col-lg-9">
+                {% comment %} <textarea class="form-control" rows="3" id="comment" name="description"></textarea> {% endcomment %}
+                {{form.description}}
+            </div>	              
+        </div>
+
+        <table class="table table-borderless">
+            <tbody>
+                <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+                </tr>
+                <tr>
+                <th scope="row">2</th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+                </tr>
+                <tr>
+                <th scope="row">3</th>
+                <td colspan="2">Larry the Bird</td>
+                <td>@twitter</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="input-group mb-3">
+            <label><b>{{form2.name_metadata.label}}</b></label>
+            <table class="table table-borderless">
+                <tbody><tr>
+                {% for choice in form2.name_metadata.field.choices %}
+                    
+                    {% if choice.0|convert_int <= 7  %}
+                        <td><input type="checkbox" name="name_metadata" value="{{choice.0}}"
+                        {% ifequal form2.name_metadata.data choice.0 %} 
+                            checked="checked"
+                        {% endifequal %}/>
+                        <label for="">{{choice.1}}</label>
+                        </td>
+                   {% else %}
+                        <td><input type="checkbox" name="name_metadata" value="{{choice.0}}"
+                        {% ifequal form2.name_metadata.data choice.0 %} 
+                            checked="checked"
+                        {% endifequal %}/>
+                        <label for="">{{choice.1}}</label>
+                        </td>
+                   {% endif %}
+                {% endfor %} </tr>
+                </tbody>
+               {% comment %} <label class="input-group-text" for="inputGroupSelect01">{{form2.name_metadata}}</label>  {% endcomment %}
+            </table>
+        </div>
+
+        <div class="form-group row">
+            {{form.public_status.label}}
+            &nbsp;
+            {{form.public_status}}              
+        </div>
+
+        <div class="form-group row">
+            {{form.collab_status.label}}
+            &nbsp;
+            {{form.collab_status}}              
+        </div>
+
+        <div class="form-group row">
+            {{form.parallel_status.label}}
+            &nbsp;
+            {{form.parallel_status}}              
+        </div>
+        
+        <div class="form-group row text-left">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9"> 
+                <button class="btn btn-danger"><a style="color:#FFF;text-decoration:none;" href="{% url 'dashboard' %}">Cancelar</a></button> 
+                &nbsp;
+                <button type="submit" class="btn btn-success">Enviar</button>
+            </div>
+        </div>
+        
+
+        </form>
+    </div>
 </div>
 
 {% endblock %}

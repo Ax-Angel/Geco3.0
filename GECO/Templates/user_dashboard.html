@@ -27,8 +27,10 @@
   <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
 																	<!-- Aquí van los contenidos del menú izquierdo -->
   <fieldset>
-    <legend>Mis proyectos</legend>
-    <a href="{% url 'create_project' %}" class="button">Nuevo</a>
+    <div style="display:inline-block;">
+      <span style="font-size:1.5rem;">Mis proyectos&nbsp;</span>
+      <button class="btn btn-primary btn-sm"><a style="color:#fff;text-decoration:none;" href="{% url 'create_project' %}">Nuevo</a></button>
+    </div>
     <hr>
     {% for p in user_projects %}
       <a href="?q={{ p.name_project }}">{{ p.name_project }}</a>
@@ -137,47 +139,60 @@ function closeRightMenu() {
     <div class="container-fliud nuevo">
 
       <nav class="navbar navbar-toggleable-xl navbar-inverse bg-primary">
-    <div class="container">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <div class="navbar-collapse collapse">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-            </ul>
+        <div class="container">
+            <a class="navbar-brand" href="#"><b>Proyecto: </b>{{project.name_project}}</a>
+            <span class="options">
+              <input type="text" name="id_project" id="id_project" value="{{project.id}}" hidden/>
+              <a href="{% url 'document' %}"><i class="fas fa-upload fa-2x"></i></a>
+              <a href=""><i class="fas fa-download fa-2x"></i></a>
+              <a href=""><i class="fas fa-share-alt fa-2x"></i></a>
+              <a href=""><i class="fas fa-trash-alt fa-2x"></i></a>
+              <a href=""><i class="fas fa-cog fa-2x"></i></a>
+            </span>           
         </div>
-    </div>
-</nav>
+    </nav>
 
-    
-      <div>
-        <h4><b>Proyecto: </b>{{project.name_project}}</h4>
-        <input type="text" name="id_project" id="id_project" value="{{project.id}}" hidden/>
-        <a>Accion1</a>
-        <a>Accion2</a>      
-        <a>Action3</a>
-        <a>Action4</a>
-        <a>Action5</a>
-        <hr>
-      </div>
-      <table>
-
-
-      </table>
-
-      <hr>
+    <hr>
       {% if project.description %}
-        <br>
-        <p><b>Descripción del proyecto: </b>{{project.description}}</p>
+        <div>
+          <p><b>Descripción del proyecto: </b>{{project.description}}</p>
+        </div>
       {% endif %}
-    
+
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Opciones</th>
+            <th scope="col">Título</th>
+            <th scope="col">Lengua</th>
+            <th scope="col">Handle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>@twitter</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    
+  </div>
 
 
 		

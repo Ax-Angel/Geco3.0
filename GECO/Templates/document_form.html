@@ -6,9 +6,6 @@
 <h1>Subir documento</h1>    
 {% if user.is_authenticated %}
 
-<p>  Hola {{ user.username }}! </p>
-<p>  Estas loggueado </p>
-
 <div class="container_form">
 <form method="post" enctype="multipart/form-data" method="post">
   {% csrf_token %}
@@ -21,12 +18,12 @@
       {{form.files}}
     </div>
     <div class="row" style="margin-top:3rem;">
-      <input style="margin-top:1em;" type="submit" id="submit_cancel" onClick ="window.location.href = '{% url 'index' %}'" value="Cancelar" />
-      <input style="margin-top:1em;" type="submit" value="Enviar" />
+      <input class="btn btn-danger" type="submit" id="submit_cancel" onClick ="window.location.href = '{% url 'index' %}'" value="Cancelar" />
+      &nbsp;
+      <input class="btn btn-success" type="submit" value="Enviar" />
     </div>
 </form>
 </div>
-<p><a href="{% url 'logout' %}">Cerrar sesión</a></p>
 {% endif %}
 </div>
 {% endblock %}

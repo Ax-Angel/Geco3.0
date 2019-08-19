@@ -11,6 +11,8 @@ def get_item(dictionary, index):
 def a_sub_b(a, b):
     return a-b
 
-@register.filter(name='convert_int')
-def convert_int(a):
-    return int(a)
+@register.filter(name='here')
+def here(a):
+    if a in [3, 6, 9, 12]:
+        return True
+    return False

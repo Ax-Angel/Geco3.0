@@ -23,51 +23,24 @@
             </div>	              
         </div>
 
-        <table class="table table-borderless">
-            <tbody>
-                <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                </tr>
-                <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                </tr>
-                <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-                </tr>
-            </tbody>
-        </table>
-
         <div class="input-group mb-3">
             <label><b>{{form2.name_metadata.label}}</b></label>
             <table class="table table-borderless">
-                <tbody><tr>
-                {% for choice in form2.name_metadata.field.choices %}
-                    
-                    {% if choice.0|convert_int <= 7  %}
+                <tbody>                                  
+                    <tr>
+                    {% for choice in form2.name_metadata.field.choices %} 
                         <td><input type="checkbox" name="name_metadata" value="{{choice.0}}"
-                        {% ifequal form2.name_metadata.data choice.0 %} 
-                            checked="checked"
-                        {% endifequal %}/>
+                        {% if choice.0 == 1 or choice.0 == 2 %}checked disabled{% endif %}
+                        >                           
                         <label for="">{{choice.1}}</label>
                         </td>
-                   {% else %}
-                        <td><input type="checkbox" name="name_metadata" value="{{choice.0}}"
-                        {% ifequal form2.name_metadata.data choice.0 %} 
-                            checked="checked"
-                        {% endifequal %}/>
-                        <label for="">{{choice.1}}</label>
-                        </td>
-                   {% endif %}
-                {% endfor %} </tr>
-                </tbody>
+                        {% if forloop.counter|here %}                                     
+                            </tr>
+                            <tr>                        
+                        {% endif %}
+                        {% endfor %} 
+                    </tr>                                                          
+               </tbody>
                {% comment %} <label class="input-group-text" for="inputGroupSelect01">{{form2.name_metadata}}</label>  {% endcomment %}
             </table>
         </div>

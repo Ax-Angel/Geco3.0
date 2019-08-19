@@ -155,7 +155,7 @@ class Project_Update(UpdateView):
 
 class Project_Delete(DeleteView):
     model = Project
-    template_name = 'delete_project_from.html'
+    template_name = 'delete_project_form.html'
     success_url = reverse_lazy('dashboard')
       
     

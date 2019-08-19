@@ -5,7 +5,7 @@
 	<form method="post">
 		{% csrf_token %}
 		<h3>¿Desea eliminar el proyecto: "{{ object.name_project }}"?</h3>
-		<a class= "btn btn-danger" href="{% url 'dashboard' %}?q={{ object.name_project }}">Cancelar</a>
+		<a class="btn btn-danger" href="{% url 'dashboard' %}?q={{ object.name_project }}">Cancelar</a>
 		<button class="btn btn-success" type="submit">Aceptar</button>
 	</form>
 </div>

@@ -140,14 +140,14 @@ function closeRightMenu() {
 
       <nav class="navbar navbar-toggleable-xl navbar-inverse bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="#"><b>Proyecto: </b>{{project.name_project}}</a>
+            <p class="navbar-brand" href="#"><b>Proyecto: </b>{{project.name_project}}</p>
             <span class="options">
               <input type="text" name="id_project" id="id_project" value="{{project.id}}" hidden/>
-              <a href="{% url 'document' %}"><i class="fas fa-upload fa-2x"></i></a>
-              <a href=""><i class="fas fa-download fa-2x"></i></a>
-              <a href=""><i class="fas fa-share-alt fa-2x"></i></a>
-              <a href="{%url 'delete_project' project.id %}" title="Eliminar proyecto"><i class="fas fa-trash-alt fa-2x"></i></a>
-              <a href=""><i class="fas fa-cog fa-2x"></i></a>
+              <a href="{% url 'document' %}" title="Subir archivo"><i class="fas fa-upload fa-2x"></i></a>
+              <a href="" title="Descargar archivo"><i class="fas fa-download fa-2x"></i></a>
+              <a href="" title="Compartir"><i class="fas fa-share-alt fa-2x"></i></a>
+              <a href="{% url 'delete_project' project.id %}" title="Eliminar proyecto"><i class="fas fa-trash-alt fa-2x"></i></a>
+              <a href="" title="Editar"><i class="fas fa-cog fa-2x"></i></a>
             </span>           
         </div>
     </nav>

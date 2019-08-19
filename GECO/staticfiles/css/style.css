@@ -254,6 +254,15 @@ input[type=email] {
     margin-left: 70%;
 }
 
+.btn-danger {
+    background-color: #da2727 !important;
+    color: #FFF !important;
+}
+
+.btn-danger:hover {
+    background-color: #971e1e !important;
+}
+
 .button_export {
     font: bold 11px Arial;
     text-decoration: none;

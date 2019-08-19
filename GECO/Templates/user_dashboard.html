@@ -146,7 +146,7 @@ function closeRightMenu() {
               <a href="{% url 'document' %}"><i class="fas fa-upload fa-2x"></i></a>
               <a href=""><i class="fas fa-download fa-2x"></i></a>
               <a href=""><i class="fas fa-share-alt fa-2x"></i></a>
-              <a href=""><i class="fas fa-trash-alt fa-2x"></i></a>
+              <a href="{%url 'delete_project' project.id %}" title="Eliminar proyecto"><i class="fas fa-trash-alt fa-2x"></i></a>
               <a href=""><i class="fas fa-cog fa-2x"></i></a>
             </span>           
         </div>

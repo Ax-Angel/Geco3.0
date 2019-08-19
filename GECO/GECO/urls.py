@@ -18,6 +18,8 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from django.conf.urls import url
 
+from django.contrib.auth.decorators import login_required
+
 from users.views import *
 from corpus.views import *
 from apps.concordanciaParalelo.views import *
@@ -29,7 +31,9 @@ urlpatterns = [
     
     url(r'^dashboard$', user_dashboard_view, name = 'dashboard'),
     url(r'^dashboard/create_project/', Project_Create.as_view(), name = 'create_project'),
+    url(r'^dashboard/delete_project/(?P<pk>\d+)/$', login_required(Project_Delete.as_view()), name='delete_project'),
     #path('dashboard/create_project/', create_project_view, name = 'create_project'),
+    
     url(r'^dashboard/add_collaborator/', add_collaborator_view, name = 'add_collaborator'),
     url(r'^list_user_projects/', list_user_projects_view, name = 'list_user_proyects'),
     url(r'^dashboard/upload_document/', document_view.as_view(), name = 'document'),

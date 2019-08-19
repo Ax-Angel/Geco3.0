@@ -157,19 +157,7 @@ class Project_Delete(DeleteView):
     model = Project
     template_name = 'delete_project_from.html'
     success_url = reverse_lazy('dashboard')
-    
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object #se obtiene el objeto
-        id_project = kwargs['pk'] #obtiene el id que se envío por url
-        project = self.model.objects.get(id=id_project)
-   
-   #tengo que analizar la BD, porque al borrar un proyecto se eliminan 
-   # todas las dependencias de él, dígase la relación con metadatos
-   # la relación con documentos, y de los documentos con los Files
-   # y los files con sus valores en la relación con los metadatos
-   # y a su vez la carpeta creada en el repositorio
-   # todo se eliminar
-   
+      
     
 #ya esta función no sirve
 '''def create_project_view(request):

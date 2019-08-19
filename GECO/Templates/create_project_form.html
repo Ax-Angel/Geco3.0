@@ -28,9 +28,11 @@
             <table class="table table-borderless">
                 <tbody>                                  
                     <tr>
+                    <input type="hidden" name="name_metadata" value="1" />
+                    <input type="hidden" name="name_metadata" value="2" />
                     {% for choice in form2.name_metadata.field.choices %} 
                         <td><input type="checkbox" name="name_metadata" value="{{choice.0}}"
-                        {% if choice.0 == 1 or choice.0 == 2 %}checked disabled{% endif %}
+                        {% if choice.0 == 1 or choice.0 == 2 %}checked disabled readonly="readonly"{% endif %}
                         >                           
                         <label for="">{{choice.1}}</label>
                         </td>

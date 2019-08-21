@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect  # noqa
+from django.shortcuts import render, redirect, get_object_or_404 # noqa
 from users.models import User
 from users.forms import *
 import traceback
@@ -34,3 +34,14 @@ def register_user_view(request):
     else:
         form = register_user_form(request.POST)
     return render(request, 'registration/register_user_form.html', {'form': form})
+
+def edit_user_view(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.method == 'GET':
+        form = EditForm(instance=user)
+    else:
+        form = EditForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+        #  hacer el return
+    return render(request, "registration/edit_user.html", {'form': form})

@@ -47,7 +47,7 @@
           <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
             {% if user.is_authenticated %}
               <p>Hola {{ user.username }}!</p>
-              <a href="#" class="dropdown-item">Editar perfil</a>
+              <a href="{% url 'edit_user' user.id %}" class="dropdown-item">Editar perfil</a>
               <a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
             {% else %}
               <a href="{% url 'login' %}" class="dropdown-item">Iniciar sesión</a>

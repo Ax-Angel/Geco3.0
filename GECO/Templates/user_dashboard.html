@@ -29,7 +29,7 @@
   <fieldset>
     <div style="display:inline-block;">
       <span style="font-size:1.5rem;">Mis proyectos&nbsp;</span>
-      <button class="btn btn-primary btn-sm"><a style="color:#fff;text-decoration:none;" href="{% url 'create_project' %}">Nuevo</a></button>
+      <button onClick ="window.location.href = '{% url 'create_project' %}'" sr class="btn btn-primary btn-sm"><a style="color:#fff;text-decoration:none;">Nuevo</a></button>
     </div>
     <hr>
     {% for p in user_projects %}
@@ -81,23 +81,8 @@
     
 </div>
 
-<div class="w3-sidebar w3-bar-block w3-card w3-animate-right" style="display:none;right:0;min-width:160px;width:15%;max-height:20%;" id="rightMenu">
-  <button onclick="closeRightMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
-																	<!-- Aquí van los contenidos del menú derecho -->
-
-  {% if user.is_authenticated %}
-    <a href="#" class="w3-bar-item w3-button">Hola {{ user.username }}!</a>
-    <a href="#" class="w3-bar-item w3-button">Editar perfil</a>
-    <a href="{% url 'logout' %}" class="w3-bar-item w3-button">Cerrar sesión</a>
-  {% else %}
-    <a href="{% url 'login' %}" class="w3-bar-item w3-button">Iniciar sesión</a>
-    <a href="{% url 'register' %}" class="w3-bar-item w3-button">Registrar usuario</a>
-  {% endif %}
-</div>
-
 <div class="w3-dark-grey">
   <button class="w3-button dark-grey w3-medium w3-left" onclick="openLeftMenu()">&#9776; Proyectos</button>
-  <button class="w3-button dark-grey w3-medium w3-right" onclick="openRightMenu()">Perfil de usuario &#9776;</button>
 </div>
 
 <script>
@@ -120,7 +105,7 @@ function closeRightMenu() {
 
 {% block content %}
 {% if user.is_authenticated %}
-<div id="dashboard" onclick="closeLeftMenu(),closeRightMenu()">
+<div id="dashboard" onclick="closeLeftMenu()">
 
 	{% if not project %}
     <div align="center">

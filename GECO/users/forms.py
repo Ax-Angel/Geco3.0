@@ -31,3 +31,17 @@ class register_user_form(forms.Form):
         if password != confirm:
             print('Bad!')
             raise forms.ValidationError("password and confirm_password does not match")
+
+class EditForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = {'username', 'first_name', 'last_name', 'email', 'institution', 'degree', 'country'}
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm = cleaned_data.get("confirm")
+
+        if password != confirm:
+            raise forms.ValidationError("password and confirm_password does not match")

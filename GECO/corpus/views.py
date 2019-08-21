@@ -279,13 +279,9 @@ class Document_Delete(DeleteView):
 
 def upload_document_view(request, id_project):
     project = Project.objects.get(id=id_project)
+    metadata = Metadata.objects.filter(project = id_project)
     
     
-    metadata = []
-    
-    if request.user.is_authenticated:
-        if request.method == 'GET':
-            id_project = Project.objects.get(id=int(request.GET['pk']))
     
     contexto = {'project':project, 'metadata': metadata}
     return render(request, 'upload_document_form.html', contexto)

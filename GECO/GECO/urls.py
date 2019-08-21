@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'^dashboard/delete_project/(?P<pk>\d+)/$', login_required(Project_Delete.as_view()), name='delete_project'),
     #path('dashboard/create_project/', create_project_view, name = 'create_project'),
     
-    url(r'^dashboard/upload_document/(?P<id_project>\d+)/$', Upload_document.as_view(), name = 'upload_document'),    
+    url(r'^dashboard/upload_document/(?P<id_project>\d+)/$', upload_document_view, name = 'upload_document'),    
     url(r'^dashboard/delete_document/(?P<pk>\d+)/$', login_required(Document_Delete.as_view()), name='delete_document'),
     
     url(r'^dashboard/add_collaborator/', add_collaborator_view, name = 'add_collaborator'),

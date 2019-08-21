@@ -275,6 +275,11 @@ input[type=email] {
     border-left: 1px solid #CCCCCC;
 }
 
+.user-options {
+    margin-top: 1px;
+    margin-right: 3%;
+}
+
 
 /* Style the container */
 
@@ -353,7 +358,11 @@ input[type=email] {
 }
 
 .navbar {
-    background-color: #CCCCCC !important;
+    background-color: rgb(238, 235, 235) !important;
+}
+
+.dropdown-item:hover {
+    background-color: #b9aeae !important;
 }
 
 

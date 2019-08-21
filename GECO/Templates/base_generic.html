@@ -17,15 +17,51 @@
 </head>
 
 <body>
-<div id="fixed-header">
-			<a href="{% url 'index' %}">
- <img src="{% static 'img/geco.png' %}" width="38" height="34" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco_00.jpg">
- 			Inicio</a>
-      <a href="{% url 'dashboard' %}">Proyectos</a>
-      <a href="{% url 'applications' %}">Desarrollos</a>
-      <a href="#">Portales</a>
-      <a href="{% url 'help_view' %}">Ayuda</a>
-</div>
+
+<nav class="navbar fixed-top navbar-light bg-light navbar-expand-lg">
+  <img src="{% static 'img/geco.png' %}" width="38" height="34" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco_00.jpg">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse flex-grow-1" id="navbarNav">
+    <ul style="margin-right:6%;" class="navbar-nav ml-auto flex-nowrap">
+        <li class="nav-item">
+          <a href="{% url 'index' %}">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'dashboard' %}">Proyectos</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'applications' %}">Desarrollos</a>
+        </li>
+        <li class="nav-item">
+          <a href="#">Portales</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'help_view' %}">Ayuda</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Usuario
+          </a>
+          <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
+            {% if user.is_authenticated %}
+              <p>Hola {{ user.username }}!</p>
+              <a href="#" class="dropdown-item">Editar perfil</a>
+              <a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
+            {% else %}
+              <a href="{% url 'login' %}" class="dropdown-item">Iniciar sesión</a>
+              <a href="{% url 'register' %}" class="dropdown-item">Registrar usuario</a>
+            {% endif %}
+          </div>
+        </li>
+      </ul>    
+    </div>
+</nav>
+<br>
+
+
+  
 
 {% block sidebar %}
 {% endblock sidebar %}

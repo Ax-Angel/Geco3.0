@@ -1,0 +1,38 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="formulario">
+        <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h4 align="center"><strong>Subir archivos</strong></h4>
+        <br>
+        <div class="form-group row">
+            <label class="col-sm-3 col-lg-3"><b>Nombre del proyecto</b></label>
+            <div class="col-sm-9 col-lg-9">
+                {{ form.project_name }}
+            </div>	
+                          
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-3"><b>{{form.files.label}}:</b></label>
+            <div class="col-lg-9">
+                {% comment %} <textarea class="form-control" rows="3" id="comment" name="description"></textarea> {% endcomment %}
+                {{form.files}}
+            </div>	              
+        </div>
+
+        <div class="form-group row text-left">
+            <div class="col-sm-3">
+                <button class="btn btn-danger"><a style="color:#FFF;text-decoration:none;" href="{% url 'dashboard' %}">Cancelar</a></button> 
+                &nbsp;
+                <button type="submit" class="btn btn-success">Aceptar</button>
+            </div>
+            <div class="col-sm-9"></div>
+        </div>
+
+        </form>
+    </div>
+</div>
+
+{% endblock %}

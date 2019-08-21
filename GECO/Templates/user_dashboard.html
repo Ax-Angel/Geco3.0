@@ -140,17 +140,17 @@ function closeRightMenu() {
 
       <nav class="navbar navbar-toggleable-xl navbar-inverse bg-primary">
         <div class="container">
-            <p class="navbar-brand" href="#"><b>Proyecto: </b>{{project.name_project}}</p>
+            <p class="navbar-brand"><b>Proyecto: </b>{{project.name_project}}</p>
             <span class="options">
               <input type="text" name="id_project" id="id_project" value="{{project.id}}" hidden/>
-              <a href="{% url 'document' %}" title="Subir archivo"><i class="fas fa-upload fa-2x"></i></a>
-              <a href="" title="Descargar archivo"><i class="fas fa-download fa-2x"></i></a>
-              <a href="" title="Compartir"><i class="fas fa-share-alt fa-2x"></i></a>
+              <a href="{% url 'upload_document' project.id %}" title="Subir archivo"><i class="fas fa-upload fa-2x"></i></a>
+              <a href="" title="Descargar proyecto"><i class="fas fa-download fa-2x"></i></a>
+              <a href="{% url 'add_collaborator' %}" title="Añadir colaborador al proyecto"><i class="fas fa-share-alt fa-2x"></i></a>
+              <a href="{% url 'update_project' project.id %}" title="Editar proyecto"><i class="fas fa-cog fa-2x"></i></a>
               <a href="{% url 'delete_project' project.id %}" title="Eliminar proyecto"><i class="fas fa-trash-alt fa-2x"></i></a>
-              <a href="" title="Editar"><i class="fas fa-cog fa-2x"></i></a>
             </span>           
         </div>
-    </nav>
+      </nav>
 
     <hr>
       {% if project.description %}
@@ -160,41 +160,57 @@ function closeRightMenu() {
       {% endif %}
 
     <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Opciones</th>
-            <th scope="col">Título</th>
-            <th scope="col">Lengua</th>
-            <th scope="col">Handle</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
-      </table>
+       {% if documents|length == 0 %}
+        <div>
+          <p align="center" style="color:red;"><b>Su proyecto no tiene archivos</b></p>
+          <br>
+          <br>
+        </div>
+      {% else %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Opciones</th>
+              <th scope="col">Archivos</th>
+              {% for v_m in value_metadata %}
+                <th scope="col">{{v_m}}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for res in documents %}
+              {% for f in res.1 %}
+                {% if forloop.first %}
+                  <tr>
+                    <td rowspan="{{res.1|length}}" width="10%">
+                    <a href="#" title="Ver documento"><img width="20%" height="20%" src="{% static 'img/ver.jpg' %}"></a>
+                    <a href="#" title="Descargar documento"><img width="20%" height="20%" src="{% static 'img/down.jpg' %}"></a>
+                    <a href="{% url 'delete_document' res.0 %}" title="Eliminar documento"><img width="20%" height="20%" src="{% static 'img/eliminar.jpg' %}"></a>
+                    {{res.0}}
+                    </td>
+                    {% for r_f in f %}
+                      <td>{{r_f}}</td>
+                    {% endfor %}
+                  </tr>
+                {% else %}
+                  <tr>
+                    {% for r_f in f %}
+                      <td>{{r_f}}</td>
+                    {% endfor %}
+                  </tr>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          
+          </tbody>
+        </table>
+      {% endif %}
     </div>
     
+
+
+
   </div>
-
-
 		
 	{% endif %}
 </div>

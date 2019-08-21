@@ -5,9 +5,9 @@
     <div class="formulario">
 		<form method="post">
 			{% csrf_token %}
-			<h4>¿Desea eliminar el proyecto: "{{ object.name_project }}"?</h4>
+			<h4>¿Desea eliminar del proyecto: "{{ project.name_project }}" los archivos {{files}}?</h4>
 			<br>
-			<a class="btn btn-danger" href="{% url 'dashboard' %}?q={{ object.name_project }}">Cancelar</a>
+			<a class="btn btn-danger" href="{% url 'dashboard' %}?q={{ project.name_project }}">Cancelar</a>
 			<button class="btn btn-success" type="submit">Aceptar</button>
 		</form>
 	</div>

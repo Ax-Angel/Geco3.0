@@ -31,12 +31,15 @@ urlpatterns = [
     
     url(r'^dashboard$', user_dashboard_view, name = 'dashboard'),
     url(r'^dashboard/create_project/', Project_Create.as_view(), name = 'create_project'),
+    url(r'^dashboard/update_project/(?P<pk>\d+)/$', login_required(Project_Update.as_view()), name='update_project'),
     url(r'^dashboard/delete_project/(?P<pk>\d+)/$', login_required(Project_Delete.as_view()), name='delete_project'),
     #path('dashboard/create_project/', create_project_view, name = 'create_project'),
     
+    url(r'^dashboard/upload_document/(?P<id_project>\d+)/$', Upload_document.as_view(), name = 'upload_document'),    
+    url(r'^dashboard/delete_document/(?P<pk>\d+)/$', login_required(Document_Delete.as_view()), name='delete_document'),
+    
     url(r'^dashboard/add_collaborator/', add_collaborator_view, name = 'add_collaborator'),
     url(r'^list_user_projects/', list_user_projects_view, name = 'list_user_proyects'),
-    url(r'^dashboard/upload_document/', document_view.as_view(), name = 'document'),
     
     url(r'^concordance_paralle$', concordance_paralle_view , name= 'concordance_paralle'),
     url(r'^export/csv$', export_search_csv, name='export_search_csv'),

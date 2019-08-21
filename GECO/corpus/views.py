@@ -14,6 +14,7 @@ from .models import *
 from users.models import User
 
 import traceback
+import os, shutil
 
 
 # Create your views here.
@@ -26,16 +27,37 @@ def user_dashboard_view(request):
         if request.method == 'GET' and request.GET.get('q',False):
             name_project = str(request.GET.get('q', ''))
             project = Project.objects.get(name_project=name_project)
-            print(project)
-            documents = Document.objects.filter(project=project)
-
+            
+            metadata = Metadata.objects.filter(project=project)
+            value_metadata = []
+            arr_id_metad = []
+            for m in metadata:
+                value_metadata.append(m.name_metadata)
+                arr_id_metad.append((Metadata.objects.get(name_metadata=m.name_metadata)).id)
+            
             result = []
+            documents = Document.objects.filter(project=project)
+            
             for doc in documents:
+                array_tmp = []                
+                array_tmp.append(doc.id)
                 files = File.objects.filter(document=doc)
+                ar_tt = []
                 for f in files:
-                    result.append(f)
-    
+                    a_t = [''] * (len(arr_id_metad)+1)
+                    a_t[0]= f.name_file
+                    relations = File_Metadata_Relation.objects.filter(file=f).order_by('metadata')
+                    for r in relations:
+                        value = r.data_value
+                        if value==None:
+                            value=''
+                        a_t[arr_id_metad.index(r.metadata_id)+1] = value
+                    ar_tt.append(a_t)
+                array_tmp.append(ar_tt)
+                result.append(array_tmp)
+               
         else:
+            value_metadata = []
             result = []
             project = None
     else:
@@ -51,7 +73,10 @@ def user_dashboard_view(request):
         elif proj.is_public():
             public_projects.append(proj)  
 
-    return render(request, 'user_dashboard.html', {'user_projects': user_projects, 'public_projects': public_projects, 'project': project, 'documents': result})
+    return render(request, 'user_dashboard.html', {'user_projects': user_projects, 
+                                                   'public_projects': public_projects, 
+                                                   'project': project, 'value_metadata':value_metadata, 
+                                                   'documents': result})
 
 
 class Project_Create(CreateView):
@@ -99,13 +124,18 @@ class Project_Create(CreateView):
                     meta = Metadata.objects.get(id=int(md))
                     meta.project.add(p)
                     meta.save()  
+                
+                new_dir_path = 'mediafiles/mediafiles/'+str(validatedData['name_project'])
+                os.makedirs(new_dir_path)
                 return HttpResponseRedirect(self.get_success_url()+'?q='+validatedData['name_project'])
             
             except IntegrityError as e:
-                error = 'Ya existe un proyecto con ese nombre. Compruebe que sea único.'
-                return self.render_to_response(self.get_context_data(form=form, form2=form2, error=error))
+                traceback.print_exc()
+                return self.render_to_response(self.get_context_data(form=form, form2=form2, error=str(traceback.print_exception)))
         
         else: #en caso de no ser válidos se muestra el contexto en blanco
+            error = 'Ya existe un proyecto con ese nombre. Compruebe que sea único.'
+            print(error)
             return self.render_to_response(self.get_context_data(form=form, form2=form2, error=error))
 
 class Project_Update(UpdateView):
@@ -119,12 +149,12 @@ class Project_Update(UpdateView):
     def get_context_data(self, **kwargs): #para poder llamar los objectos de los modelos y se rendericen los atributos de c/u
         context = super(Project_Update, self).get_context_data(**kwargs)
         pk = self.kwargs.get('pk', 0) #se obtienen las llaves
-        solicitud = self.model.objects.get(id=pk) #contiene el objeto de la solicitud a editar
-        persona = self.second_model.objects.get(id=solicitud.persona_id) #contiene el objeto de Persona relacionada a la solicitud
+        project = self.model.objects.get(id=pk) #contiene el objeto de la solicitud a editar
+        metadata = self.second_model.objects.get(project=project.id) #contiene el objeto de Persona relacionada a la solicitud
         if 'form' not in context: #validar que los form esten en el contexto y luego asignarlos
             context['form'] = self.form_class()
         if 'form2' not in context:
-            context['form2'] = self.second_form_class(instance=persona) #se instancia a la persona que se obtiene
+            context['form2'] = self.second_form_class(instance=metadata) #se instancia a la persona que se obtiene
         context['id'] = pk
         return context
 
@@ -157,8 +187,57 @@ class Project_Delete(DeleteView):
     model = Project
     template_name = 'delete_project_form.html'
     success_url = reverse_lazy('dashboard')
-      
     
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object #se obtiene el objeto
+        id_project = kwargs['pk'] #obtiene el id que se envío por url
+        project = self.model.objects.get(id=id_project)
+        folder = 'mediafiles/mediafiles/'+project.name_project
+        try:
+            shutil.rmtree(folder, ignore_errors=True)
+        except OSError as e:
+            print(e)
+        
+        project.delete() 
+        return HttpResponseRedirect(self.get_success_url())
+    
+
+class Document_Delete(DeleteView):
+    model = Document
+    template_name = 'delete_document_form.html'
+    success_url = reverse_lazy('dashboard')
+    
+    def get_context_data(self, **kwargs):
+        context = super(Document_Delete, self).get_context_data(**kwargs)
+        self.object = self.get_object #se obtiene el objeto
+        document = kwargs['object'] #obtiene el id que se envío por url
+        #document = self.model.objects.get(id=id_document)
+        project = Project.objects.get(id=document.project_id) 
+        files = File.objects.filter(document_id=document.id)
+        _f = ''
+        for f in files:
+            _f+= '"'+f.name_file + '" '
+        if 'project' not in context:
+            context['project'] = project
+        if 'files' not in context:
+            context['files'] = _f
+    
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object #se obtiene el objeto
+        id_document = kwargs['pk'] #obtiene el id que se envío por url
+        document = self.model.objects.get(id=id_document)
+        
+        files = File.objects.filter(document_id=document.id)
+        for f in files:
+            if os.path.exists(f.file.path):
+                os.remove(f.file.path)
+        project = Project.objects.get(id=document.project_id)        
+        document.delete() 
+        return HttpResponseRedirect(self.get_success_url()+'?q='+project.name_project)
+    
+
 #ya esta función no sirve
 '''def create_project_view(request):
     if request.user.is_authenticated:
@@ -198,9 +277,23 @@ class Project_Delete(DeleteView):
     return render(request, 'create_project_form.html', {'form': form, 'form2': form2, 'error': False})
 '''
 
-class document_view(FormView): 
+def upload_document_view(request, id_project):
+    project = Project.objects.get(id=id_project)
+    
+    
+    metadata = []
+    
+    if request.user.is_authenticated:
+        if request.method == 'GET':
+            id_project = Project.objects.get(id=int(request.GET['pk']))
+    
+    contexto = {'project':project, 'metadata': metadata}
+    return render(request, 'upload_document_form.html', contexto)
+
+
+class Upload_document(FormView): 
     form_class = document_form
-    template_name = 'document_form.html'  # Replace with your template.
+    template_name = 'upload_document_form.html'  # Replace with your template.
     success_url = 'http://localhost:8000/dashboard/'  # Replace with your URL or reverse().
 
     def post(self, request, *args, **kwargs):
@@ -232,7 +325,7 @@ class document_view(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if request.user.is_authenticated:
-            return super(document_view, self).get(request, *args, **kwargs)
+            return super(Upload_document, self).get(request, *args, **kwargs)
         else:
             redirect('http://localhost:8000/accounts/login/')
 

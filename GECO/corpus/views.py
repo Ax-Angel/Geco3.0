@@ -9,6 +9,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.urls import reverse
 
+from django.conf import settings
+
+from django.core.files.storage import default_storage
+
 from corpus.forms import *
 from .models import *
 from users.models import User
@@ -55,11 +59,14 @@ def user_dashboard_view(request):
                     ar_tt.append(a_t)
                 array_tmp.append(ar_tt)
                 result.append(array_tmp)
+            
+            colaboradores = project.project_members.all()
                
         else:
             value_metadata = []
             result = []
             project = None
+            colaboradores = []
     else:
         return redirect('login')
 
@@ -71,12 +78,13 @@ def user_dashboard_view(request):
         if proj.is_user_collaborator(request.user):
             user_projects.append(proj)
         elif proj.is_public():
-            public_projects.append(proj)  
+            public_projects.append(proj)
 
     return render(request, 'user_dashboard.html', {'user_projects': user_projects, 
                                                    'public_projects': public_projects, 
                                                    'project': project, 'value_metadata':value_metadata, 
-                                                   'documents': result})
+                                                   'documents': result,
+                                                   'colaboradores': colaboradores})
 
 
 class Project_Create(CreateView):
@@ -107,7 +115,6 @@ class Project_Create(CreateView):
         if form.is_valid() and form2.is_valid():
             validatedData = form.cleaned_data
             validatedData2 = form2.cleaned_data
-            print(validatedData2)
             try:
                 p = Project(owner = request.user,
                             name_project = str(validatedData['name_project']),
@@ -119,7 +126,6 @@ class Project_Create(CreateView):
                 p.project_members.add(request.user)
 
                 list_md = validatedData2['name_metadata']
-                print(list_md)
                 for md in list_md:
                     meta = Metadata.objects.get(id=int(md))
                     meta.project.add(p)
@@ -135,7 +141,6 @@ class Project_Create(CreateView):
         
         else: #en caso de no ser válidos se muestra el contexto en blanco
             error = 'Ya existe un proyecto con ese nombre. Compruebe que sea único.'
-            print(error)
             return self.render_to_response(self.get_context_data(form=form, form2=form2, error=error))
 
 class Project_Update(UpdateView):
@@ -281,7 +286,46 @@ def upload_document_view(request, id_project):
     project = Project.objects.get(id=id_project)
     metadata = Metadata.objects.filter(project = id_project)
     
+    if request.user.is_authenticated and project.is_user_collaborator(request.user):
+        if request.method == 'POST':
+            i = 1
+            d = Document(project = project, owner = request.user)
+            guarde = False            
+            while str(i) in request.POST:
+                
+                if guarde==False and project.parallel_status:
+                    d.save()
+                    guarde = True
+                else:
+                    d = Document(project = project, owner = request.user)
+                    d.save()
+                            
+                _file = request.FILES['file_'+str(i)]
+                new_path = '/mediafiles/' + project.name_project 
+                save_path = settings.MEDIA_ROOT + new_path + '/' + _file.name
+                path = default_storage.save(save_path, _file)
+                
+                name_file = path.split('/')[-1]
+                f = File(file = new_path+ '/' + name_file,
+                         name_file = name_file,
+                         document = d)
+                f.save()
+                
+                for m in metadata:
+                    if 'file_'+str(i)+'_'+str(m.id) in request.POST:
+                        f_m_r = File_Metadata_Relation(metadata = m,
+                                                       file = f,
+                                                       data_value = request.POST['file_'+str(i)+'_'+str(m.id)])
+                    else:
+                        f_m_r = File_Metadata_Relation(metadata = m,
+                                                       file = f)
+                    f_m_r.save()
+                i+=1
     
+            return HttpResponseRedirect(reverse_lazy('dashboard')+'?q='+project.name_project)
+        
+    else:
+        return redirect('login')
     
     contexto = {'project':project, 'metadata': metadata}
     return render(request, 'upload_document_form.html', contexto)

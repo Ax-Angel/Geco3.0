@@ -5,12 +5,17 @@
     <div class="formulario">
         <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <h3><strong>Subir archivos</strong></h3>
-        <h4><strong>Proyecto: </strong>{{project.name_project}}  {{project.parallel_status}}</h4>
+        <h3 align="center"><strong>Subir archivos</strong></h3>
+        <h4><strong>Proyecto: </strong>{{project.name_project}}</h4>
         <br>
 
+        <div class="form-group text-right">
+            <button type="button" class="btn btn-success" onclick="agregarFila()" title="Agregar Fila">+</button>
+            <button type="button" class="btn btn-danger" onclick="eliminarFila()" title="Eliminar Fila">X</button>
+        </div>
+
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped" id="tablaprueba">
                 <thead>
                     <tr>
                         <th>Subir archivo (.txt)</th>
@@ -22,27 +27,114 @@
                 <tbody>
                     {% if project.parallel_status %}
                         <tr>
-                            <th><input type="file" id="docpicker" accept=".txt"></th>
+                            <th><input type="file" id="file_1" name="file_1" accept=".txt" required>
+                            <input type="hidden" name="1" value="1" /></th>
                             {% for m in metadata %}
-                                <th>{{m.name_metadata}}</th>
-                            {% endfor %}
+                                {% if m.id == 1 %}
+                                    <th><select class="form-control" id="file_1_{{m.id}}" required>
+                                        <option value="">Seleccione...</option>
+                                        <option value="DE">Alemán</option>
+                                        <option value="ES">Español</option>
+                                        <option value="EN">Inglés</option>
+                                    </select></th>
+                                
+                                {% elif m.id == 2 %}
+                                    <th><input type="text" name="file_1_{{m.id}}" id="file_1_{{m.id}}" value="" required/></th>
 
-                            <input type="text" name="{{m.id}" id="{{m.id}}" value=""/>
+                                {% elif m.id == 12 %}
+                                    <th><select class="form-control" id="file_1_{{m.id}}">
+                                        <option value="">Seleccione...</option>
+                                        <option value="Didáctico">Didáctico</option>
+                                        <option value="Expositivo">Expositivo</option>
+                                        <option value="Narrativo">Narrativo</option>
+                                        <option value="Poético">Poético</option>
+                                        <option value="Religioso ">Religioso </option>
+                                        <option value="Histórico">Histórico</option>
+                                        <option value="Político ">Político </option>
+                                    </select></th>
+                                
+                                {% else %}
+                                    <th><input type="text" name="file_1_{{m.id}}" id="file_1_{{m.id}}" value=""/></th>
+                                {% endif %}
+                                
+                            {% endfor %}
                         </tr>
+                        <tr>
+                            <th><input type="file" id="file_2" name="file_2" accept=".txt" required>
+                            <input type="hidden" name="2" value="2" /></th>
+                            {% for m in metadata %}
+                                {% if m.id == 1 %}
+                                    <th><select class="form-control" id="file_2_{{m.id}}" required>
+                                        <option value="">Seleccione...</option>
+                                        <option value="DE">Alemán</option>
+                                        <option value="ES">Español</option>
+                                        <option value="EN">Inglés</option>
+                                    </select></th>
+                                
+                                {% elif m.id == 2 %}
+                                    <th><input type="text" name="file_2_{{m.id}}" id="file_2_{{m.id}}" value="" required/></th>
+
+
+                                {% elif m.id == 12 %}
+                                    <th><select class="form-control" id="file_2_{{m.id}}">
+                                        <option value="">Seleccione...</option>
+                                        <option value="Didáctico">Didáctico</option>
+                                        <option value="Expositivo">Expositivo</option>
+                                        <option value="Narrativo">Narrativo</option>
+                                        <option value="Poético">Poético</option>
+                                        <option value="Religioso ">Religioso </option>
+                                        <option value="Histórico">Histórico</option>
+                                        <option value="Político ">Político </option>
+                                    </select></th>
+                                
+                                {% else %}
+                                    <th><input type="text" name="file_2_{{m.id}}" id="file_2_{{m.id}}" value=""/></th>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+
                     {% else %}
                         <tr>
-                            <th><input type="file" id="docpicker" accept=".txt"></th>
-                            <th></th>
-                            <th></th>
+                            <th><input type="file" id="file_1" name="file_1" accept=".txt" required>
+                            <input type="hidden" name="1" value="1" /></th>
+                            {% for m in metadata %}
+                                {% if m.id == 1 %}
+                                    <th><select class="form-control" id="file_1_{{m.id}}" required>
+                                        <option value="">Seleccione...</option>
+                                        <option value="DE">Alemán</option>
+                                        <option value="ES">Español</option>
+                                        <option value="EN">Inglés</option>
+                                    </select></th>
+                                
+                                {% elif m.id == 2 %}
+                                    <th><input type="text" name="file_1_{{m.id}}" id="file_1_{{m.id}}" value="" required/></th>
+
+                                {% elif m.id == 12 %}
+                                    <th><select class="form-control" id="file_1_{{m.id}}">
+                                        <option value="">Seleccione...</option>
+                                        <option value="Didáctico">Didáctico</option>
+                                        <option value="Expositivo">Expositivo</option>
+                                        <option value="Narrativo">Narrativo</option>
+                                        <option value="Poético">Poético</option>
+                                        <option value="Religioso ">Religioso </option>
+                                        <option value="Histórico">Histórico</option>
+                                        <option value="Político ">Político </option>
+                                    </select></th>
+                                
+                                {% else %}
+                                    <th><input type="text" name="file_1_{{m.id}}" id="file_1_{{m.id}}" value=""/></th>
+                                {% endif %}
+                            {% endfor %}
                         </tr>
                     {% endif %}
                     
                 </tbody>
             </table>
         </div>
+
         <div class="form-group row text-left">
             <div class="col-sm-3">
-                <button class="btn btn-danger"><a style="color:#FFF;text-decoration:none;" href="{% url 'dashboard' %}">Cancelar</a></button> 
+                <button class="btn btn-danger"><a style="color:#FFF;text-decoration:none;" href="{% url 'dashboard' %}?q={{ project.name_project }}">Cancelar</a></button> 
                 &nbsp;
                 <button type="submit" class="btn btn-success">Aceptar</button>
             </div>
@@ -52,5 +144,40 @@
         </form>
     </div>
 </div>
+
+<script>
+function agregarFila(){
+  var table = document.getElementById("tablaprueba");
+  var celCount = table.rows[0].cells.length;
+  alert(celCount);
+
+  var t = table.insertRow(-1);
+  for(var i=0; i<celCount; i++){
+      t.innerHTML += '<th><input type="file" id="file_1" name="file_1" accept=".txt" required><input type="hidden" name="1" value="1" /></th>';
+      t.innerHTML += '<th></th><th>que tal</th>';
+      t.innerHTML += '<th></th>';
+      t.innerHTML += '<th><input type="text" name="" id="" value="" required/></th>';
+      var t = table.insertRow(-1);
+  }
+  var json = "{{metadata|safe}}";
+}
+
+function eliminarFila(){
+  var table = document.getElementById("tablaprueba");
+  var rowCount = table.rows.length;
+  //console.log(rowCount);
+
+  if("{{project.parallel_status|safe}}" == "True")
+    if(rowCount <= 3)
+        alert('No se puede eliminar más filas, es el mínimo requerido');
+    else
+        table.deleteRow(rowCount -1);
+  else
+    if(rowCount <= 2)
+        alert('No se puede eliminar más filas, es el mínimo requerido');
+    else
+        table.deleteRow(rowCount -1);
+}
+</script>
 
 {% endblock %}

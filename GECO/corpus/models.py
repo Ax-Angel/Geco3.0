@@ -44,7 +44,7 @@ class Document(models.Model):
 
 class File(models.Model):
     file = models.FileField(blank=False, null=False, upload_to='mediafiles/', validators=[validate_file_extension])
-    name_file = models.CharField(max_length=100, null=False, unique=True)
+    name_file = models.CharField(max_length=100, null=False)
     document = models.ForeignKey(Document, related_name='file_document', on_delete=models.CASCADE)
     tagged_doc = models.FileField(max_length=100, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)

@@ -128,11 +128,17 @@ function closeRightMenu() {
             <p class="navbar-brand"><b>Proyecto: </b>{{project.name_project}}</p>
             <span class="options">
               <input type="text" name="id_project" id="id_project" value="{{project.id}}" hidden/>
-              <a href="{% url 'upload_document' project.id %}" title="Subir archivo"><i class="fas fa-upload fa-2x"></i></a>
               <a href="" title="Descargar proyecto"><i class="fas fa-download fa-2x"></i></a>
-              <a href="{% url 'add_collaborator' %}" title="Añadir colaborador al proyecto"><i class="fas fa-share-alt fa-2x"></i></a>
-              <a href="{% url 'update_project' project.id %}" title="Editar proyecto"><i class="fas fa-cog fa-2x"></i></a>
-              <a href="{% url 'delete_project' project.id %}" title="Eliminar proyecto"><i class="fas fa-trash-alt fa-2x"></i></a>
+              {% if user == project.owner or user in colaboradores %}
+                <a href="{% url 'upload_document' project.id %}" title="Subir archivo"><i class="fas fa-upload fa-2x"></i></a>               
+                {% if project.collab_status and user == project.owner %}
+                <a href="{% url 'add_collaborator' %}" title="Añadir colaborador al proyecto"><i class="fas fa-share-alt fa-2x"></i></a>
+                {% endif %}
+                <a href="{% url 'update_project' project.id %}" title="Editar proyecto"><i class="fas fa-cog fa-2x"></i></a>
+                {% if user == project.owner %}            
+                <a href="{% url 'delete_project' project.id %}" title="Eliminar proyecto"><i class="fas fa-trash-alt fa-2x"></i></a>
+                {% endif %}
+              {% endif %}
             </span>           
         </div>
       </nav>
@@ -168,10 +174,11 @@ function closeRightMenu() {
                 {% if forloop.first %}
                   <tr>
                     <td rowspan="{{res.1|length}}" width="10%">
-                    <a href="#" title="Ver documento"><img width="20%" height="20%" src="{% static 'img/ver.jpg' %}"></a>
-                    <a href="#" title="Descargar documento"><img width="20%" height="20%" src="{% static 'img/down.jpg' %}"></a>
-                    <a href="{% url 'delete_document' res.0 %}" title="Eliminar documento"><img width="20%" height="20%" src="{% static 'img/eliminar.jpg' %}"></a>
-                    {{res.0}}
+                      <a href="#" title="Ver documento"><i class="fas fa-eye fa-1x"></i></a>
+                      <a href="#" title="Descargar documento"><i class="fas fa-file-download fa-1x"></i></a>
+                    {% if user == project.owner or user in colaboradores %}                     
+                      <a href="{% url 'delete_document' res.0 %}" title="Eliminar documento"><i class="fas fa-trash fa-1x"></i></a>
+                    {% endif %}
                     </td>
                     {% for r_f in f %}
                       <td>{{r_f}}</td>

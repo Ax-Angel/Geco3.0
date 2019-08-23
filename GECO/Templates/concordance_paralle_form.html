@@ -1,22 +1,38 @@
 {% extends "base_generic.html" %}
 <h1>Concordancia Corpus Paralelo</h1>
 
-{% block sidebar %}
-{% load static %} 
-{% load my_filters %}
-<!DOCTYPE html>
+{% block banner %}
+ {% load static %}
+<nav class="navbar fixed-top navbar-light bg-light navbar-expand-lg">
+  <h4><strong>Concordancias para Corpus Paralelo</strong></h4>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  {% if user.is_authenticated %}
+  <div class="collapse navbar-collapse flex-grow-1" id="navbarNav">
+    <ul style="margin-right:6%;" class="navbar-nav ml-auto flex-nowrap">
+        <li class="nav-item dropdown">
+          <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Usuario
+          </a>
+          <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
+              <p>Hola {{ user.username }}!</p>
+              <a href="{% url 'edit_user' user.id %}" class="dropdown-item">Editar perfil</a>
+              <a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
+          </div>
+        </li>
+      </ul>    
+    </div>
+    {% endif %}
+</nav>
+<br>
+{% endblock banner %}
 
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 {% block title %}<title>GECO 3/Concordancia Corpus Paralelo</title>{% endblock %}
 
-<!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-<![endif]-->
-  <!-- Add additional CSS in static file -->
- 
+{% block sidebar %}
+{% load my_filters %}
+
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>

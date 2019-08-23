@@ -18,6 +18,7 @@
 
 <body>
 
+{% block banner %}
 <nav class="navbar fixed-top navbar-light bg-light navbar-expand-lg">
   <img src="{% static 'img/geco.png' %}" width="38" height="34" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco_00.jpg">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,9 +60,7 @@
     </div>
 </nav>
 <br>
-
-
-  
+{% endblock banner %}
 
 {% block sidebar %}
 {% endblock sidebar %}
@@ -71,17 +70,17 @@
     </div>
  {% endblock content %}
 
+{% block footer %}
 <div id="fixed-footer">
-
-2019, <a href="http://grupos.iingen.unam.mx/iling/es-mx/Paginas/default.aspx" target="_blank">Grupo de Ingeniería Lingüística</a>, &nbsp;
-<a href="mailto:gil@iingen.unam.mx" target="_blank"> <img src="{% static 'img/mail.jpg' %}" alt="mail" class="icon"></a>&nbsp;
-<a href="mailto:gil@iingen.unam.mx">gil@iingen.unam.mx</a>,&nbsp; 
-<img src="{% static 'img/phone.jpg' %}" class="icon"> +52(55)5623-3600 ext. 8808, &nbsp;
-<a href="https://www.facebook.com/ingenieriaLinguistica/" target="_blank"><img src="{% static 'img/face-ico.png' %}" alt="Facebook" class="icon"></a> &nbsp;
-<a href="https://twitter.com/gil_unam" target="_blank"><img src="{% static 'img/twit-ico.png' %}" alt="twitter" class="icon"></a>&nbsp; 
-<a href="https://www.youtube.com/channel/UCnvi-DrR-m_gl-IhtP07dYA" target="_blank"><img src="{% static 'img/you-ico.png' %}" alt="Youtube" class="icon"></a>
-
+  2019, <a href="http://grupos.iingen.unam.mx/iling/es-mx/Paginas/default.aspx" target="_blank">Grupo de Ingeniería Lingüística</a>, &nbsp;
+  <a href="mailto:gil@iingen.unam.mx" target="_blank"> <img src="{% static 'img/mail.jpg' %}" alt="mail" class="icon"></a>&nbsp;
+  <a href="mailto:gil@iingen.unam.mx">gil@iingen.unam.mx</a>,&nbsp; 
+  <img src="{% static 'img/phone.jpg' %}" class="icon"> +52(55)5623-3600 ext. 8808, &nbsp;
+  <a href="https://www.facebook.com/ingenieriaLinguistica/" target="_blank"><img src="{% static 'img/face-ico.png' %}" alt="Facebook" class="icon"></a> &nbsp;
+  <a href="https://twitter.com/gil_unam" target="_blank"><img src="{% static 'img/twit-ico.png' %}" alt="twitter" class="icon"></a>&nbsp; 
+  <a href="https://www.youtube.com/channel/UCnvi-DrR-m_gl-IhtP07dYA" target="_blank"><img src="{% static 'img/you-ico.png' %}" alt="Youtube" class="icon"></a>
 </div>
+{% endblock footer %}
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

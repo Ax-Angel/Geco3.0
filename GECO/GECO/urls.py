@@ -27,6 +27,7 @@ from apps.concordanciaParalelo.views import *
 urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^accounts/register/', register_user_view, name = 'register'),
+    url(r'^info_user/(?P<user_id>\d+)/$', info_user_view, name='info_user'),
     url(r'^accounts/edit_user/(?P<user_id>\d+)/$', edit_user_view, name='edit_user'),
     url(r'^$', index_view, name = 'index'),
     

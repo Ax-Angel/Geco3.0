@@ -131,7 +131,7 @@ class Project_Create(CreateView):
                     meta.project.add(p)
                     meta.save()  
                 
-                new_dir_path = 'mediafiles/mediafiles/'+str(validatedData['name_project'])
+                new_dir_path = 'mediafiles/'+str(validatedData['name_project'])
                 os.makedirs(new_dir_path)
                 return HttpResponseRedirect(self.get_success_url()+'?q='+validatedData['name_project'])
             
@@ -197,7 +197,7 @@ class Project_Delete(DeleteView):
         self.object = self.get_object #se obtiene el objeto
         id_project = kwargs['pk'] #obtiene el id que se envío por url
         project = self.model.objects.get(id=id_project)
-        folder = 'mediafiles/mediafiles/'+project.name_project
+        folder = 'mediafiles/'+project.name_project
         try:
             shutil.rmtree(folder, ignore_errors=True)
         except OSError as e:
@@ -285,9 +285,35 @@ class Document_Delete(DeleteView):
 def upload_document_view(request, id_project):
     project = Project.objects.get(id=id_project)
     metadata = Metadata.objects.filter(project = id_project)
+    error = ''
     
     if request.user.is_authenticated and project.is_user_collaborator(request.user):
         if request.method == 'POST':
+            i = 1
+            while str(i) in request.POST:
+                _file = request.FILES['file_'+str(i)]
+                file_name = _file.name
+                if not file_name.endswith('.txt'):
+                    error = 'Los archivos tienen que ser formato .txt'
+                    contexto = {'project':project, 'metadata': metadata, 'error': error}
+                    return render(request, 'upload_document_form.html', contexto)
+                i+=1
+            
+            if project.parallel_status:
+                i = 1
+                num_line_tmp = -1
+                while str(i) in request.POST:
+                    _file = request.FILES['file_'+str(i)]
+                    num_line = len(_file.read().splitlines())
+                    if i==1:
+                        num_line_tmp = num_line
+                    else:
+                        if num_line_tmp != num_line:
+                            error = 'Los corpus paralelos tienen que estar alineados'
+                            contexto = {'project':project, 'metadata': metadata, 'error': error}
+                            return render(request, 'upload_document_form.html', contexto)      
+                    i+=1
+            
             i = 1
             d = Document(project = project, owner = request.user)
             guarde = False            
@@ -296,26 +322,27 @@ def upload_document_view(request, id_project):
                 if guarde==False and project.parallel_status:
                     d.save()
                     guarde = True
-                else:
+                elif not project.parallel_status:
                     d = Document(project = project, owner = request.user)
                     d.save()
                             
                 _file = request.FILES['file_'+str(i)]
-                new_path = '/mediafiles/' + project.name_project 
-                save_path = settings.MEDIA_ROOT + new_path + '/' + _file.name
+                
+                #new_path = 'mediafiles/' + project.name_project 
+                save_path = settings.MEDIA_ROOT + '/' +  project.name_project  + '/' + _file.name
                 path = default_storage.save(save_path, _file)
                 
                 name_file = path.split('/')[-1]
-                f = File(file = new_path+ '/' + name_file,
+                f = File(file = project.name_project+ '/' + name_file,
                          name_file = name_file,
                          document = d)
                 f.save()
                 
                 for m in metadata:
-                    if 'file_'+str(i)+'_'+str(m.id) in request.POST:
+                    if 'file_'+str(i)+'_m_'+str(m.id) in request.POST:
                         f_m_r = File_Metadata_Relation(metadata = m,
                                                        file = f,
-                                                       data_value = request.POST['file_'+str(i)+'_'+str(m.id)])
+                                                       data_value = request.POST['file_'+str(i)+'_m_'+str(m.id)])
                     else:
                         f_m_r = File_Metadata_Relation(metadata = m,
                                                        file = f)
@@ -327,47 +354,8 @@ def upload_document_view(request, id_project):
     else:
         return redirect('login')
     
-    contexto = {'project':project, 'metadata': metadata}
+    contexto = {'project':project, 'metadata': metadata, 'error': error}
     return render(request, 'upload_document_form.html', contexto)
-
-
-class Upload_document(FormView): 
-    form_class = document_form
-    template_name = 'upload_document_form.html'  # Replace with your template.
-    success_url = 'http://localhost:8000/dashboard/'  # Replace with your URL or reverse().
-
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        files = request.FILES.getlist('files')
-        if request.user.is_authenticated:
-            users = Project.objects.values_list('project_members', flat=True)
-            if request.user.pk in users:
-                if form.is_valid():
-                    project = Project.objects.get(name=str(form.cleaned_data['project_name']))
-                    for f in files:
-                        try:
-                            doc = Document(project=project,
-                                                owner=request.user)
-                            doc.save()
-                            file = File(file = f,
-                                        name_file = f.name,
-                                        document = doc)
-                            file.save()
-                        except:
-                            print('error')
-                    return self.form_valid(form)
-                else:
-                    print(form.errors)
-                    return self.form_invalid(form)
-
-    def get(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        if request.user.is_authenticated:
-            return super(Upload_document, self).get(request, *args, **kwargs)
-        else:
-            redirect('http://localhost:8000/accounts/login/')
 
 
 def list_collaborators_project_view(request):

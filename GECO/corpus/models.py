@@ -43,7 +43,7 @@ class Document(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='owner_document', on_delete=models.CASCADE)
 
 class File(models.Model):
-    file = models.FileField(blank=False, null=False, upload_to='mediafiles/', validators=[validate_file_extension])
+    file = models.FileField(blank=False, null=False, validators=[validate_file_extension])
     name_file = models.CharField(max_length=100, null=False)
     document = models.ForeignKey(Document, related_name='file_document', on_delete=models.CASCADE)
     tagged_doc = models.FileField(max_length=100, null=True)

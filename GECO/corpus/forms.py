@@ -55,10 +55,7 @@ class add_collaborator_form(forms.Form):
     project_name = forms.CharField(max_length=100)
     project_member = forms.CharField(label='Usuario', max_length=100)
 
-class document_form(forms.Form):
-    project_name = forms.CharField(max_length=100)
-    files = forms.FileField(label="Selecciona los archivos", widget=forms.ClearableFileInput(attrs={'multiple': True}))
- 
+
 class contact_form(forms.Form):
     name = forms.CharField(label='Su nombre*', max_length=50)
     email = forms.EmailField(label='Su e-mail*')

@@ -230,7 +230,7 @@ def filter_metadata(dct):
         for p_m in dct['project_metadato']:
             if p_m.id!=dct['metadata_idioma'].id:
                 id_metadato.append(p_m.id)
-                filter_metadato.append([p_m.id, p_m.name, set()])
+                filter_metadato.append([p_m.id, p_m.name_metadata, set()])
         
         for d in dct['docs']:
             files = File.objects.filter(document_id=d.id)

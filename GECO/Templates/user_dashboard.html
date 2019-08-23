@@ -130,14 +130,14 @@ function closeRightMenu() {
               <input type="text" name="id_project" id="id_project" value="{{project.id}}" hidden/>
               <a href="" title="Descargar proyecto"><i class="fas fa-download fa-2x"></i></a>
               {% if user == project.owner or user in colaboradores %}
-                <a href="{% url 'upload_document' project.id %}" title="Subir archivo"><i class="fas fa-upload fa-2x"></i></a>               
-                {% if project.collab_status and user == project.owner %}
-                <a href="{% url 'add_collaborator' %}" title="Añadir colaborador al proyecto"><i class="fas fa-share-alt fa-2x"></i></a>
-                {% endif %}
-                <a href="{% url 'update_project' project.id %}" title="Editar proyecto"><i class="fas fa-cog fa-2x"></i></a>
-                {% if user == project.owner %}            
-                <a href="{% url 'delete_project' project.id %}" title="Eliminar proyecto"><i class="fas fa-trash-alt fa-2x"></i></a>
-                {% endif %}
+              <a href="{% url 'upload_document' project.id %}" title="Subir archivo"><i class="fas fa-upload fa-2x"></i></a>               
+              {% endif %}
+              {% if project.collab_status and user == project.owner %}
+              <a href="{% url 'add_collaborator' project.id %}" title="Añadir colaborador al proyecto"><i class="fas fa-share-alt fa-2x"></i></a>
+              {% endif %}
+              <a href="{% url 'update_project' project.id %}" title="Editar proyecto"><i class="fas fa-cog fa-2x"></i></a>
+              {% if user == project.owner %}            
+              <a href="{% url 'delete_project' project.id %}" title="Eliminar proyecto"><i class="fas fa-trash-alt fa-2x"></i></a>
               {% endif %}
             </span>           
         </div>
@@ -199,11 +199,7 @@ function closeRightMenu() {
       {% endif %}
     </div>
     
-
-
-
   </div>
-		
 	{% endif %}
 </div>
 {% endif %}

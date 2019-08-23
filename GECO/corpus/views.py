@@ -362,6 +362,33 @@ def list_collaborators_project_view(request):
     pass
 
 
+def add_collaborator_view(request, id_project):
+    project = Project.objects.get(id=id_project)
+    colaboradores = project.project_members.all()
+    error = ''
+    email = ''
+    
+    if request.user.is_authenticated and project.get_owner()==request.user:
+        if request.method == 'GET' and request.GET.get('q',False):
+            id_colaborador = int(request.GET.get('q', ''))
+            project.project_members.remove(id_colaborador)
+            colaboradores = project.project_members.all()
+            
+        elif request.method == 'POST':
+            email = request.POST['email_user']
+            try:
+                user = User.objects.get(email = email)
+                project.project_members.add(user)
+            except:
+                error = "Usuario no encontrado"
+            
+    else:
+        return redirect('login')
+    
+    contexto = {'project':project, 'colaboradores':colaboradores, 'error': error, 'email':email}
+    return render(request, 'add_collaborator_form.html', contexto)
+
+
 def list_user_projects_view(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -373,91 +400,6 @@ def list_user_projects_view(request):
     else:
         result = []
     return render(request, 'list_user_projects.html', {'result': result})
-
-
-def add_collaborator_view(request):
-    if request.method == 'POST':
-        form = add_collaborator_form(request.POST)
-        if request.user.is_authenticated:
-            if form.is_valid():
-                validatedData = form.cleaned_data
-                print(validatedData)
-
-                try:
-                    project = Project.objects.get(name_project = str(validatedData['project_name']))
-
-                except:
-                    error = "Proyecto no encontrado"
-
-                if project.owner == request.user:
-                    try:
-                        user = User.objects.get(email = str(validatedData['project_member']))
-                        error = ""
-
-                    except:
-                        
-                        error = "usuario no encontrado"
-
-                    project.project_members.add(user)
-    else:
-        error = ""
-        form = add_collaborator_form()
-    return render(request, 'add_collaborator_form.html', {'form': form, 'error': error})
-
-
-def add_metadata_document(request):
-    error=""
-    if request.method == 'POST':
-        print(request.POST)
-        if request.user.is_authenticated:
-            try:
-                project = Project.objects.get(name_project = str(request.POST['project_name']))
-            except:
-                error = "Proyecto no encontrado"
-                return
-            try:
-                file = File.objects.get(pk = int(request.POST['document']))
-            except:
-                error = "Archivo no encontrado"
-                return
-            try:
-                meta = Metadata.objects.get(pk = int(request.POST['metadata']))
-            except:
-                error = "Metadato no encontrado"
-                return
-            users = Project.objects.values_list('project_members', flat=True)
-            if request.user.pk in users:                
-                rel = File_Metadata_Relation(metadata = meta,
-                                             file = file,
-                                             data_value = str(request.POST['data'])
-                    )
-                rel.save()
-                return redirect('/dashboard/?q='+str(request.POST['project_name']))
-                    
-    elif request.method == 'GET' and request.GET.get('q',False):
-        project = str(request.GET.get('q', ''))
-        projectObj = Project.objects.get(name_project=project)
-        documents = Document.objects.filter(project=projectObj)
-        metadata = Metadata.objects.filter(project=projectObj)
-
-        doc_list = []
-        for doc in documents:
-            files = File.objects.filter(document=doc)
-            for f in files:
-                doc_list.append(f)
-
-        tp = []
-        for doc in doc_list:
-            tp.append((doc.pk, doc.name))
-        choices_doc = tuple(tp)
-
-        tp = []
-        for md in metadata:
-            tp.append((md.pk, md.name))
-        choices_md = tuple(tp)
-
-        form = data_document_form(choices_doc=choices_doc, choices_md=choices_md, initial={'project_name': projectObj.name})
-    return render(request, 'add_data_document.html', {'form': form, 'error': error})    
 
 
 def help_view(request):

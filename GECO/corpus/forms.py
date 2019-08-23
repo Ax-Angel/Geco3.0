@@ -4,7 +4,6 @@ from django.forms.widgets import CheckboxSelectMultiple
 from .models import *
 
 class create_project_form(forms.ModelForm):
-
     name_project = forms.CharField(label='Nombre del proyecto', max_length=100, widget=forms.TextInput(attrs={'style':'width:100%;'}))
     description = forms.CharField(label='Descripción del proyecto', max_length=250, widget=forms.Textarea(attrs={'placeholder': 'Escriba aquí la descripción del proyecto...', 'rows':'3', 'style':'width:100%;'}))
     public_status = forms.BooleanField(label='¿Será público?', required=False, initial=False, widget="")
@@ -20,11 +19,8 @@ class create_project_form(forms.ModelForm):
             'collab_status',
             'parallel_status',
         ]
-        
-
 
 class metadata_project_form(forms.ModelForm):
-    
     name_metadata = forms.MultipleChoiceField(
         label='Metadatos para su proyecto',
         widget= CheckboxSelectMultiple(),
@@ -49,12 +45,6 @@ class metadata_project_form(forms.ModelForm):
     class Meta:
         model = Metadata
         fields = ('name_metadata',)
-
-
-class add_collaborator_form(forms.Form):
-    project_name = forms.CharField(max_length=100)
-    project_member = forms.CharField(label='Usuario', max_length=100)
-
 
 class contact_form(forms.Form):
     name = forms.CharField(label='Su nombre*', max_length=50)

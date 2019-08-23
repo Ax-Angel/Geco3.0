@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^dashboard/upload_document/(?P<id_project>\d+)/$', upload_document_view, name = 'upload_document'),    
     url(r'^dashboard/delete_document/(?P<pk>\d+)/$', login_required(Document_Delete.as_view()), name='delete_document'),
     
-    url(r'^dashboard/add_collaborator/', add_collaborator_view, name = 'add_collaborator'),
+    url(r'^dashboard/add_collaborator/(?P<id_project>\d+)/$', add_collaborator_view, name = 'add_collaborator'),
     url(r'^list_user_projects/', list_user_projects_view, name = 'list_user_proyects'),
     
     url(r'^concordance_paralle$', concordance_paralle_view , name= 'concordance_paralle'),

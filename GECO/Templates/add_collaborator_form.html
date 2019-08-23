@@ -1,32 +1,67 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-    <div id="content">
+<div class="container">
+    <div class="formulario">
+        <form method="post">
+        {% csrf_token %}
+        <h4 align="center"><b>Proyecto: </b>{{project.name_project}}</h4>
+        <br>
+        <h5><strong>Agregar colaborador</strong></h5>
+        <br>
+        <div class="form-group row">
+            <label class="col-sm-3 col-lg-3"><b>E-mail del usuario:</b></label>
+            <div class="col-sm-9 col-lg-9">
+                <input type="email" name="email_user" id="email_user" value="{{email}}" required /><br>
+                {% if error %}<strong style="color:red;">{{error}}</strong>{%endif%}
+            </div>	              
+        </div>
 
-<h1>Agregar colaborador</h1>
+        <div class="form-group row text-right">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+              <button class="btn btn-danger"><a style="color:#FFF;text-decoration:none;" href="{% url 'dashboard' %}?q={{ project.name_project }}">Cancelar</a></button> 
+              &nbsp;
+              <button type="submit" class="btn btn-success">Agregar</button>
+            </div>
+        </div>
 
-{% if user.is_authenticated %} </p>
-<p> Hi {{ user.username }}! </p>
-<p> Estas loggueado
-
-<div class="container_form">
-<form method="post">
-  {% csrf_token %}
-    <div class="row">
-      <p><b>Nombre del proyecto</b></p>
-      {{form.project_name}}
+        <hr>
+        <h5><strong>Colaboradores del proyecto</strong></h5>
+        {% if colaboradores|length == 1 %}
+          <div>
+            <p align="center" style="color:red;"><b>El proyecto no tiene colaboradores</b></p>
+            <br>
+            <br>
+          </div>
+        {% else %}
+          <div class="table-responsive">
+              <table class="table table-striped" id="tablaprueba">
+                  <thead>
+                      <tr>
+                          <th>Nombres y Apellidos</th>
+                          <th>Usuario</th>
+                          <th>Correo electrónico</th>
+                          <th>Eliminar colaboración</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for c in colaboradores %}
+                      {% if c != project.owner%}
+                        <tr>
+                          <td>{{c.first_name}} {{c.last_name}}</td>
+                          <td>{{c.username}}</td>
+                          <td>{{c.email}}</td>
+                          <td><a class="btn btn-danger" href="?q={{ c.id }}">Eliminar</a></td>
+                        </tr>
+                      {% endif %}
+                    {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+        {% endif %}
+      </form>
     </div>
-    <div class="row">
-      <p><b>Añadir a usuario</b></p>	  
-      {{form.project_member}}
-    </div>
-    <div class="row">
-      <input style="margin-top:1em;" type="submit" id="submit_cancel" onClick ="window.location.href = '{% url 'dashboard' %}'" value="Cancelar" />
-      <input style="margin-top:1em;" type="submit" value="Enviar" />
-    </div>
-</form>
 </div>
-<p><a href="{% url 'logout' %}">Cerrar sesión</a></p>
-{% endif %}
-</div>
+
 {% endblock %}

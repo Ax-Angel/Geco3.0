@@ -36,12 +36,23 @@ def register_user_view(request):
     return render(request, 'registration/register_user_form.html', {'form': form})
 
 def edit_user_view(request, user_id):
-    user = User.objects.get(id=user_id)
-    if request.method == 'GET':
-        form = EditForm(instance=user)
+    if request.user.is_authenticated and (int(request.user.pk) == int(user_id)):
+        user = User.objects.get(id=user_id)
+        if request.method == 'GET':
+            form = EditForm(instance=user)
+        else:
+            form = EditForm(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                return redirect('info_user', user_id)
+        return render(request, "registration/edit_user.html", {'form': form})
     else:
-        form = EditForm(request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-        #  hacer el return
-    return render(request, "registration/edit_user.html", {'form': form})
+        return redirect('login')
+
+def info_user_view(request, user_id):
+    if request.user.is_authenticated and (int(request.user.pk) == int(user_id)):
+        if request.method == "GET":
+            user = User.objects.get(id=user_id)
+        return render(request, "info_user.html", {'user': user})
+    else:
+        return redirect('login')

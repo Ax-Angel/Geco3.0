@@ -1,0 +1,43 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="text-center">Información del usuario</h2>
+        <br>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>Nombre(s):</td>
+                    <td><b>{{user.first_name}}</b></td>                  
+                </tr>
+                <tr>
+                    <td>Apellido(s):</td>
+                    <td><b>{{user.last_name}}</b></td>                   
+                </tr>
+                <tr>
+                    <td>Nombre de usuario:</td>
+                    <td><b>{{user.username}}</b></td>                   
+                </tr>
+                <tr>
+                    <td>Correo electrónico:</td>
+                    <td><b>{{user.email}}</b></td>                   
+                </tr>
+                <tr>
+                    <td>Institución:</td>
+                    <td><b>{{user.institution}}</b></td>                   
+                </tr>
+                <tr>
+                    <td>Grado académico:</td>
+                    <td><b>{{user.degree}}</b></td>                   
+                </tr>
+                <tr>
+                    <td>País:</td>
+                    <td><b>{{user.country}}</b></td>                   
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-right">
+            <button class="btn btn-primary" onClick ="window.location.href = '{% url 'edit_user' user.id %}'">Editar</button>
+        </div>
+    </div>
+{% endblock content %}

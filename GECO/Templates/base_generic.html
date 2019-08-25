@@ -41,21 +41,26 @@
         <li class="nav-item">
           <a href="{% url 'help_view' %}">Ayuda</a>
         </li>
+
+        {% if user.is_authenticated %}
         <li class="nav-item dropdown">
           <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Usuario
-          </a>
+            Hola {{ user.username }}!</a>
           <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
-            {% if user.is_authenticated %}
-              <p>Hola {{ user.username }}!</p>
               <a href="{% url 'info_user' user.id %}" class="dropdown-item">Perfil de usuario</a>
               <a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
-            {% else %}
-              <a href="{% url 'login' %}" class="dropdown-item">Iniciar sesión</a>
-              <a href="{% url 'register' %}" class="dropdown-item">Registrar usuario</a>
-            {% endif %}
           </div>
         </li>
+        {% else %}
+        <li class="nav-item dropdown">
+          <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Usuario </a>
+          <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">            
+              <a href="{% url 'login' %}" class="dropdown-item">Iniciar sesión</a>
+              <a href="{% url 'register' %}" class="dropdown-item">Registrar usuario</a>
+          </div>
+        </li>
+        {% endif %}        
       </ul>    
     </div>
 </nav>

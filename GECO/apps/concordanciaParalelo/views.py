@@ -19,7 +19,8 @@ def concordance_paralle_view(request):
     lang_select = ''
     style_display = 'none'
     search_petition = ''
-    positional_annotation = [['palabra', 'checked', ''], ['lemma', '', ''], ['POS', '', '']]
+    positional_annotation = [['palabra', 'checked', '']]
+    #positional_annotation = [['palabra', 'checked', ''], ['lemma', '', ''], ['POS', '', '']]
     alignment = []
     alignment_select = []
     max_view = '-'
@@ -68,7 +69,7 @@ def concordance_paralle_view(request):
                 style_display = '' 
                 lang_select = query_list[1]
                 dct.update({'lang_select':lang_select})
-                positional_annotation = type_positicional_annotation(dct)                    
+                #positional_annotation = type_positicional_annotation(dct)                    
                 alignment = type_alignment(dct)
                 project_metadato = Metadata.objects.filter(project=dct['project_select'])
                 dct.update({'project_metadato':project_metadato})
@@ -89,7 +90,7 @@ def concordance_paralle_view(request):
         alignment_select = request.POST.getlist('alignment')        
         positional = request.POST.getlist('positional')
         dct.update({'positional':positional})
-        positional_annotation = type_positicional_annotation(dct)
+        #positional_annotation = type_positicional_annotation(dct)
         max_view = request.POST['max_view']
         search_petition = request.POST['search_petition']
         window = request.POST['window']
@@ -240,7 +241,8 @@ def filter_metadata(dct):
                     for _d_f in dato_file:
                         if _d_f.metadata.id in id_metadato:
                             i = id_metadato.index(_d_f.metadata.id)
-                            filter_metadato[i][2].add(_d_f.data_value)
+                            if _d_f.data_value != "":
+                                filter_metadato[i][2].add(_d_f.data_value)
         j = 0
         k = len(filter_metadato)
         while j < k:

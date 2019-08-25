@@ -33,10 +33,10 @@
                                 {% if m.id == 1 %}
                                     <th><select class="form-control" id="file_1_m_{{m.id}}" name="file_1_m_{{m.id}}" required>
                                         <option value="">Seleccione...</option>
-                                        <option value="DE">Alemán</option>
-                                        <option value="ES">Español</option>
-                                        <option value="EN">Inglés</option>
-                                    </select></th>
+                                        {% for l in lenguas %}
+                                            <option value="{{l.1}}">{{l.0}}</option>
+                                        {% endfor %}
+                                        </select></th>
                                 
                                 {% elif m.id == 2 %}
                                     <th><input type="text" name="file_1_m_{{m.id}}" id="file_1_m_{{m.id}}" value="" required/></th>
@@ -66,9 +66,9 @@
                                 {% if m.id == 1 %}
                                     <th><select class="form-control" id="file_2_m_{{m.id}}" name="file_2_m_{{m.id}}" required>
                                         <option value="">Seleccione...</option>
-                                        <option value="DE">Alemán</option>
-                                        <option value="ES">Español</option>
-                                        <option value="EN">Inglés</option>
+                                        {% for l in lenguas %}
+                                            <option value="{{l.1}}">{{l.0}}</option>
+                                        {% endfor %}
                                     </select></th>
                                 
                                 {% elif m.id == 2 %}
@@ -76,7 +76,7 @@
 
 
                                 {% elif m.id == 12 %}
-                                    <th><select class="form-control" id="file_2_m_{{m.id}}" name="file_2_m_{{m.id}}>
+                                    <th><select class="form-control" id="file_2_m_{{m.id}}" name="file_2_m_{{m.id}}">
                                         <option value="">Seleccione...</option>
                                         <option value="Didáctico">Didáctico</option>
                                         <option value="Expositivo">Expositivo</option>
@@ -101,9 +101,9 @@
                                 {% if m.id == 1 %}
                                     <th><select class="form-control" id="file_1_m_{{m.id}}" name="file_1_m_{{m.id}}" required>
                                         <option value="">Seleccione...</option>
-                                        <option value="DE">Alemán</option>
-                                        <option value="ES">Español</option>
-                                        <option value="EN">Inglés</option>
+                                        {% for l in lenguas %}
+                                            <option value="{{l.1}}">{{l.0}}</option>
+                                        {% endfor %}
                                     </select></th>
                                 
                                 {% elif m.id == 2 %}
@@ -169,20 +169,44 @@ function agregarFila(){
   var table = document.getElementById("tablaprueba");
   
   t = table.insertRow(-1);
-  t.innerHTML += '<th><input type="file" id="'+id1+'" name="'+id1+'" accept=".txt" required><input type="hidden" id="'+String(i)+'" name="'+String(i)+'" value="'+String(i)+'" /></th>';
+  texto1 = '<th><input type="file" id="'+id1+'" name="'+id1+'" accept=".txt" required>';
+  texto1 += '<input type="hidden" id="'+String(i)+'" name="'+String(i)+'" value="'+String(i)+'" /></th>';
+  t.innerHTML += texto1;
   
   var celCount = table.rows[0].cells.length;
+
+  lengua = [["Aguacateco","AGU"], ["Akateko","KNJ"], ["Amuzgo","AZG"], ["Ayapaneco","AYA"], ["Chatino","CHAT"],
+            ["Chichimeco","PEI"], ["Chinanteco","CHIN"], ["Chocholteco","COZ"], ["Chontal de la sierra de oaxaca","CHD"],
+            ["Chontal de tabasco","CHF"], ["Chuj","CAC"], ["Cora","CRN"], ["Cucapá","COC"], ["Cuicateco","CUT"],
+            ["Español","ES"], ["Huarijio","VAR"], ["Huasteco","HUS"], ["Huave","HUV"], ["Inglés","EN"], ["Ixcateco","IXC"],
+            ["Ixil","IXL"], ["Jacalteco","JAC"], ["Kaqchikel","CAK"], ["Kikapú","KIC"], ["Kiliwa","KLB"], ["Ku' ahl","PPI"],
+            ["Kumiai","DIH"], ["Lacandón","LAC"], ["Mam","MAM"], ["Maya","YUA"], ["Mayo","MFY"], ["Mazahua","MAZA"], ["Mazateco","MAZ"],
+            ["Mixe","MXE"], ["Mixteco","MX"], ["Náhuatl","NAH"], ["Oluteco","PLO"], ["Paipai","PAPAI"], ["Pápago","OOD"], ["Pima del norte","PIA"], ["Popoloca","POP"],
+            ["Popoluca","PPA"], ["Purépecha","TSZ"], ["Q'anjob'al","KJB"], ["Qato'k","MHC"], ["Quekchí","KEK"], ["Quiché","QUC"],
+            ["Sayulteco","POS"], ["Seri","SEI"], ["Tarahumara","TAC"], ["Teko","TTC"], ["Tepehua","TPA"], ["Tepehuán","TPN"],
+            ["Texistepequeño","POQ"], ["Tlapaneco","TCF"], ["Tojolabal","TOJ"], ["Totonaco","TOT"], ["Triqui","TRC"], 
+            ["Tzeltal","TZH"] ,["Tzotzil","TZO"], ["Yaqui","YAQ"], ["Zapoteco","ZAP"], ["Zoque","ZOR"]];
 
   for(var j=1; j<celCount; j++){
       var id2 = table.rows[0].cells[j].id;
       if(id2 == "_m_1"){
-          t.innerHTML += '<th><select class="form-control" name="'+id1+id2+'" id="'+id1+id2+'" required><option value="">Seleccione...</option><option value="DE">Alemán</option><option value="ES">Español</option><option value="EN">Inglés</option></select></th>';
+          idioma = '<th><select class="form-control" name="'+id1+id2+'" id="'+id1+id2+'" required><option value="">Seleccione...</option>';
+          for (var k = 0; k < lengua.length; k++) {
+              idioma += '<option value="'+lengua[k][1]+'">'+lengua[k][0]+'</option>';
+          }
+          idioma += '</select></th>';
+          t.innerHTML += idioma;
       }
       else if(id2 == "_m_2"){
           t.innerHTML += '<th><input type="text" name="'+id1+id2+'" id="'+id1+id2+'" value="" required/></th>';
       }
       else if(id2 == "_m_12"){
-          t.innerHTML += '<th><select class="form-control" name="'+id1+id2+'" id="'+id1+id2+'"><option value="">Seleccione...</option><option value="Didáctico">Didáctico</option><option value="Expositivo">Expositivo</option><option value="Narrativo">Narrativo</option><option value="Poético">Poético</option><option value="Religioso ">Religioso </option><option value="Histórico">Histórico</option><option value="Político ">Político </option></select></th>';
+          clasificacion = '<th><select class="form-control" name="'+id1+id2+'" id="'+id1+id2+'"><option value="">Seleccione...</option>';
+          clasificacion += '<option value="Didáctico">Didáctico</option><option value="Expositivo">Expositivo</option>';
+          clasificacion += '<option value="Narrativo">Narrativo</option><option value="Poético">Poético</option>';
+          clasificacion += '<option value="Religioso ">Religioso </option><option value="Histórico">Histórico</option>';
+          clasificacion += '<option value="Político ">Político </option></select></th>';
+          t.innerHTML +=  clasificacion;
       }
       else{
           t.innerHTML += '<th><input type="text" name="'+id1+id2+'" id="'+id1+id2+'" value=""/></th>';   

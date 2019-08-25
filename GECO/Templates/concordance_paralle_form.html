@@ -13,10 +13,8 @@
     <ul style="margin-right:6%;" class="navbar-nav ml-auto flex-nowrap">
         <li class="nav-item dropdown">
           <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Usuario
-          </a>
+            Hola {{ user.username }}!</a>
           <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
-              <p>Hola {{ user.username }}!</p>
               <a href="{% url 'edit_user' user.id %}" class="dropdown-item">Editar perfil</a>
               <a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
           </div>

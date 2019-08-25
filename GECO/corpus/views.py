@@ -282,10 +282,12 @@ class Document_Delete(DeleteView):
     return render(request, 'create_project_form.html', {'form': form, 'form2': form2, 'error': False})
 '''
 
+
 def upload_document_view(request, id_project):
     project = Project.objects.get(id=id_project)
     metadata = Metadata.objects.filter(project = id_project)
     error = ''
+    lengua = lenguas()
     
     if request.user.is_authenticated and project.is_user_collaborator(request.user):
         if request.method == 'POST':
@@ -295,7 +297,7 @@ def upload_document_view(request, id_project):
                 file_name = _file.name
                 if not file_name.endswith('.txt'):
                     error = 'Los archivos tienen que ser formato .txt'
-                    contexto = {'project':project, 'metadata': metadata, 'error': error}
+                    contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua}
                     return render(request, 'upload_document_form.html', contexto)
                 i+=1
             
@@ -310,7 +312,7 @@ def upload_document_view(request, id_project):
                     else:
                         if num_line_tmp != num_line:
                             error = 'Los corpus paralelos tienen que estar alineados'
-                            contexto = {'project':project, 'metadata': metadata, 'error': error}
+                            contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua}
                             return render(request, 'upload_document_form.html', contexto)      
                     i+=1
             
@@ -354,8 +356,23 @@ def upload_document_view(request, id_project):
     else:
         return redirect('login')
     
-    contexto = {'project':project, 'metadata': metadata, 'error': error}
+    contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua}
     return render(request, 'upload_document_form.html', contexto)
+
+
+def lenguas():
+    lengua = [["Aguacateco","AGU"], ["Akateko","KNJ"], ["Amuzgo","AZG"], ["Ayapaneco","AYA"], ["Chatino","CHAT"],
+              ["Chichimeco","PEI"], ["Chinanteco","CHIN"], ["Chocholteco","COZ"], ["Chontal de la sierra de oaxaca","CHD"],
+              ["Chontal de tabasco","CHF"], ["Chuj","CAC"], ["Cora","CRN"], ["Cucapá","COC"], ["Cuicateco","CUT"],
+              ["Español","ES"], ["Huarijio","VAR"], ["Huasteco","HUS"], ["Huave","HUV"], ["Inglés","EN"], ["Ixcateco","IXC"],
+              ["Ixil","IXL"], ["Jacalteco","JAC"], ["Kaqchikel","CAK"], ["Kikapú","KIC"], ["Kiliwa","KLB"], ["Ku' ahl","PPI"],
+              ["Kumiai","DIH"], ["Lacandón","LAC"], ["Mam","MAM"], ["Maya","YUA"], ["Mayo","MFY"], ["Mazahua","MAZA"], ["Mazateco","MAZ"],
+              ["Mixe","MXE"], ["Mixteco","MX"], ["Náhuatl","NAH"], ["Oluteco","PLO"], ["Paipai","PAPAI"], ["Pápago","OOD"], ["Pima del norte","PIA"], ["Popoloca","POP"],
+              ["Popoluca","PPA"], ["Purépecha","TSZ"], ["Q'anjob'al","KJB"], ["Qato'k","MHC"], ["Quekchí","KEK"], ["Quiché","QUC"],
+              ["Sayulteco","POS"], ["Seri","SEI"], ["Tarahumara","TAC"], ["Teko","TTC"], ["Tepehua","TPA"], ["Tepehuán","TPN"],
+              ["Texistepequeño","POQ"], ["Tlapaneco","TCF"], ["Tojolabal","TOJ"], ["Totonaco","TOT"], ["Triqui","TRC"], 
+              ["Tzeltal","TZH"] ,["Tzotzil","TZO"], ["Yaqui","YAQ"], ["Zapoteco","ZAP"], ["Zoque","ZOR"]]
+    return lengua
 
 
 def list_collaborators_project_view(request):

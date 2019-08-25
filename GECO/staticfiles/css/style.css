@@ -59,15 +59,14 @@ a:hover {
 }
 
 a:active {
-    color: yellow;
+    color: rgba(27, 192, 63, 0.849);
     background-color: transparent;
     text-decoration: underline;
 }
 
-
 /* Header */
 
-#fixed-header,
+/*#fixed-header,
 #fixed-footer {
     width: 100%;
     position: fixed;
@@ -79,7 +78,7 @@ a:active {
     left: 0;
     text-align: center;
     z-index: 10;
-}
+}*/
 
 #fixed-header {
     top: 0;
@@ -94,6 +93,10 @@ a:active {
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
+    background-color: rgb(238, 235, 235);
+    position: fixed;
+    width: 100%;
+    text-align: center;
 }
 
 .icon {

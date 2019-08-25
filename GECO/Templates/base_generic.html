@@ -26,19 +26,19 @@
   </button>
   <div class="collapse navbar-collapse flex-grow-1" id="navbarNav">
     <ul style="margin-right:6%;" class="navbar-nav ml-auto flex-nowrap">
-        <li class="nav-item">
+        <li class="nav-item {% if request.path == '/' %}active{% endif %}">
           <a href="{% url 'index' %}">Inicio</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {% if request.path == '/dashboard/' %}active{% endif %}">
           <a href="{% url 'dashboard' %}">Proyectos</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {% if request.path == '/applications/' %}active{% endif %}">
           <a href="{% url 'applications' %}">Desarrollos</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {% if request.path == '' %}active{% endif %}">
           <a href="#">Portales</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {% if request.path == '/help/' %}active{% endif %}">
           <a href="{% url 'help_view' %}">Ayuda</a>
         </li>
 
@@ -77,13 +77,13 @@
 
 {% block footer %}
 <div id="fixed-footer">
-  2019, <a href="http://grupos.iingen.unam.mx/iling/es-mx/Paginas/default.aspx" target="_blank">Grupo de Ingeniería Lingüística</a>, &nbsp;
-  <a href="mailto:gil@iingen.unam.mx" target="_blank"> <img src="{% static 'img/mail.jpg' %}" alt="mail" class="icon"></a>&nbsp;
-  <a href="mailto:gil@iingen.unam.mx">gil@iingen.unam.mx</a>,&nbsp; 
-  <img src="{% static 'img/phone.jpg' %}" class="icon"> +52(55)5623-3600 ext. 8808, &nbsp;
-  <a href="https://www.facebook.com/ingenieriaLinguistica/" target="_blank"><img src="{% static 'img/face-ico.png' %}" alt="Facebook" class="icon"></a> &nbsp;
-  <a href="https://twitter.com/gil_unam" target="_blank"><img src="{% static 'img/twit-ico.png' %}" alt="twitter" class="icon"></a>&nbsp; 
-  <a href="https://www.youtube.com/channel/UCnvi-DrR-m_gl-IhtP07dYA" target="_blank"><img src="{% static 'img/you-ico.png' %}" alt="Youtube" class="icon"></a>
+  2019, <a href="http://grupos.iingen.unam.mx/iling/es-mx/Paginas/default.aspx" target="_blank">Grupo de Ingeniería Lingüística,</a>
+  <a href="mailto:gil@iingen.unam.mx" target="_blank"><i class="far fa-envelope"></i></a>
+  <a href="mailto:gil@iingen.unam.mx">gil@iingen.unam.mx</a>, 
+  <i class="fas fa-phone"></i> +52(55)5623-3600 ext. 8808,
+  <a href="https://www.facebook.com/ingenieriaLinguistica/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+  <a href="https://twitter.com/gil_unam" target="_blank"><i class="fab fa-twitter"></i></a> 
+  <a href="https://www.youtube.com/channel/UCnvi-DrR-m_gl-IhtP07dYA" target="_blank"><i class="fab fa-youtube"></i></a>
 </div>
 {% endblock footer %}
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -111,329 +111,326 @@ function closeLeftMenu() {
 {% endblock sidebar %}
 
 {% block content %}
-{% if user.is_authenticated %}
-  <div id="dashboard" onclick="closeLeftMenu()">
-
-    <form method="POST">
-    {% csrf_token %}
-      {% if not project_select %}
-        <div align="center">
-          <h1>Concordancias</h1>
-          <h4>Bienvenido a la sección de Concordancia para Corpus Paralelo </h4>
-          <h6>Buscador de palabras en contexto</h6>
-          <br>
-        </div>
+<div id="dashboard" onclick="closeLeftMenu()">
+  <form method="POST">
+  {% csrf_token %}
+    {% if not project_select %}
+      <div align="center">
+        <h1>Concordancias</h1>
+        <h4>Bienvenido a la sección de Concordancia para Corpus Paralelo </h4>
+        <h6>Buscador de palabras en contexto</h6>
         <br>
-        <div align="center">
-          <p>Seleccione algún proyecto para realizar la Concordancia</p>
-          {% if not user.is_authenticated %}
-            <p>Ud. no está autenticado. Podrá solo visualizar aquellos proyectos que son públicos</p>
-          {% endif %}
-        </div>
-      {% else %}
-        <div class="container">
-          <legend><h4><b>Proyecto: </b>{{project_select.name_project}}</h4></legend>
-        {% if project_select.description %}
-          <br>
-          <p><b>Descripción del proyecto: </b>{{project_select.description}}</p>
+      </div>
+      <br>
+      <div align="center">
+        <p>Seleccione algún proyecto para realizar la Concordancia</p>
+        {% if not user.is_authenticated %}
+          <p>Ud. no está autenticado. Podrá solo visualizar aquellos proyectos que son públicos</p>
         {% endif %}
-        <input type="text" name="id_project" id="id_project" value="{{project_select.id}}" hidden/>
+      </div>
+    {% else %}
+      <div class="container">
+        <legend><h4><b>Proyecto: </b>{{project_select.name_project}}</h4></legend>
+      {% if project_select.description %}
         <br>
-
-        <div>
-          {% if languages %}
-            <b>Idioma de búsqueda:</b>
-            {% for language in languages %}
-                <a href="?q={{project_select.id}}/{{language}}">{{language}}</a>
-            {% endfor %}
-          {% else %}
-            <p>Este proyecto no contiene archivos con metadato: "Lengua" para realizar la concordancia</p>
-          {% endif %}
-          <input type="text" name="lang_select" id="lang_select" value="{{lang_select}}" hidden/>
-        </div>
-        <br>
-
-        <div id="contenido" style="display:{{style_display}};">
-          <div>
-            <b>Petición de búsqueda:</b>
-            <div style="display: inline">
-              <input type="text" name="search_petition" id="search_petition" value="{{search_petition}}" style="width:70%;"/>
-            </div>
-            <div style="display: inline-block;">
-              <a href="javascript:mostrar_cerrar();"><img width="18px" height="18px" src="{% static 'img/ayuda.jpg' %}">Ayuda</a>
-            </div>
-          </div>
-          <br>
-
-          <script>
-            function mostrar_cerrar(){
-              var elem_display = document.getElementById('petition_help').style.display;
-              if (elem_display == 'none'){
-                document.getElementById('petition_help').style.display='';       
-              }
-              else{
-                document.getElementById('petition_help').style.display='none';
-              }
-            }
-          </script>
-
-          <div id="petition_help" style="display:none;">
-            <br>
-            <table style="width:98%; margin-left: 1%; margin-right: 1%;">
-              <caption>La petición de búsqueda puede ser una o varias palabras. Cada palabra de la petición puede tener un modificador diferente</caption>
-              <tr bgcolor= "#eeeeee" align="left">
-                <th>Modificador</th>
-                <th>Descripción</th>
-                <th>Ejemplo de petición</th>
-                <th>Ejemplos de resultados</th>
-              </tr>
-              <tr>
-                <td>Sin modificador</td>
-                <td>Forma concreta</td>
-                <td>avión</td>
-                <td>Avión, avión</td>
-              </tr>
-              <tr bgcolor= "#eeeeee">
-                <td>Corchetes</td>
-                <td>Buscar lema</td>
-                <td>[vivir]</td>
-                <td>viví, vive, vivió</td>
-              </tr>
-              <tr>
-                <td>Signos menor y mayor qué</td>
-                <td>Buscar  <a href="http://blade10.cs.upc.edu/freeling-old/doc/tagsets/tagset-es.html"  target="_blank" title="ETIQUETAS EAGLES">etiqueta POS</a></td>
-                <td>< VMIS3S0 >></td>
-                <td>dijo, habló, tomó</td>
-              </tr>
-              <tr bgcolor= "#eeeeee">
-                <td>Asterisco</td>
-                <td>Comodín, varias letras</td>
-                <td>*ito</td>
-                <td>chiquito, banquito, chorrito</td>
-              </tr>
-              <tr>
-                <td>Asterisco</td>
-                <td>Comodín, varias letras</td>
-                <td>ca*</td>
-                <td>casa, carro, carnaval</td>
-              </tr>
-              <tr bgcolor= "#eeeeee">
-                <td>Asterisco</td>
-                <td>Comodín, una palabra</td>
-                <td>de * y *</td>
-                <td>de carne y hueso, de oro y plata</td>
-              </tr>
-              <tr>
-                <td>Signo de interrogación</td>
-                <td>Comodín, una letra</td>
-                <td>p?lo</td>
-                <td>palo, pelo, polo</td>
-              </tr>
-              <tr bgcolor= "#eeeeee">
-                <td>Llaves</td>
-                <td>Buscar en una distancia de X palabras</td>
-                <td>un {2} de</td>
-                <td>un servicio público de, un amor platónico de</td>
-              </tr>
-              <tr>
-                <td>Llaves</td>
-                <td>Buscar en una distancia de X a Y palabras</td>
-                <td>un {1-4} de</td>
-                <td>un vaso de, un plato de alimentos de</td>
-              </tr>
-            </table>
-          </div>
-        
-          <div>
-            <div style="display: inline-block;">
-              <b>Anotación Posicional:</b>
-              {% for p_a in positional_annotation%}
-                {% with val=p_a.0 check_anot=p_a.1 sty=p_a.2 %}
-                <label id="{{val}}" style="display:{{sty}};"><input type="checkbox" {{check_anot}} 
-                  name="positional" value="{{val}}">{{val}}</label>
-                {% endwith %}
-              {% endfor %}
-            </div>
-
-            <div style="display: inline-block; margin-left:1%;">
-              <b>Alineamiento:</b>
-              {% for a in alignment %}
-                {% if a in alignment_select %}
-                  <label id="{{a}}"><input type="checkbox" checked name="alignment" value="{{a}}">{{a}}</label>
-                {% else %}
-                  <label id="{{a}}"><input type="checkbox" name="alignment" value="{{a}}">{{a}}</label>
-                {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-
-          {% if filter_metadato %}
-            <div>
-            <br>
-              <b>Filtros:</b>
-              <br>
-              {% for f_m in filter_metadato %}
-                <div style="display: inline-block;">
-
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <label class="input-group-text" for="inputGroupSelect01">{{f_m.1}}</label>
-                    </div>
-                    <select class="custom-select" id="{{f_m.0}}" name="{{f_m.0}}">
-                      {% if filter_select|length == 0 %}
-                      <option value="Seleccione..." selected>Seleccione...</option>
-                      {% for v_f_m in f_m.2 %}
-                        <option value="{{v_f_m}}">{{v_f_m}}</option>
-                      {% endfor %}
-
-                      {% else %}
-                      <option value="Seleccione...">Seleccione...</option>
-                      {% for v_f_m in f_m.2 %}
-                        {% with k=f_m.0|stringformat:"i" %}      
-                          {% if k in filter_select %}
-                              {% if filter_select|get_item:k == v_f_m %}
-                                <option value="{{v_f_m}}" selected>{{v_f_m}}</option>
-                              {% else %}
-                                <option value="{{v_f_m}}">{{v_f_m}}</option>
-                              {% endif %}
-                          {% else %}
-                            <option value="{{v_f_m}}">{{v_f_m}}</option> 
-                          {% endif %}
-                        {% endwith %}
-                      {% endfor %}
-                    {% endif %}
-                    </select>
-                  </div>
-                </div>
-              {% endfor %}       
-            </div>
-          {% endif %}
-        
-            <br>
-
-            <div style="display:inline-block;">
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="inputGroupSelect01"><b>Vista máxima</b></label>
-                </div>
-                <select class="custom-select" id="max_view" name="max_view">
-                  {% with '- 5 10 25 30 40' as view_value %}
-                  {% for v_v in view_value.split %}
-                    {% ifequal v_v max_view %}
-                      <option value="{{v_v}}" selected>{{v_v}}</option>
-                    {% else %}
-                      <option value="{{v_v}}">{{v_v}}</option>
-                    {% endifequal %}
-                  {% endfor %}
-                  {% endwith %}
-                </select>
-                <div style="margin-left:4%;">
-                  <b>Ventana:</b>
-                  {% with 'Vertical Horizontal KWIC' as window_value %}
-                  {% for w_v in window_value.split %}
-                    {% ifequal w_v window %}
-                      <label id="{{w_v}}"><input type="radio" checked name="window" value="{{w_v}}">{{w_v}}</label>
-                    {% else %}
-                      <label id="{{w_v}}"><input type="radio" name="window" value="{{w_v}}">{{w_v}}</label>
-                    {% endifequal %}
-                  {% endfor %}
-                  {% endwith %}
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div>
-                <input class="btn btn-success" type="submit" value="Buscar" />
-              </div>
-            </div>
-
-        </div>
-        </div>
+        <p><b>Descripción del proyecto: </b>{{project_select.description}}</p>
       {% endif %}
-    </form>
+      <input type="text" name="id_project" id="id_project" value="{{project_select.id}}" hidden/>
+      <br>
 
-    <br>
-    <div id="contenido" style="display:{{style_display}};">
-      {% if results|length == 0 %}
+      <div>
+        {% if languages %}
+          <b>Idioma de búsqueda:</b>
+          {% for language in languages %}
+              <a href="?q={{project_select.id}}/{{language}}">{{language}}</a>
+          {% endfor %}
+        {% else %}
+          <p>Este proyecto no contiene archivos con metadato: "Lengua" para realizar la concordancia</p>
+        {% endif %}
+        <input type="text" name="lang_select" id="lang_select" value="{{lang_select}}" hidden/>
+      </div>
+      <br>
+
+      <div id="contenido" style="display:{{style_display}};">
         <div>
-          <p align="center" style="color:red;"><b>No hay resultados</b></p>
-          <br>
-          <br>
+          <b>Petición de búsqueda:</b>
+          <div style="display: inline">
+            <input type="text" name="search_petition" id="search_petition" value="{{search_petition}}" style="width:70%;"/>
+          </div>
+          <div style="display: inline-block;">
+            <a href="javascript:mostrar_cerrar();"><img width="18px" height="18px" src="{% static 'img/ayuda.jpg' %}">Ayuda</a>
+          </div>
         </div>
-      {% else %}
-        <div style="margin-left: 1%;">
-          <a class="button_export" href="{% url 'export_search_csv' %}"><img width="18px" height="18px" src="{% static 'img/down.jpg' %}"> CSV</a>
-          <a class="button_export" href="{% url 'export_search_xls' %}"><img width="18px" height="18px" src="{% static 'img/down.jpg' %}"> EXCEL</a>
+        <br>
+
+        <script>
+          function mostrar_cerrar(){
+            var elem_display = document.getElementById('petition_help').style.display;
+            if (elem_display == 'none'){
+              document.getElementById('petition_help').style.display='';       
+            }
+            else{
+              document.getElementById('petition_help').style.display='none';
+            }
+          }
+        </script>
+
+        <div id="petition_help" style="display:none;">
+          <br>
+          <table style="width:98%; margin-left: 1%; margin-right: 1%;">
+            <caption>La petición de búsqueda puede ser una o varias palabras. Cada palabra de la petición puede tener un modificador diferente</caption>
+            <tr bgcolor= "#eeeeee" align="left">
+              <th>Modificador</th>
+              <th>Descripción</th>
+              <th>Ejemplo de petición</th>
+              <th>Ejemplos de resultados</th>
+            </tr>
+            <tr>
+              <td>Sin modificador</td>
+              <td>Forma concreta</td>
+              <td>avión</td>
+              <td>Avión, avión</td>
+            </tr>
+            <tr bgcolor= "#eeeeee">
+              <td>Corchetes</td>
+              <td>Buscar lema</td>
+              <td>[vivir]</td>
+              <td>viví, vive, vivió</td>
+            </tr>
+            <tr>
+              <td>Signos menor y mayor qué</td>
+              <td>Buscar  <a href="http://blade10.cs.upc.edu/freeling-old/doc/tagsets/tagset-es.html"  target="_blank" title="ETIQUETAS EAGLES">etiqueta POS</a></td>
+              <td>< VMIS3S0 >></td>
+              <td>dijo, habló, tomó</td>
+            </tr>
+            <tr bgcolor= "#eeeeee">
+              <td>Asterisco</td>
+              <td>Comodín, varias letras</td>
+              <td>*ito</td>
+              <td>chiquito, banquito, chorrito</td>
+            </tr>
+            <tr>
+              <td>Asterisco</td>
+              <td>Comodín, varias letras</td>
+              <td>ca*</td>
+              <td>casa, carro, carnaval</td>
+            </tr>
+            <tr bgcolor= "#eeeeee">
+              <td>Asterisco</td>
+              <td>Comodín, una palabra</td>
+              <td>de * y *</td>
+              <td>de carne y hueso, de oro y plata</td>
+            </tr>
+            <tr>
+              <td>Signo de interrogación</td>
+              <td>Comodín, una letra</td>
+              <td>p?lo</td>
+              <td>palo, pelo, polo</td>
+            </tr>
+            <tr bgcolor= "#eeeeee">
+              <td>Llaves</td>
+              <td>Buscar en una distancia de X palabras</td>
+              <td>un {2} de</td>
+              <td>un servicio público de, un amor platónico de</td>
+            </tr>
+            <tr>
+              <td>Llaves</td>
+              <td>Buscar en una distancia de X a Y palabras</td>
+              <td>un {1-4} de</td>
+              <td>un vaso de, un plato de alimentos de</td>
+            </tr>
+          </table>
+        </div>
+      
+        <div>
+          <div style="display: inline-block;">
+            <b>Anotación Posicional:</b>
+            {% for p_a in positional_annotation%}
+              {% with val=p_a.0 check_anot=p_a.1 sty=p_a.2 %}
+              <label id="{{val}}" style="display:{{sty}};"><input type="checkbox" {{check_anot}} 
+                name="positional" value="{{val}}">{{val}}</label>
+              {% endwith %}
+            {% endfor %}
+          </div>
+
+          <div style="display: inline-block; margin-left:1%;">
+            <b>Alineamiento:</b>
+            {% for a in alignment %}
+              {% if a in alignment_select %}
+                <label id="{{a}}"><input type="checkbox" checked name="alignment" value="{{a}}">{{a}}</label>
+              {% else %}
+                <label id="{{a}}"><input type="checkbox" name="alignment" value="{{a}}">{{a}}</label>
+              {% endif %}
+            {% endfor %}
+          </div>
         </div>
 
-        <div class="table-responsive">
+        {% if filter_metadato %}
+          <div>
           <br>
-          <table style="width:98%; margin-left: 1%; margin-right: 1%;" class="table table-bordered">
-            {% ifequal window 'Vertical' %}
-              <caption style="caption-side: top;">Resultados: {{visualize|a_sub_b:1}} de {{results|length|a_sub_b:1}}</caption>
-            {% else %}
-              <caption style="caption-side: top;">Resultados: {{visualize}} de {{results|length}}</caption>
-            {% endifequal %}
-            
-            {% for result in results %}
-              {% if forloop.counter0 < visualize %}
-                {% ifequal window 'Vertical' %}
+            <b>Filtros:</b>
+            <br>
+            {% for f_m in filter_metadato %}
+              <div style="display: inline-block;">
+
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">{{f_m.1}}</label>
+                  </div>
+                  <select class="custom-select" id="{{f_m.0}}" name="{{f_m.0}}">
+                    {% if filter_select|length == 0 %}
+                    <option value="Seleccione..." selected>Seleccione...</option>
+                    {% for v_f_m in f_m.2 %}
+                      <option value="{{v_f_m}}">{{v_f_m}}</option>
+                    {% endfor %}
+
+                    {% else %}
+                    <option value="Seleccione...">Seleccione...</option>
+                    {% for v_f_m in f_m.2 %}
+                      {% with k=f_m.0|stringformat:"i" %}      
+                        {% if k in filter_select %}
+                            {% if filter_select|get_item:k == v_f_m %}
+                              <option value="{{v_f_m}}" selected>{{v_f_m}}</option>
+                            {% else %}
+                              <option value="{{v_f_m}}">{{v_f_m}}</option>
+                            {% endif %}
+                        {% else %}
+                          <option value="{{v_f_m}}">{{v_f_m}}</option> 
+                        {% endif %}
+                      {% endwith %}
+                    {% endfor %}
+                  {% endif %}
+                  </select>
+                </div>
+              </div>
+            {% endfor %}       
+          </div>
+        {% endif %}
+      
+          <br>
+
+          <div style="display:inline-block;">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01"><b>Vista máxima</b></label>
+              </div>
+              <select class="custom-select" id="max_view" name="max_view">
+                {% with '- 5 10 25 30 40' as view_value %}
+                {% for v_v in view_value.split %}
+                  {% ifequal v_v max_view %}
+                    <option value="{{v_v}}" selected>{{v_v}}</option>
+                  {% else %}
+                    <option value="{{v_v}}">{{v_v}}</option>
+                  {% endifequal %}
+                {% endfor %}
+                {% endwith %}
+              </select>
+              <div style="margin-left:4%;">
+                <b>Ventana:</b>
+                {% with 'Vertical Horizontal KWIC' as window_value %}
+                {% for w_v in window_value.split %}
+                  {% ifequal w_v window %}
+                    <label id="{{w_v}}"><input type="radio" checked name="window" value="{{w_v}}">{{w_v}}</label>
+                  {% else %}
+                    <label id="{{w_v}}"><input type="radio" name="window" value="{{w_v}}">{{w_v}}</label>
+                  {% endifequal %}
+                {% endfor %}
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div>
+              <input class="btn btn-success" type="submit" value="Buscar" />
+            </div>
+          </div>
+
+      </div>
+      </div>
+    {% endif %}
+  </form>
+
+  <br>
+  <div id="contenido" style="display:{{style_display}};">
+    {% if results|length == 0 %}
+      <div>
+        <p align="center" style="color:red;"><b>No hay resultados</b></p>
+        <br>
+        <br>
+      </div>
+    {% else %}
+      <div style="margin-left: 1%;">
+        <a class="button_export" href="{% url 'export_search_csv' %}"><img width="18px" height="18px" src="{% static 'img/down.jpg' %}"> CSV</a>
+        <a class="button_export" href="{% url 'export_search_xls' %}"><img width="18px" height="18px" src="{% static 'img/down.jpg' %}"> EXCEL</a>
+      </div>
+
+      <div class="table-responsive">
+        <br>
+        <table style="width:98%; margin-left: 1%; margin-right: 1%;" class="table table-bordered">
+          {% ifequal window 'Vertical' %}
+            <caption style="caption-side: top;">Resultados: {{visualize|a_sub_b:1}} de {{results|length|a_sub_b:1}}</caption>
+          {% else %}
+            <caption style="caption-side: top;">Resultados: {{visualize}} de {{results|length}}</caption>
+          {% endifequal %}
+          
+          {% for result in results %}
+            {% if forloop.counter0 < visualize %}
+              {% ifequal window 'Vertical' %}
+                {% ifequal forloop.counter0 0 %}
+                  <tr bgcolor= "#eee">
+                    {% for x in result %}
+                      <th>{{x}}</th>
+                    {% endfor %}
+                  </tr>
+                {% else %}
+                  <tr>
+                    {% for x in result %}
+                      <td>{{x}}</td>
+                    {% endfor %}
+                  </tr>
+                {% endifequal %}
+              {% endifequal %}
+
+              {% ifequal window 'Horizontal' %}
+                {% for x in result %}
                   {% ifequal forloop.counter0 0 %}
                     <tr bgcolor= "#eee">
-                      {% for x in result %}
-                        <th>{{x}}</th>
-                      {% endfor %}
+                  {% else %}
+                    <tr>
+                  {% endifequal %}
+                    <td style="font-weight: bold;">{{x.0}}</td>
+                    <td>{{x.1}}</td>
+                  </tr>
+                {% endfor %}          
+              {% endifequal %}
+
+              {% ifequal window 'KWIC' %}
+                {% for x in result %}
+                  {% ifequal forloop.counter0 0 %}
+                    <tr bgcolor= "#eee">
+                      <td style="font-weight: bold;">{{x.0}}</td>
+                      <td style="text-align: right;">{{x.1.0}}</td>
+                      <td style="text-align: center; font-weight: bold;">{{x.1.1}}</td>
+                      <td style="text-align: left;">{{x.1.2}}</td>
                     </tr>
                   {% else %}
                     <tr>
-                      {% for x in result %}
-                        <td>{{x}}</td>
-                      {% endfor %}
+                      <td style="font-weight: bold;">{{x.0}}</td>
+                      <td colspan="3" style="text-align: center;">{{x.1}}</td>
                     </tr>
                   {% endifequal %}
-                {% endifequal %}
-
-                {% ifequal window 'Horizontal' %}
-                  {% for x in result %}
-                    {% ifequal forloop.counter0 0 %}
-                      <tr bgcolor= "#eee">
-                    {% else %}
-                      <tr>
-                    {% endifequal %}
-                      <td style="font-weight: bold;">{{x.0}}</td>
-                      <td>{{x.1}}</td>
-                    </tr>
-                  {% endfor %}          
-                {% endifequal %}
-
-                {% ifequal window 'KWIC' %}
-                  {% for x in result %}
-                    {% ifequal forloop.counter0 0 %}
-                      <tr bgcolor= "#eee">
-                        <td style="font-weight: bold;">{{x.0}}</td>
-                        <td style="text-align: right;">{{x.1.0}}</td>
-                        <td style="text-align: center; font-weight: bold;">{{x.1.1}}</td>
-                        <td style="text-align: left;">{{x.1.2}}</td>
-                      </tr>
-                    {% else %}
-                      <tr>
-                        <td style="font-weight: bold;">{{x.0}}</td>
-                        <td colspan="3" style="text-align: center;">{{x.1}}</td>
-                      </tr>
-                    {% endifequal %}
-                  {% endfor %}
-                {% endifequal %}
-              {% endif %}
-            {% endfor %}
-          </table>
-          <br>
-          <br>
-        </div>
-      {% endif %}
-    </div>
-    <br>
-    <br>
+                {% endfor %}
+              {% endifequal %}
+            {% endif %}
+          {% endfor %}
+        </table>
+        <br>
+        <br>
+      </div>
+    {% endif %}
   </div>
-{% endif %}
+  <br>
+  <br>
+</div>
 {% endblock content %}

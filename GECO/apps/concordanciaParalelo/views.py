@@ -32,11 +32,11 @@ def concordance_paralle_view(request):
     results = []
     
     if request.user.is_authenticated:
-        project = Project.objects.filter(parallel_status = True).filter(Q(owner = request.user) | Q(project_members=request.user)).order_by('id')
-        project_public = Project.objects.filter(parallel_status = True).filter(public_status = True).exclude(Q(owner = request.user) | Q(project_members=request.user)).order_by('id')
+        project = Project.objects.filter(parallel_status = True).filter(Q(owner = request.user) | Q(project_members=request.user))
+        project_public = Project.objects.filter(parallel_status = True).filter(public_status = True).exclude(Q(owner = request.user) | Q(project_members=request.user))
     else:
         project = []
-        project_public = Project.objects.filter(parallel_status = True).filter(public_status = True).order_by('id') 
+        project_public = Project.objects.filter(parallel_status = True).filter(public_status = True) 
     
     metadata_idioma = Metadata.objects.get(name_metadata='Lengua')
 

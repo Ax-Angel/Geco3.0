@@ -211,7 +211,7 @@ function closeRightMenu() {
 </div>
 {% endif %}
 
-<div class="overlay" id="overlay">
+{% comment %} <div class="overlay" id="overlay">
 			<div class="popup" id="popup">
 				<a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
 				
@@ -320,6 +320,6 @@ function closeRightMenu() {
 
 		</div>
 
-<script src="{% static 'js/popup.js' %}" ></script>
+<script src="{% static 'js/popup.js' %}" ></script> {% endcomment %}
 
 {% endblock content %}

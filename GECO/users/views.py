@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404 # noqa
+from django.urls import reverse
 from users.models import User
 from users.forms import *
 import traceback
@@ -28,9 +29,11 @@ def register_user_view(request):
             
             except:
                 print(traceback.format_exc())
-                return redirect('error')#Falta crear la vista para cuando falla la creacion de usuarios por escribir un nombre de usuario que ya existe
+                return redirect(reverse('register') + '?error')#Falta crear la vista para cuando falla la creacion de usuarios por escribir un nombre de usuario que ya existe
                                         #o en caso de cualquier otro error causado por intentar crear un nuevo usuario
             return redirect('login')
+        else:
+            return redirect(reverse('register') + '?error')
     else:
         form = register_user_form(request.POST)
     return render(request, 'registration/register_user_form.html', {'form': form})

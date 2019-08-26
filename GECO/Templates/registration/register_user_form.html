@@ -16,13 +16,17 @@
         <h2>Registro de usuario</h2>
         <p>&nbsp;</p>
 
+        {% if 'error' in request.GET %}
+          <p style="color:red">Los sentimos, algo no ha salido bien, por favor verifica que todo esté bien y vuelve a intentar</p>
+        {% endif %}
+
         <form method="post">
           {% csrf_token %}
           <div class="form-group row text-left">
             <label class="col-sm-3 col-form-label"><b>Nombre(s)*</b></label>
             <div class="col-sm-9">
                 <input type="text" name="first_name" placeholder="Juan" required>
-            </div>	              
+            </div>              
           </div>
 
           <div class="form-group row text-left">
@@ -57,7 +61,7 @@
             <label class="col-sm-3 col-form-label"><b>Confirmar contraseña*</b></label>
             <div class="col-sm-9">
                 <input type="password" name="confirm" required>
-            </div>  
+            </div>
           </div>
 
           <div class="form-group row text-left">

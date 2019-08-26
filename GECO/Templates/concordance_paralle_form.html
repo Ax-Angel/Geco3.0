@@ -41,11 +41,7 @@
   <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
 																	<!-- Aquí van los contenidos del menú izquierdo -->
   <fieldset>
-    <div style="display:inline-block;">
-      <span style="font-size:1.5rem;">Mis proyectos&nbsp;</span>
-      <button onClick ="window.location.href = '{% url 'create_project' %}'" sr class="btn btn-primary btn-sm"><a style="color:#fff;text-decoration:none;">Nuevo</a></button>
-    </div>
-    <hr>
+    <legend style="font-size:1.5rem;"><b>Mis proyectos</b></legend>
     {% for p in project %}
       <a href="?q={{ p.id }}">{{ p.name_project }}
       {% if p.public_status %} 
@@ -68,11 +64,9 @@
     {% endfor %}
       
   </fieldset>
-
+  
   <fieldset>
-    <div style="display:inline-block;">
-      <span style="font-size:1.5rem;">Proyectos públicos&nbsp;</span>
-    </div>
+    <legend style="font-size:1.5rem;"><b>Proyectos públicos</b></legend>
     {% for p in project_public %}   
       <a href="?q={{ p.id }}">{{ p.name_project }}
       {% if p.public_status %} 

@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+<h3>Editar documento</h3>
+
+{% block content %}
+{% load static %}
+<div class="container">
+    {% for line in text %}
+        <p>{{line}}</p>
+    {% endfor %}
+</div>
+{% endblock content %}
+ 

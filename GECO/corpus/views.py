@@ -86,6 +86,15 @@ def user_dashboard_view(request):
                                                    'documents': result,
                                                    'colaboradores': colaboradores})
 
+def document_view_view(request, document_id):
+    if request.method == 'GET':
+        doc_lines = []
+        file = File.objects.get(id=document_id)
+        text = open(os.path.join(settings.MEDIA_ROOT, str(file.file)), 'r').readlines()
+        for line in text:
+            doc_lines.append(line)
+    return render(request, 'document_view.html', {'file':file, 'text':doc_lines})
+
 
 class Project_Create(CreateView):
     model = Project
@@ -361,7 +370,7 @@ def upload_document_view(request, id_project):
 
 
 def lenguas():
-    lengua = [["Aguacateco","AGU"], ["Akateko","KNJ"], ["Amuzgo","AZG"], ["Ayapaneco","AYA"], ["Chatino","CHAT"],
+    lengua = [["Aguacateco","AGU"], ["Akateko","KNJ"], ["Amuzgo","AZG"], ["Ayapaneco","AYA"], ["Ch'ol","CHL"], ["Chatino","CHAT"],
               ["Chichimeco","PEI"], ["Chinanteco","CHIN"], ["Chocholteco","COZ"], ["Chontal de la sierra de oaxaca","CHD"],
               ["Chontal de tabasco","CHF"], ["Chuj","CAC"], ["Cora","CRN"], ["Cucapá","COC"], ["Cuicateco","CUT"],
               ["Español","ES"], ["Huarijio","VAR"], ["Huasteco","HUS"], ["Huave","HUV"], ["Inglés","EN"], ["Ixcateco","IXC"],
@@ -404,7 +413,6 @@ def add_collaborator_view(request, id_project):
     
     contexto = {'project':project, 'colaboradores':colaboradores, 'error': error, 'email':email}
     return render(request, 'add_collaborator_form.html', contexto)
-
 
 def list_user_projects_view(request):
     if request.method == 'GET':

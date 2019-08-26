@@ -27,11 +27,16 @@
   <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
 																	<!-- Aquí van los contenidos del menú izquierdo -->
   <fieldset>
-    <div style="display:inline-block;">
-      <span style="font-size:1.5rem;">Mis proyectos&nbsp;</span>
-      <button onClick ="window.location.href = '{% url 'create_project' %}'" sr class="btn btn-primary btn-sm"><a style="color:#fff;text-decoration:none;">Nuevo</a></button>
+
+    <legend><b>Mis proyectos</b> 
+    {% comment %} <button style="margin-left: 25%;" onClick ="window.location.href = '{% url 'create_project' %}'" class="btn btn-primary btn-sm">Nuevo</button> {% endcomment %}    
+    </legend>
+    <div>
+      <p><button onClick ="window.location.href = '{% url 'create_project' %}'" class="btn btn-primary btn-sm">Nuevo</button>
+      Puedes crear un nuevo proyecto</p>
     </div>
     <hr>
+       
     {% for p in user_projects %}
       <a href="?q={{ p.name_project }}">{{ p.name_project }}</a>
       {% if p.public_status %} 
@@ -56,7 +61,7 @@
   </fieldset>
 
   <fieldset>
-    <legend>Proyectos públicos</legend>
+    <legend><b>Proyectos públicos</b></legend>
     {% for p in public_projects %}   
     <a href="?q={{ p.name_project }}">{{ p.name_project }}</a>
     {% if p.public_status %} 
@@ -174,7 +179,7 @@ function closeRightMenu() {
                 {% if forloop.first %}
                   <tr>
                     <td rowspan="{{res.1|length}}" width="10%">
-                      <a href="#" title="Ver documento"><i class="fas fa-eye fa-1x"></i></a>
+                      <a href="{% url 'document_view' 1 %}" title="Ver documento"><i class="fas fa-eye fa-1x"></i></a>
                       <a href="#" title="Descargar documento"><i class="fas fa-file-download fa-1x"></i></a>
                     {% if user == project.owner or user in colaboradores %}                     
                       <a href="{% url 'delete_document' res.0 %}" title="Eliminar documento"><i class="fas fa-trash fa-1x"></i></a>

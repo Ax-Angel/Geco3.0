@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^dashboard/create_project/', Project_Create.as_view(), name = 'create_project'),
     url(r'^dashboard/update_project/(?P<pk>\d+)/$', login_required(Project_Update.as_view()), name='update_project'),
     url(r'^dashboard/delete_project/(?P<pk>\d+)/$', login_required(Project_Delete.as_view()), name='delete_project'),
+    url(r'^dashboard/document_view/(?P<document_id>\d+)/$', document_view_view, name='document_view'),
     #path('dashboard/create_project/', create_project_view, name = 'create_project'),
     
     url(r'^dashboard/upload_document/(?P<id_project>\d+)/$', upload_document_view, name = 'upload_document'),    

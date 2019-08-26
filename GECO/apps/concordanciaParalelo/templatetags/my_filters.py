@@ -16,3 +16,8 @@ def here(a):
     if a in [3, 6, 9, 12]:
         return True
     return False
+
+@register.filter(name='escribir_Aqui')
+def escribir_Aqui(x):
+    texto = "Hola mundo estoy probando " + str(x[0][0])
+    return texto

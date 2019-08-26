@@ -376,7 +376,7 @@ def lenguas():
               ["Español","ES"], ["Huarijio","VAR"], ["Huasteco","HUS"], ["Huave","HUV"], ["Inglés","EN"], ["Ixcateco","IXC"],
               ["Ixil","IXL"], ["Jacalteco","JAC"], ["Kaqchikel","CAK"], ["Kikapú","KIC"], ["Kiliwa","KLB"], ["Ku' ahl","PPI"],
               ["Kumiai","DIH"], ["Lacandón","LAC"], ["Mam","MAM"], ["Maya","YUA"], ["Mayo","MFY"], ["Mazahua","MAZA"], ["Mazateco","MAZ"],
-              ["Mixe","MXE"], ["Mixteco","MX"], ["Náhuatl","NAH"], ["Oluteco","PLO"], ["Paipai","PAPAI"], ["Pápago","OOD"], ["Pima del norte","PIA"], ["Popoloca","POP"],
+              ["Mixe","MXE"], ["Mixteco","MX"], ["Náhuatl","NAH"], ["Oluteco","PLO"], ["Otomí", "OT"], ["Paipai","PAPAI"], ["Pápago","OOD"], ["Pima del norte","PIA"], ["Popoloca","POP"],
               ["Popoluca","PPA"], ["Purépecha","TSZ"], ["Q'anjob'al","KJB"], ["Qato'k","MHC"], ["Quekchí","KEK"], ["Quiché","QUC"],
               ["Sayulteco","POS"], ["Seri","SEI"], ["Tarahumara","TAC"], ["Teko","TTC"], ["Tepehua","TPA"], ["Tepehuán","TPN"],
               ["Texistepequeño","POQ"], ["Tlapaneco","TCF"], ["Tojolabal","TOJ"], ["Totonaco","TOT"], ["Triqui","TRC"], 

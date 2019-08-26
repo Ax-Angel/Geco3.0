@@ -30,10 +30,16 @@ def concordance_paralle_view(request):
     filter_select = {}
     results = request.session.get('results')
     results = []
+    project = []
+    project_public = []
     
+    all_projects = Project.objects.filter(parallel_status = True)
     if request.user.is_authenticated:
-        project = Project.objects.filter(parallel_status = True).filter(Q(owner = request.user) | Q(project_members=request.user))
-        project_public = Project.objects.filter(parallel_status = True).filter(public_status = True).exclude(Q(owner = request.user) | Q(project_members=request.user))
+        for proj in all_projects:
+            if proj.is_user_collaborator(request.user):
+                project.append(proj)
+            elif proj.is_public():
+                project_public.append(proj)
     else:
         project = []
         project_public = Project.objects.filter(parallel_status = True).filter(public_status = True) 

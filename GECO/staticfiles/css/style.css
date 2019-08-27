@@ -476,10 +476,6 @@ select {
 	opacity: 0;
 }
 
-.popup form .contenedor-inputs {
-	opacity: 0;
-}
-
 /* ------------------------- */
 /* ANIMACIONES */
 /* ------------------------- */
@@ -509,9 +505,4 @@ select {
 		transform: translateY(0);
 		opacity: 1;
 	}
-}
-
-@keyframes entradaInputs {
-	from { opacity: 0; }
-	to { opacity: 1; }
 }

@@ -31,7 +31,6 @@
   <fieldset>
 
     <legend><b>Mis proyectos</b> 
-    {% comment %} <button style="margin-left: 25%;" onClick ="window.location.href = '{% url 'create_project' %}'" class="btn btn-primary btn-sm">Nuevo</button> {% endcomment %}    
     </legend>
     <div>
       <p><button onClick ="window.location.href = '{% url 'create_project' %}'" class="btn btn-primary btn-sm">Nuevo</button>
@@ -181,7 +180,8 @@ function closeRightMenu() {
                 {% if forloop.first %}
                   <tr>
                     <td rowspan="{{res.1|length}}" width="10%">
-                      <a href="#" id="btn-abrir-popup" title="Ver documento"><i class="fas fa-eye fa-1x"></i></a>
+                      <a href="#" onclick="open_popup({{res.0}});" id="btn-abrir-popup_{{res.0}}" 
+                      style=".btn-abrir-popup_{{res.0}}:hover {background: rgba(94,125,227, .9);}" title="Ver documento"><i class="fas fa-eye fa-1x"></i></a>
                       <a href="#" title="Descargar documento"><i class="fas fa-file-download fa-1x"></i></a>
                       {% if user == project.owner or user in colaboradores %}                     
                         <a href="{% url 'delete_document' res.0 %}" title="Eliminar documento"><i class="fas fa-trash fa-1x"></i></a>
@@ -211,9 +211,45 @@ function closeRightMenu() {
 </div>
 {% endif %}
 
-{% comment %} <div class="overlay" id="overlay">
-			<div class="popup" id="popup">
-				<a href="#" id="btn-cerrar-popup" class="btn-cerrar-popup"><i class="fas fa-times"></i></a>
+{% if documents|length != 0 %}
+  {% for res in documents %}
+
+    <div class="overlay_{{res.0}}" id="overlay_{{res.0}}" 
+      style="background:rgba(0,0,0,.3); position:fixed; top:0; bottom:0; left:0; right:0; align-items:center; 
+      justify-content:center; display:flex; visibility:hidden;">
+			
+      <div class="popup_{{res.0}}" id="popup_{{res.0}}"
+        style="background:#F8F8F8; box-shadow:0px 0px 5px 0px rgba(0,0,0,0.3); border-radius:3px; 
+        font-family:'Montserrat', sans-serif; padding: 20px; text-align:center; width:25%; height:25%; 
+        transition:.3s ease all; transform:scale(0.7); opacity:0;">
+				
+        <a href="#" id="btn-cerrar-popup_{{res.0}}" class="btn-cerrar-popup_{{res.0}}" onclick="close_popup({{res.0}});"
+          style = "font-size:16px; line-height:16px; display:block; text-align:right; transition:.3s ease all; 
+          color:#BBBBBB;"><i class="fas fa-times"></i></a>
+
+        <p>HOLAAAAA </p>
+        <p>{{res.0|escribir_Aqui}}</p>
+
+      </div>
+    </div>
+
+  {% endfor %}
+{% endif %}
+
+<script>
+  function open_popup(id){
+    document.getElementById('overlay_'+id).style.visibility = 'visible';
+  	document.getElementById('popup_'+id).style.visibility = 'visible';
+  }
+
+  function close_popup(id){
+    document.getElementById('overlay_'+id).style.visibility = 'hidden';
+  	document.getElementById('popup_'+id).style.visibility = 'hidden'; 
+  }
+
+</script>
+
+{% comment %} 
 				
         <p>{{documents|escribir_Aqui}}</p>
 <!--Accordion wrapper-->

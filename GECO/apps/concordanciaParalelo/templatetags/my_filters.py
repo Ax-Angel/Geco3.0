@@ -19,5 +19,5 @@ def here(a):
 
 @register.filter(name='escribir_Aqui')
 def escribir_Aqui(x):
-    texto = "Hola mundo estoy probando " + str(x[0][0])
+    texto = "Hola mundo estoy probando " + str(x)
     return texto

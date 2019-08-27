@@ -5,7 +5,7 @@ from .validators import validate_file_extension
 # Create your models here.
 class Project(models.Model):
     name_project = models.CharField(max_length=100, null=False, unique=True)
-    description = models.CharField(max_length=250, null=False, unique=False)
+    description = models.TextField(null=False, unique=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='owner_normalproject', on_delete=models.CASCADE)
     project_members = models.ManyToManyField(settings.AUTH_USER_MODEL)
     public_status = models.BooleanField(default=0)
@@ -62,5 +62,5 @@ class Metadata(models.Model):
 class File_Metadata_Relation(models.Model):
     metadata = models.ForeignKey(Metadata, related_name='metadata', on_delete=models.CASCADE)
     file = models.ForeignKey(File, related_name='metadata_file', on_delete=models.CASCADE)
-    data_value = models.CharField(max_length=250, blank=True, null=True)
+    data_value = models.TextField(blank=True, null=True)
 

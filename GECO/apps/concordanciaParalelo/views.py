@@ -271,14 +271,14 @@ def export_search_csv(request):
     results = request.session.get('results')
     if window == 'Vertical':
         for r in results:
-            r = re.sub(r'<strong>', '', r)
-            r = re.sub(r'</strong>', '', r)
+            r = re.sub(r'<strong>', '', str(r))
+            r = re.sub(r'</strong>', '', str(r))
             writer.writerow(r)   
     elif window == 'Horizontal':
         for r in results:
             for x in r:
-                x = re.sub(r'<strong>', '', x)
-                x = re.sub(r'</strong>', '', x)
+                x = re.sub(r'<strong>', '', str(x))
+                x = re.sub(r'</strong>', '', str(x))
                 writer.writerow(x)       
     elif window == 'KWIC':
         for r in results:

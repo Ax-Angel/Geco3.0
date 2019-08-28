@@ -1,6 +1,9 @@
 from django import template
 from django.template.defaultfilters import register
 
+from corpus.models import *
+from apps.concordanciaParalelo.function import *
+
 @register.filter(name='get_item')
 def get_item(dictionary, index):
     if index in dictionary:
@@ -17,7 +20,15 @@ def here(a):
         return True
     return False
 
-@register.filter(name='escribir_Aqui')
-def escribir_Aqui(x):
-    texto = "Hola mundo estoy probando " + str(x)
-    return texto
+@register.filter(name='document_text')
+def document_text(id_document):    
+    document = Document.objects.get(id=id_document)
+    files = File.objects.filter(document_id=document.id)
+    textos = []
+    for f in files:
+        _tmp = []
+        _tmp.append(f.id)
+        _tmp.append(f.name_file)
+        _tmp.append(read_text_txt(f.file.path))
+        textos.append(_tmp)
+    return textos

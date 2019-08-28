@@ -391,29 +391,6 @@ input[type=email] {
 }
 
 
-/*.select-wrap {
-    border: 1px solid #777;
-    border-radius: 10px;
-    padding: 0 5px;
-    width: 200px;
-    background-color: #fff;
-    position: relative;
-}
-
-.select-wrap label {
-    font-size: 8px;
-    text-transform: uppercase;
-    color: #777;
-    padding: 0 0;
-    position: absolute;
-    top: 3px;
-}
-
-select {
-    border: 0px;
-    font-size: 16px;
-}*/
-
 .btn-abrir-popup {
     padding: 0 20px;
     margin-bottom: 20px;
@@ -434,13 +411,8 @@ select {
     background: rgba(94, 125, 227, .9);
 }
 
-
 /* ------------------------- */
-
-
 /* POPUP */
-
-
 /* ------------------------- */
 
 .overlay {
@@ -488,8 +460,8 @@ select {
 }
 
 .popup h3 {
-    font-size: 36px;
-    font-weight: 600;
+    font-size: 32px;
+    font-weight: 500;
     margin-bottom: 10px;
     opacity: 0;
 }
@@ -501,13 +473,8 @@ select {
     opacity: 0;
 }
 
-
 /* ------------------------- */
-
-
-/* ANIMACIONES */
-
-
+/* ANIMACIONES POPUP */
 /* ------------------------- */
 
 .popup.active {

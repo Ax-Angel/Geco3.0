@@ -218,7 +218,7 @@ def find_files(dct):
             else:
                 t_aux = ()
                 dato = dato.filter(metadata_id=dct['metadata_idioma'].id)
-                if dato[0].data_value in dct['alignment_select']:
+                if dato.exists() and dato[0].data_value in dct['alignment_select']:
                     t_aux = (f.file.path, dato[0].data_value)
                     array_files.append(t_aux)
         #if len(tuple_file)!=0 and len(array_files)==len(dct['alignment_select']):

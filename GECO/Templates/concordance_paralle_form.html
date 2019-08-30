@@ -189,69 +189,80 @@ function closeLeftMenu() {
 
         <div id="petition_help" style="display:none;">
           <br>
-          <table style="width:98%; margin-left: 1%; margin-right: 1%;">
-            <caption>La petición de búsqueda puede ser una o varias palabras. Cada palabra de la petición puede tener un modificador diferente</caption>
-            <tr bgcolor= "#eeeeee" align="left">
-              <th>Modificador</th>
-              <th>Descripción</th>
-              <th>Ejemplo de petición</th>
-              <th>Ejemplos de resultados</th>
-            </tr>
-            <tr>
-              <td>Sin modificador</td>
-              <td>Forma concreta</td>
-              <td>avión</td>
-              <td>Avión, avión</td>
-            </tr>
-            <tr bgcolor= "#eeeeee">
-              <td>Corchetes</td>
-              <td>Buscar lema</td>
-              <td>[vivir]</td>
-              <td>viví, vive, vivió</td>
-            </tr>
-            <tr>
-              <td>Signos menor y mayor qué</td>
-              <td>Buscar  <a href="http://blade10.cs.upc.edu/freeling-old/doc/tagsets/tagset-es.html"  target="_blank" title="ETIQUETAS EAGLES">etiqueta POS</a></td>
-              <td>< VMIS3S0 >></td>
-              <td>dijo, habló, tomó</td>
-            </tr>
-            <tr bgcolor= "#eeeeee">
-              <td>Asterisco</td>
-              <td>Comodín, varias letras</td>
-              <td>*ito</td>
-              <td>chiquito, banquito, chorrito</td>
-            </tr>
-            <tr>
-              <td>Asterisco</td>
-              <td>Comodín, varias letras</td>
-              <td>ca*</td>
-              <td>casa, carro, carnaval</td>
-            </tr>
-            <tr bgcolor= "#eeeeee">
-              <td>Asterisco</td>
-              <td>Comodín, una palabra</td>
-              <td>de * y *</td>
-              <td>de carne y hueso, de oro y plata</td>
-            </tr>
-            <tr>
-              <td>Signo de interrogación</td>
-              <td>Comodín, una letra</td>
-              <td>p?lo</td>
-              <td>palo, pelo, polo</td>
-            </tr>
-            <tr bgcolor= "#eeeeee">
-              <td>Llaves</td>
-              <td>Buscar en una distancia de X palabras</td>
-              <td>un {2} de</td>
-              <td>un servicio público de, un amor platónico de</td>
-            </tr>
-            <tr>
-              <td>Llaves</td>
-              <td>Buscar en una distancia de X a Y palabras</td>
-              <td>un {1-4} de</td>
-              <td>un vaso de, un plato de alimentos de</td>
-            </tr>
+          <table style="width:98%; margin-left: 1%; margin-right: 1%;" class="table table-striped">
+            <caption style="caption-side: top;">La petición de búsqueda puede ser una o varias palabras. Cada palabra de la petición puede tener un modificador diferente</caption>
+            <thead>
+              <tr align="left">
+                <th>Modificador</th>
+                <th>Descripción</th>
+                <th>Ejemplo de petición</th>
+                <th>Ejemplos de resultados</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sin modificador</td>
+                <td>Forma concreta</td>
+                <td>avión</td>
+                <td>Avión, avión</td>
+              </tr>
+              <tr>
+                <td><b>Comillas*</b></td>
+                <td>Combinación de caracteres dependencia de la lengua</td>
+                <td>"avion"</td>
+                <td>Avión, avión, aviön, avìòn, avíón</td>
+              </tr>
+              <tr>
+                <td>Corchetes</td>
+                <td>Buscar lema</td>
+                <td>[vivir]</td>
+                <td>viví, vive, vivió</td>
+              </tr>
+              <tr>
+                <td>Signos menor y mayor qué</td>
+                <td>Buscar  <a href="http://blade10.cs.upc.edu/freeling-old/doc/tagsets/tagset-es.html"  target="_blank" title="ETIQUETAS EAGLES">etiqueta POS</a></td>
+                <td>< VMIS3S0 >></td>
+                <td>dijo, habló, tomó</td>
+              </tr>
+              <tr>
+                <td>Asterisco</td>
+                <td>Comodín, varias letras</td>
+                <td>*ito</td>
+                <td>chiquito, banquito, chorrito</td>
+              </tr>
+              <tr>
+                <td>Asterisco</td>
+                <td>Comodín, varias letras</td>
+                <td>ca*</td>
+                <td>casa, carro, carnaval</td>
+              </tr>
+              <tr>
+                <td>Asterisco</td>
+                <td>Comodín, una palabra</td>
+                <td>de * y *</td>
+                <td>de carne y hueso, de oro y plata</td>
+              </tr>
+              <tr>
+                <td>Signo de interrogación</td>
+                <td>Comodín, una letra</td>
+                <td>p?lo</td>
+                <td>palo, pelo, polo</td>
+              </tr>
+              <tr>
+                <td>Llaves</td>
+                <td>Buscar en una distancia de X palabras</td>
+                <td>un {2} de</td>
+                <td>un servicio público de, un amor platónico de</td>
+              </tr>
+              <tr>
+                <td>Llaves</td>
+                <td>Buscar en una distancia de X a Y palabras</td>
+                <td>un {1-4} de</td>
+                <td>un vaso de, un plato de alimentos de</td>
+              </tr>
+            </tbody>
           </table>
+          <p><b>*Sólo aplica para las lenguas indígenas mexicanas: Ch'ol(CHL), Maya(MY), Mazateco(MAZ), Mixteco(MX), Náhuatl(NAH) y Otomí(OT)</b></p>
         </div>
       
         <div>

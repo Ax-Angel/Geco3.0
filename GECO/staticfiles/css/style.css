@@ -390,7 +390,6 @@ input[type=email] {
     }
 }
 
-
 .btn-abrir-popup {
     padding: 0 20px;
     margin-bottom: 20px;
@@ -411,8 +410,17 @@ input[type=email] {
     background: rgba(94, 125, 227, .9);
 }
 
+.cplm-back {
+    background: url('/static/img/CPLM/Background-propuesta2.jpg') !important;
+}
+
+
 /* ------------------------- */
+
+
 /* POPUP */
+
+
 /* ------------------------- */
 
 .overlay {
@@ -473,8 +481,13 @@ input[type=email] {
     opacity: 0;
 }
 
+
 /* ------------------------- */
+
+
 /* ANIMACIONES POPUP */
+
+
 /* ------------------------- */
 
 .popup.active {

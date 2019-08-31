@@ -38,7 +38,7 @@
 
 <body {% if project_select.name_project == 'CPLM' %}class="cplm-back"{% endif %}>
 
-<div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none;min-width:200px;width:20%;max-height:90%;" id="leftMenu">
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-left {% if project_select.name_project == 'CPLM' %}cplm-back{% endif %}" style="display:none;min-width:200px;width:20%;max-height:90%;" id="leftMenu">
   <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
 																	<!-- Aquí van los contenidos del menú izquierdo -->
   <fieldset>
@@ -46,22 +46,22 @@
     {% for p in project %}
       <a href="?q={{ p.id }}">{{ p.name_project }}
       {% if p.public_status %} 
-        <img width="5%" height="5%" src="{% static 'img/publico.jpg' %}">
+        <i class="fas fa-globe-americas" title="Público"></i>
       {% else %}
-        <img width="5%" height="5%" src="{% static 'img/personal.jpg' %}">
+        <i class="fas fa-user-lock" title="Privado"></i>
       {% endif %}
       {% if p.parallel_status %} 
-        <img width="5%" height="5%" src="{% static 'img/paral.jpg' %}">
+        <i class="far fa-copy" title="Paralelo"></i>
       {% else %}
-        <img width="5%" height="5%" src="{% static 'img/monol.jpg' %}">
+        <i class="far fa-file" title="Normal"></i>
       {% endif %}
 
       {% if p.collab_status %} 
-        <img width="5%" height="5%" src="{% static 'img/compartido.jpg' %}">
+        <i class="far fa-handshake" title="Colaborativo"></i>
       {% else %}
-        <img width="5%" height="5%" src="{% static 'img/personal.jpg' %}">
+        <i class="fas fa-male" title="Personal"></i>
       {% endif %}
-      </a>
+      </a><br>
     {% endfor %}
       
   </fieldset>
@@ -71,23 +71,23 @@
     {% for p in project_public %}   
       <a href="?q={{ p.id }}">{{ p.name_project }}
       {% if p.public_status %} 
-        <img width="5%" height="5%" src="{% static 'img/publico.jpg' %}">
+        <i class="fas fa-globe-americas" title="Público"></i>
       {% else %}
-        <img width="5%" height="5%" src="{% static 'img/personal.jpg' %}">
+        <i class="fas fa-user-lock" title="Privado"></i>
       {% endif %}
 
       {% if p.parallel_status %} 
-        <img width="5%" height="5%" src="{% static 'img/paral.jpg' %}">
+        <i class="far fa-copy" title="Paralelo"></i>
       {% else %}
-        <img width="5%" height="5%" src="{% static 'img/monol.jpg' %}">
+        <i class="far fa-file" title="Normal"></i>
       {% endif %}
 
       {% if p.collab_status %} 
-        <img width="5%" height="5%" src="{% static 'img/compartido.jpg' %}">
+        <i class="far fa-handshake" title="Colaborativo"></i>
       {% else %}
-        <img width="5%" height="5%" src="{% static 'img/personal.jpg' %}">
+        <i class="fas fa-male" title="Personal"></i>
       {% endif %}
-      </a>
+      </a><br>
     {% endfor %}
 
   </fieldset>

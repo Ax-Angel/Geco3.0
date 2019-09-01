@@ -337,7 +337,7 @@ def letter_change(language, busq):
         for a in array:
             if a[0] in busq:
                 busq = re.sub(a[0], a[1], busq)
-    
+    print('MIRANDO LA BUSQUEDA  -  ', busq)
     return busq
     
 

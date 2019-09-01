@@ -20,6 +20,8 @@ from zipfile import ZipFile
 
 import traceback
 import os, shutil
+import zipfile
+import datetime
 
 
 # Create your views here.
@@ -87,14 +89,14 @@ def user_dashboard_view(request):
                                                    'documents': result,
                                                    'colaboradores': colaboradores})
 
-def document_view_view(request, document_id):
+""" def document_view_view(request, document_id):
     if request.method == 'GET':
         doc_lines = []
         file = File.objects.get(id=document_id)
         text = open(os.path.join(settings.MEDIA_ROOT, str(file.file)), 'r').readlines()
         for line in text:
             doc_lines.append(line)
-    return render(request, 'document_view.html', {'file':file, 'text':doc_lines})
+    return render(request, 'document_view.html', {'file':file, 'text':doc_lines}) """
 
 
 class Project_Create(CreateView):
@@ -486,4 +488,23 @@ def download_project(request, project_id):
 
             print('All files zipped successfully!')
 
+    return response
+
+
+def download_document(request, document_id):
+    document = Document.objects.get(id = document_id)
+    files = File.objects.filter(document_id = document.id)
+        
+    currentDT = datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
+    zipfile_name = "%s.zip" % currentDT
+    
+    response = HttpResponse(content_type='application/zip')
+    zip_file = zipfile.ZipFile(response, 'w')
+    
+    for f in files:
+        fdir, fname = os.path.split(f.file.path)
+        zip_path = os.path.join(currentDT, fname)
+        zip_file.write(f.file.path, zip_path)
+    response['Content-Disposition'] = 'attachment; filename={}'.format(zipfile_name)
+    zip_file.close()
     return response

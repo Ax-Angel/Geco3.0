@@ -265,21 +265,21 @@ def export_search_csv(request):
     name_file = currentDT+".csv"
     response = HttpResponse(content_type='text/csv')  
     response['Content-Disposition'] = 'attachment; filename='+name_file 
-    writer = csv.writer(response)
+    writer = csv.writer(response, delimiter=",")
     response.write(u'\ufeff'.encode('utf8'))
     window = request.session.get('window')
     results = request.session.get('results')
     if window == 'Vertical':
         for r in results:
-            r = re.sub(r'<strong>', '', str(r))
-            r = re.sub(r'</strong>', '', str(r))
-            writer.writerow(r)   
+            r = re.sub('<strong>', '', str(r))
+            r = re.sub('</strong>', '', r)
+            writer.writerow([r])   
     elif window == 'Horizontal':
         for r in results:
             for x in r:
                 x = re.sub(r'<strong>', '', str(x))
-                x = re.sub(r'</strong>', '', str(x))
-                writer.writerow(x)       
+                x = re.sub(r'</strong>', '', x)
+                writer.writerow([x])       
     elif window == 'KWIC':
         for r in results:
             for i,x in enumerate(r):

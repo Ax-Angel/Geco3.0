@@ -17,6 +17,7 @@ from corpus.forms import *
 from .models import *
 from users.models import User
 from zipfile import ZipFile
+from glob import glob
 
 import traceback
 import os, shutil
@@ -454,39 +455,23 @@ def help_view(request):
 def apps_view(request):
     return render(request, 'applications.html')
 
-def get_all_file_paths(directory):
-    # initializing empty file paths list
-    file_paths = []
-
-    # crawling through directory and subdirectories 
-    for root, directories, files in os.walk(directory):
-        for filename in files:
-            # join the two strings in order to form the full filepath. 
-            filepath = os.path.join(root, filename)
-            file_paths.append(filepath)
-
-            # returning all file paths
-    return file_paths
-
-
 def download_project(request, project_id):
-    response = HttpResponse(content_type="application/zip")
-    response["Content-Disposition"] = "attachment; filename=my_python_files.zip"
-    if request.user.is_authenticated:
-        if request.method == 'GET':
-            project = Project.objects.get(id=project_id)
-            # calling function to get all file paths in the directory
-            file_paths = get_all_file_paths( settings.MEDIA_ROOT + '/' + project.name_project)
+    project = Project.objects.get(id=project_id)
 
-                # writing files to a zipfile
-            with ZipFile('my_python_files.zip', 'w') as zip:
-                # writing each file one by one 
-                for file in file_paths:
-                    zip.write(file)
-            
-            response.write(str(os.getcwd) + '/my_python_files.zip')
+    currentDT = datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
+    zipfile_name = "%s.zip" % currentDT
+    currentDT = currentDT + '/' + project.name_project
+    
+    response = HttpResponse(content_type='application/zip')
+    zip_file = zipfile.ZipFile(response, 'w')
+    paths = glob(settings.MEDIA_ROOT + '/' + project.name_project + '/*.txt')
 
-            print('All files zipped successfully!')
+    for file in paths:
+        fdir, fname = os.path.split(file)
+        zip_path = os.path.join(currentDT, fname)
+        zip_file.write(file, zip_path)
+    response['Content-Disposition'] = 'attachment; filename={}'.format(zipfile_name)
+    zip_file.close()
 
     return response
 

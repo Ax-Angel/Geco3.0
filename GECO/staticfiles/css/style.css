@@ -371,22 +371,35 @@ input[type=email] {
 }
 
 .card-body {
-    max-height: 28rem;
+    max-height: 15rem;
 }
 
 .accordion {
-    max-height: 41rem;
+    max-height: 19rem;
 }
 
 @media screen and (max-width: 768px) {
     .card-body {
         max-height: 10rem;
     }
+
 }
 
 @media screen and (max-width: 768px) {
     .accordion {
         max-height: auto;
+    }
+}
+
+@media screen and (min-width: 1768px) {
+    .card-body {
+        max-height: 30rem;
+    }
+}
+
+@media screen and (min-width: 1768px) {
+    .accordion {
+        max-height: 50rem;
     }
 }
 

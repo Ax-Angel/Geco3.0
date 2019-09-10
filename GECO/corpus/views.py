@@ -12,12 +12,14 @@ from django.urls import reverse
 from django.conf import settings
 
 from django.core.files.storage import default_storage
+from django.core.mail import send_mail
 
 from corpus.forms import *
 from .models import *
 from users.models import User
 from zipfile import ZipFile
 from glob import glob
+from inviter2.utils import invite
 
 import traceback
 import os, shutil
@@ -393,13 +395,31 @@ def lenguas():
 def list_collaborators_project_view(request):
     pass
 
+def sendhtml(invitee, inviter, url=None, opt_out_url=None, *args, **kwargs):
+    msg = 'Hola, {} te está invitando a que te registres en GECO para colaborar en el proyecto'.format(inviter)
+    ctx = {'invitee': invitee, 'inviter': inviter}
+    ctx.update(kwargs)
+    ctx.update(url=url)
+    ctx.update(opt_out_url=opt_out_url)
+
+    subject_template = kwargs.pop('subject_template',
+                                  'inviter2/email/subject.txt')
+
+    subject = render_to_string(subject_template, ctx)
+    
+
+    # Newlines in subject lines are not allowed
+    subject = ' '.join(subject.split('\n'))
+
+    send_mail(subject, msg, settings.EMAIL_HOST_USER, [invitee.email])
+
 
 def add_collaborator_view(request, id_project):
     project = Project.objects.get(id=id_project)
     colaboradores = project.project_members.all()
     error = ''
     email = ''
-    
+
     if request.user.is_authenticated and project.get_owner()==request.user:
         if request.method == 'GET' and request.GET.get('q',False):
             id_colaborador = int(request.GET.get('q', ''))
@@ -413,11 +433,11 @@ def add_collaborator_view(request, id_project):
                 project.project_members.add(user)
             except:
                 error = "Usuario no encontrado"
-            
+                invite(email, request.user, sendfn=sendhtml)
     else:
         return redirect('login')
     
-    contexto = {'project':project, 'colaboradores':colaboradores, 'error': error, 'email':email}
+    contexto = {'project':project, 'colaboradores':colaboradores, 'error': error, 'email': email}
     return render(request, 'add_collaborator_form.html', contexto)
 
 def list_user_projects_view(request):

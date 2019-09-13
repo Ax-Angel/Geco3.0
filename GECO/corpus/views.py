@@ -19,7 +19,6 @@ from .models import *
 from users.models import User
 from zipfile import ZipFile
 from glob import glob
-from inviter2.utils import invite
 
 import traceback
 import os, shutil
@@ -395,30 +394,13 @@ def lenguas():
 def list_collaborators_project_view(request):
     pass
 
-def sendhtml(invitee, inviter, url=None, opt_out_url=None, *args, **kwargs):
-    msg = 'Hola, {} te está invitando a que te registres en GECO para colaborar en el proyecto'.format(inviter)
-    ctx = {'invitee': invitee, 'inviter': inviter}
-    ctx.update(kwargs)
-    ctx.update(url=url)
-    ctx.update(opt_out_url=opt_out_url)
-
-    subject_template = kwargs.pop('subject_template',
-                                  'inviter2/email/subject.txt')
-
-    subject = render_to_string(subject_template, ctx)
-    
-
-    # Newlines in subject lines are not allowed
-    subject = ' '.join(subject.split('\n'))
-
-    send_mail(subject, msg, settings.EMAIL_HOST_USER, [invitee.email])
-
-
 def add_collaborator_view(request, id_project):
     project = Project.objects.get(id=id_project)
     colaboradores = project.project_members.all()
     error = ''
     email = ''
+    sbj = '¡GECO te saluda!'
+    msg = 'Hola, {} {} te invita a que te registres en GECO para colaborar en el proyecto {}.\n\nPor favor utiliza este correo para tu registro o indícale por medio de su correo: {} qué otro correo utilizarás.\n\nRegistrate aquí: http://127.0.0.1:8000/accounts/register/'.format(request.user.first_name, request.user.last_name, project.name_project, project.get_owner())
 
     if request.user.is_authenticated and project.get_owner()==request.user:
         if request.method == 'GET' and request.GET.get('q',False):
@@ -432,8 +414,8 @@ def add_collaborator_view(request, id_project):
                 user = User.objects.get(email = email)
                 project.project_members.add(user)
             except:
-                error = "Usuario no encontrado"
-                invite(email, request.user, sendfn=sendhtml)
+                error = "Usuario no encontrado. Ya se le ha enviado un correo electrónico invitándolo a que se registre"
+                send_mail(sbj, msg, settings.DEFAULT_FROM_EMAIL, [email])
     else:
         return redirect('login')
     

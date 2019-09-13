@@ -20,7 +20,7 @@
         <div class="form-group row text-right">
             <div class="col-sm-3"></div>
             <div class="col-sm-9">
-              <button onClick ="window.location.href='{% url 'dashboard' %}?q={{ project.name_project }}'" class="btn btn-danger">Salir</button> 
+              <a href='{% url 'dashboard' %}?q={{ project.name_project }}' class="btn btn-danger">Salir</a> 
               &nbsp;
               <button type="submit" class="btn btn-success">Agregar</button>
             </div>

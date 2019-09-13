@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'corpus',
     'common',
     'apps.concordanciaParalelo',
-    'inviter2'
 ]
 
 MIDDLEWARE = [

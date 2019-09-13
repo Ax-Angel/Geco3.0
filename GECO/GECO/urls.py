@@ -37,7 +37,6 @@ urlpatterns = [
     url(r'^dashboard/update_project/(?P<pk>\d+)/$', login_required(Project_Update.as_view()), name='update_project'),
     url(r'^dashboard/delete_project/(?P<pk>\d+)/$', login_required(Project_Delete.as_view()), name='delete_project'),
     url(r'^dashboard/download_project/(?P<project_id>\d+)/$', download_project, name='download_project'),
-    url(r'^invites/', include(('inviter2.urls', 'inviter2'), namespace='inviter2')),
     
     #url(r'^dashboard/document_view/(?P<document_id>\d+)/$', document_view_view, name='document_view'),
     #path('dashboard/create_project/', create_project_view, name = 'create_project'),

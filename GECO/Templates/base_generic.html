@@ -49,6 +49,7 @@
             Hola {{ user.username }}!</a>
           <div class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
               <a href="{% url 'info_user' user.id %}" class="dropdown-item">Perfil de usuario</a>
+              <a href="{% url 'invite_user' %}" class="dropdown-item">Invitar usuario</a>
               <a href="{% url 'logout' %}" class="dropdown-item">Cerrar sesión</a>
           </div>
         </li>

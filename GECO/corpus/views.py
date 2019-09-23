@@ -400,7 +400,7 @@ def add_collaborator_view(request, id_project):
     error = ''
     email = ''
     sbj = '¡GECO te saluda!'
-    msg = 'Hola, {} {} te invita a que te registres en GECO para colaborar en el proyecto {}.\n\nPor favor utiliza este correo para tu registro o indícale por medio de su correo: {} qué otro correo utilizarás.\n\nRegistrate aquí: http://127.0.0.1:8000/accounts/register/'.format(request.user.first_name, request.user.last_name, project.name_project, project.get_owner())
+    msg = 'Hola, {0} {1} te invita a que te registres en GECO para colaborar en el proyecto {2}.\n\nPor favor utiliza este correo para tu registro en la siguiente dirección: http://172.16.199.134/accounts/register/\n\nEn caso de que quieras utilizar otro correo para registrarte, avísale a {0} por medio de su correo: {3}'.format(request.user.first_name, request.user.last_name, project.name_project, project.get_owner())
 
     if request.user.is_authenticated and project.get_owner()==request.user:
         if request.method == 'GET' and request.GET.get('q',False):
@@ -421,6 +421,26 @@ def add_collaborator_view(request, id_project):
     
     contexto = {'project':project, 'colaboradores':colaboradores, 'error': error, 'email': email}
     return render(request, 'add_collaborator_form.html', contexto)
+
+def invite_user_view(request):
+    error = ''
+    email = ''
+    sbj = '¡GECO te saluda!'
+    msg = 'Hola, {0} {1} te invita a que te registres en GECO'.format(request.user.first_name, request.user.last_name,)
+
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            email = request.POST['email_user']
+            try:
+                send_mail(sbj, msg, settings.DEFAULT_FROM_EMAIL, [email])
+                error = 'Invitación enviada correctamente al usuario'
+            except:
+                error = 'Hubo un error al enviar invitación al usuario'
+    else:
+        return redirect('login')
+    
+    contexto = {'error': error, 'email': email}
+    return render(request, 'invite_user_form.html', contexto)
 
 def list_user_projects_view(request):
     if request.method == 'GET':

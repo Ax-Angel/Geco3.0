@@ -1,93 +1,127 @@
-[
-    {
-      "model": "corpus.metadata",
-      "pk": 1,
-      "fields": {
-        "name_metadata": "Lengua"
-      }
+[{
+        "model": "corpus.metadata",
+        "pk": 1,
+        "fields": {
+            "name_metadata": "Lengua"
+        }
     },
     {
         "model": "corpus.metadata",
         "pk": 2,
         "fields": {
-          "name_metadata": "Título"
+            "name_metadata": "Título principal"
         }
     },
     {
-      "model": "corpus.metadata",
-      "pk": 3,
-      "fields": {
-        "name_metadata": "Autor"
-      }
+        "model": "corpus.metadata",
+        "pk": 3,
+        "fields": {
+            "name_metadata": "Título secundario"
+        }
     },
     {
         "model": "corpus.metadata",
         "pk": 4,
         "fields": {
-          "name_metadata": "Editorial"
+            "name_metadata": "Autor"
         }
     },
     {
-      "model": "corpus.metadata",
-      "pk": 5,
-      "fields": {
-        "name_metadata": "Variante en el texto"
-      }
+        "model": "corpus.metadata",
+        "pk": 5,
+        "fields": {
+            "name_metadata": "Compilador"
+        }
     },
     {
         "model": "corpus.metadata",
         "pk": 6,
         "fields": {
-          "name_metadata": "Variantes de la lengua en norma ISO"
+            "name_metadata": "Traductor"
         }
     },
     {
-      "model": "corpus.metadata",
-      "pk": 7,
-      "fields": {
-        "name_metadata": "Año"
-      }
+        "model": "corpus.metadata",
+        "pk": 7,
+        "fields": {
+            "name_metadata": "Editorial"
+        }
     },
     {
         "model": "corpus.metadata",
         "pk": 8,
         "fields": {
-          "name_metadata": "País"
+            "name_metadata": "Variante en el texto"
         }
     },
     {
-      "model": "corpus.metadata",
-      "pk": 9,
-      "fields": {
-        "name_metadata": "Estado"
-      }
+        "model": "corpus.metadata",
+        "pk": 9,
+        "fields": {
+            "name_metadata": "Variantes de la lengua en norma ISO"
+        }
     },
     {
         "model": "corpus.metadata",
         "pk": 10,
         "fields": {
-          "name_metadata": "División regional"
+            "name_metadata": "Año"
         }
     },
     {
-      "model": "corpus.metadata",
-      "pk": 11,
-      "fields": {
-        "name_metadata": "Comunidad a la que pertenece"
-      }
+        "model": "corpus.metadata",
+        "pk": 11,
+        "fields": {
+            "name_metadata": "Número"
+        }
     },
     {
         "model": "corpus.metadata",
         "pk": 12,
         "fields": {
-          "name_metadata": "Clasificación genérica"
+            "name_metadata": "País"
         }
     },
     {
-      "model": "corpus.metadata",
-      "pk": 13,
-      "fields": {
-        "name_metadata": "Notas"
-      }
+        "model": "corpus.metadata",
+        "pk": 13,
+        "fields": {
+            "name_metadata": "Estado"
+        }
+    },
+    {
+        "model": "corpus.metadata",
+        "pk": 14,
+        "fields": {
+            "name_metadata": "División regional"
+        }
+    },
+    {
+        "model": "corpus.metadata",
+        "pk": 15,
+        "fields": {
+            "name_metadata": "Comunidad a la que pertenece"
+        }
+    },
+    {
+        "model": "corpus.metadata",
+        "pk": 16,
+        "fields": {
+            "name_metadata": "Clasificación genérica"
+        }
+    },
+    {
+        "model": "corpus.metadata",
+        "pk": 17,
+        "fields": {
+            "name_metadata": "URL"
+        }
+    },
+    {
+        "model": "corpus.metadata",
+        "pk": 18,
+        "fields": {
+            "name_metadata": "Notas"
+        }
     }
 ]

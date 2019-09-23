@@ -382,7 +382,6 @@ input[type=email] {
     .card-body {
         max-height: 10rem;
     }
-
 }
 
 @media screen and (max-width: 768px) {
@@ -425,6 +424,10 @@ input[type=email] {
 
 .cplm-back {
     background: url('/static/img/CPLM/Background-propuesta2.jpg') !important;
+}
+
+#logo {
+    cursor: pointer;
 }
 
 

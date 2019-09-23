@@ -288,11 +288,11 @@ function closeLeftMenu() {
           </div>
         </div>
 
+        <br>
+          <a href="javascript:mostrar_cerrar_f();">Filtros:</a>
+        <br>
         {% if filter_metadato %}
-          <div>
-          <br>
-            <b>Filtros:</b>
-            <br>
+          <div id="filters">         
             {% for f_m in filter_metadato %}
               <div style="display: inline-block;">
 
@@ -462,5 +462,17 @@ function closeLeftMenu() {
           <img style="width:100%;max-height:100px;" src="{% static 'img/CPLM/bannerfooter.jpg' %}">
         </div>
 {% endif %}
+
+<script>
+  function mostrar_cerrar_f(){
+    var elem_display = document.getElementById('filters').style.display;
+    if (elem_display == 'none'){
+      document.getElementById('filters').style.display='';       
+    }
+    else{
+      document.getElementById('filters').style.display='none';
+    }
+  }
+</script>
 
 {% endblock content %}

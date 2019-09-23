@@ -21,7 +21,7 @@
 
 {% block banner %}
 <nav class="navbar fixed-top navbar-light bg-light navbar-expand-lg">
-  <img src="{% static 'img/geco.png' %}" width="38" height="34" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco_00.jpg">
+  <img id="logo" onClick ="window.location.href = '{% url 'index' %}'" src="{% static 'img/geco.png' %}" width="38" height="34" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco_00.jpg">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>

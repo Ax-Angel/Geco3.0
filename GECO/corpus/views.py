@@ -24,6 +24,8 @@ import traceback
 import os, shutil
 import zipfile
 import datetime
+import random
+import string
 
 
 # Create your views here.
@@ -101,6 +103,12 @@ def user_dashboard_view(request):
     return render(request, 'document_view.html', {'file':file, 'text':doc_lines}) """
 
 
+def randomStringDigits(stringLength=8):
+    """Generate a random string of letters and digits """
+    lettersAndDigits = string.ascii_letters + string.digits
+    return ''.join(random.choice(lettersAndDigits) for i in range(stringLength))
+
+
 class Project_Create(CreateView):
     model = Project
     template_name = 'create_project_form.html'
@@ -129,13 +137,21 @@ class Project_Create(CreateView):
         if form.is_valid() and form2.is_valid():
             validatedData = form.cleaned_data
             validatedData2 = form2.cleaned_data
+            
+            code_random = randomStringDigits()
+            _proj = Project.object.filter(code=code_random)
+            while _proj.exists():
+                code_random = randomStringDigits()
+                _proj = Project.object.filter(code=code_random)
+                
             try:
                 p = Project(owner = request.user,
                             name_project = str(validatedData['name_project']),
                             description = str(validatedData['description']),
                             public_status = validatedData['public_status'],
                             collab_status = validatedData['collab_status'],
-                            parallel_status = validatedData['parallel_status'])
+                            parallel_status = validatedData['parallel_status']
+                            code = code_random)
                 p.save()
                 p.project_members.add(request.user)
 
@@ -145,7 +161,7 @@ class Project_Create(CreateView):
                     meta.project.add(p)
                     meta.save()  
                 
-                new_dir_path = 'mediafiles/'+str(validatedData['name_project'])
+                new_dir_path = 'mediafiles/'+str(code_random)
                 os.makedirs(new_dir_path)
                 return HttpResponseRedirect(self.get_success_url()+'?q='+validatedData['name_project'])
             
@@ -211,7 +227,7 @@ class Project_Delete(DeleteView):
         self.object = self.get_object #se obtiene el objeto
         id_project = kwargs['pk'] #obtiene el id que se envío por url
         project = self.model.objects.get(id=id_project)
-        folder = 'mediafiles/'+project.name_project
+        folder = 'mediafiles/'+project.code
         try:
             shutil.rmtree(folder, ignore_errors=True)
         except OSError as e:
@@ -344,12 +360,12 @@ def upload_document_view(request, id_project):
                             
                 _file = request.FILES['file_'+str(i)]
                 
-                #new_path = 'mediafiles/' + project.name_project 
-                save_path = settings.MEDIA_ROOT + '/' +  project.name_project  + '/' + _file.name
+                #new_path = 'mediafiles/' + project.code 
+                save_path = settings.MEDIA_ROOT + '/' +  project.code  + '/' + _file.name
                 path = default_storage.save(save_path, _file)
                 
                 name_file = path.split('/')[-1]
-                f = File(file = project.name_project+ '/' + name_file,
+                f = File(file = project.code+ '/' + name_file,
                          name_file = name_file,
                          document = d)
                 f.save()
@@ -394,6 +410,7 @@ def lenguas():
 def list_collaborators_project_view(request):
     pass
 
+
 def add_collaborator_view(request, id_project):
     project = Project.objects.get(id=id_project)
     colaboradores = project.project_members.all()
@@ -422,6 +439,7 @@ def add_collaborator_view(request, id_project):
     contexto = {'project':project, 'colaboradores':colaboradores, 'error': error, 'email': email}
     return render(request, 'add_collaborator_form.html', contexto)
 
+
 def invite_user_view(request):
     error = ''
     email = ''
@@ -441,6 +459,7 @@ def invite_user_view(request):
     
     contexto = {'error': error, 'email': email}
     return render(request, 'invite_user_form.html', contexto)
+
 
 def list_user_projects_view(request):
     if request.method == 'GET':
@@ -477,16 +496,17 @@ def help_view(request):
 def apps_view(request):
     return render(request, 'applications.html')
 
+
 def download_project(request, project_id):
     project = Project.objects.get(id=project_id)
 
     currentDT = datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
     zipfile_name = "%s.zip" % currentDT
-    currentDT = currentDT + '/' + project.name_project
+    currentDT = currentDT + '/' + project.code
     
     response = HttpResponse(content_type='application/zip')
     zip_file = zipfile.ZipFile(response, 'w')
-    paths = glob(settings.MEDIA_ROOT + '/' + project.name_project + '/*.txt')
+    paths = glob(settings.MEDIA_ROOT + '/' + project.code + '/*.txt')
 
     for file in paths:
         fdir, fname = os.path.split(file)

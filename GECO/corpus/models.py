@@ -12,12 +12,16 @@ class Project(models.Model):
     collab_status = models.BooleanField(default=0)
     parallel_status = models.BooleanField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
+    code = models.CharField(max_length=8, null=False, unique=True)
 
     def is_public(self):
         return bool(self.public_status)
 
     def is_collab(self):
         return bool(self.collab_status)
+    
+    def is_parallel(self):
+        return bool(self.parallel_status)
 
     def get_project_members(self):
         return self.project_members
@@ -37,6 +41,9 @@ class Project(models.Model):
 
     def set_status_collab(self, status):
         self.collab_status=status
+    
+    def set_status_parallel(self, status):
+        self.parallel_status=status
 
 class Document(models.Model):
     project = models.ForeignKey(Project, related_name='project_document', on_delete=models.CASCADE)

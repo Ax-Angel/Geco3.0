@@ -150,7 +150,7 @@ class Project_Create(CreateView):
                             description = str(validatedData['description']),
                             public_status = validatedData['public_status'],
                             collab_status = validatedData['collab_status'],
-                            parallel_status = validatedData['parallel_status']
+                            parallel_status = validatedData['parallel_status'],
                             code = code_random)
                 p.save()
                 p.project_members.add(request.user)

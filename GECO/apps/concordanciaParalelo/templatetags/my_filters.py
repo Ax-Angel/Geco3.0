@@ -16,7 +16,7 @@ def a_sub_b(a, b):
 
 @register.filter(name='here')
 def here(a):
-    if a in [3, 6, 9, 12]:
+    if a in [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]:
         return True
     return False
 

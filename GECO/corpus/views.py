@@ -81,7 +81,6 @@ def user_dashboard_view(request):
     public_projects = []
     all_projects = Project.objects.all()
     for proj in all_projects:
-        print(proj.is_public())
         if proj.is_user_collaborator(request.user):
             user_projects.append(proj)
         elif proj.is_public():
@@ -139,10 +138,10 @@ class Project_Create(CreateView):
             validatedData2 = form2.cleaned_data
             
             code_random = randomStringDigits()
-            _proj = Project.object.filter(code=code_random)
+            _proj = Project.objects.filter(code=code_random)
             while _proj.exists():
                 code_random = randomStringDigits()
-                _proj = Project.object.filter(code=code_random)
+                _proj = Project.objects.filter(code=code_random)
                 
             try:
                 p = Project(owner = request.user,

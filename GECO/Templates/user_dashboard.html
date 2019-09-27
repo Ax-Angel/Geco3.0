@@ -219,7 +219,7 @@ function closeRightMenu() {
             <i class="fas fa-times"></i></a>
           {% if project %}
           <h3><b>Documentos del Proyecto: </b>{{project.name_project}}</h3>
-          {%endif%}
+          {% endif %}
           <div class="overflow-auto accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
             {% for t in res.0|document_text%}
               <div class="card">
@@ -238,7 +238,7 @@ function closeRightMenu() {
                   </div>
                 </div>
               </div>
-            {%endfor%}
+            {% endfor %}
           </div>
         </div>
       </div>

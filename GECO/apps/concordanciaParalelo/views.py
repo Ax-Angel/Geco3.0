@@ -7,6 +7,7 @@ import re
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.http import HttpResponseBadRequest, HttpResponse
+from django.utils.safestring import mark_safe
 
 from corpus.models import *
 from users.models import User
@@ -30,6 +31,7 @@ def concordance_paralle_view(request):
     filter_select = {}
     results = request.session.get('results')
     results = []
+    results_m = []
     project = []
     project_public = []
     
@@ -114,16 +116,19 @@ def concordance_paralle_view(request):
         dicc_file = find_files(dct)
         _file = dicc_file['_file']
         files_corpus = dicc_file['files_corpus']
+        value_metadata = dicc_file['value_metadata']
         
         dicc_search = type_search(search_petition)
         
         if bool(dicc_search):
             for i,path in enumerate(_file):
                 pathes = files_corpus[i]
+                v_metadata = value_metadata[i]
                 dicc_search.update({'language':lang_select})
-                results = search_request(path, pathes, alignment_select.copy(), dicc_search, window, results)
+                results, results_m = search_request(path, pathes, v_metadata, alignment_select.copy(), dicc_search, window, results, results_m)
         else:
             results = []
+            results_m = []
             
         if max_view=='-':
             visualize = len(results)
@@ -140,8 +145,8 @@ def concordance_paralle_view(request):
                 'project_select':project_select, 'style_display':style_display, 'lang_select':lang_select,
                 'positional_annotation':positional_annotation, 'alignment':alignment, 'visualize':visualize,
                 'alignment_select':alignment_select, 'max_view':max_view, 'window':window, 'filter_metadato':filter_metadato,
-                'filter_select':filter_select, 'search_petition':search_petition, 'results':results}
-    
+                'filter_select':filter_select, 'search_petition':search_petition, 'results':results, 'results_m':results_m}
+    print(results_m)
     return render(request, 'concordance_paralle_form.html', contexto)
 
 #Type of positional annotation
@@ -195,13 +200,22 @@ def type_alignment(dct):
 def find_files(dct):
     _file = []
     files_corpus = []
+    value_metadata = []
                 
     for d in dct['docs']:
         files = File.objects.filter(document_id=d.id)
         tuple_file = ()
         array_files = []
+        m_value=''
         for f in files:
             dato = File_Metadata_Relation.objects.filter(file_id=f.id)
+            
+            m_value = m_value+'<strong>Archivo: </strong>'+f.name_file+'<br>'
+            for d in dato:
+                if d.data_value:
+                    meta = Metadata.objects.get(id=d.metadata_id)
+                    m_value = m_value+'<strong>'+meta.name_metadata+': </strong>'+d.data_value+'<br>'
+            m_value = m_value+'<br>'
             
             if dato.filter(metadata_id=dct['metadata_idioma'].id, data_value=dct['lang_select']).exists():
                 if dct['filter_select']:
@@ -221,12 +235,14 @@ def find_files(dct):
                 if dato.exists() and dato[0].data_value in dct['alignment_select']:
                     t_aux = (f.file.path, dato[0].data_value)
                     array_files.append(t_aux)
+                    
         #if len(tuple_file)!=0 and len(array_files)==len(dct['alignment_select']):
         if len(tuple_file)!=0 and (dct['alignment_select']==[] or len(array_files)!=0):
             _file.append(tuple_file)
             files_corpus.append(array_files)
+            value_metadata.append(mark_safe(m_value))
 
-    return {'_file':_file, 'files_corpus':files_corpus}
+    return {'_file':_file, 'files_corpus':files_corpus, 'value_metadata':value_metadata}
 
 #Show metadata values for filtering
 def filter_metadata(dct):

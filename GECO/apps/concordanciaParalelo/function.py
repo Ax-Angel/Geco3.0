@@ -352,7 +352,7 @@ def letter_change(language, busq):
     
 
 #Return the search according to parameters
-def search_request(path_search, path_files, languages, dicc_search, window, result):
+def search_request(path_search, path_files, v_metadata, languages, dicc_search, window, result, result_m):
     input_text_search = read_text_txt(path_search[0])
     files_list = read_txt_files(path_files)
     
@@ -403,6 +403,7 @@ def search_request(path_search, path_files, languages, dicc_search, window, resu
                                 array_tmp[k]= (languages[k], '')
                 
                 result.append(array_tmp)
+                result_m.append(v_metadata)
                 array_tmp = array_result.copy()
             
             #result = [ [(lang1, [izq, cen, der]), (lang2, line2), (lang3, line3), ...], [], ...]
@@ -428,6 +429,7 @@ def search_request(path_search, path_files, languages, dicc_search, window, resu
                                     array_tmp[k]= (languages[k], '')
 
                             result.append(array_tmp)
+                            result_m.append(v_metadata)
                             array_tmp = array_result.copy()
 
                         except:
@@ -436,4 +438,4 @@ def search_request(path_search, path_files, languages, dicc_search, window, resu
     if window == 'Vertical' and len(result)!=0 and result[0]!=languages:
         result.insert(0, languages)                             
 
-    return result
+    return result, result_m

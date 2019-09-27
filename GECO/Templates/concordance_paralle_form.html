@@ -402,13 +402,19 @@ function closeLeftMenu() {
               {% ifequal window 'Vertical' %}
                 {% ifequal forloop.counter0 0 %}
                   <tr bgcolor= "#eee">
+                    <th>Meta</th>
                     {% for x in result %}
                       <th>{{x}}</th>
                     {% endfor %}
                   </tr>
                 {% else %}
                   <tr>
-                    {% for x in result %}
+                    <td>
+                        <a href="#" onclick="open_popup({{forloop.counter0|a_sub_b:1}});" id="btn-abrir-popup_{{forloop.counter0|a_sub_b:1}}"
+                        style=".btn-abrir-popup_{{forloop.counter0|a_sub_b:1}}:hover {background: rgba(94,125,227, .9);}" 
+                        title="Ver metadato"><i class="fas fa-eye fa-1x"></i>Ver metadato</a>
+                    </td>
+                    {% for x in result %}                      
                       <td>{{x}}</td>
                     {% endfor %}
                   </tr>
@@ -416,6 +422,13 @@ function closeLeftMenu() {
               {% endifequal %}
 
               {% ifequal window 'Horizontal' %}
+                <tr>
+                  <td colspan="2">
+                        <a href="#" onclick="open_popup({{forloop.counter0}});" id="btn-abrir-popup_{{forloop.counter0}}"
+                        style=".btn-abrir-popup_{{forloop.counter0}}:hover {background: rgba(94,125,227, .9);}" 
+                        title="Ver metadato"><i class="fas fa-eye fa-1x"></i>Ver metadato</a>
+                  </td>
+                </tr>
                 {% for x in result %}
                   {% ifequal forloop.counter0 0 %}
                     <tr bgcolor= "#eee">
@@ -429,6 +442,13 @@ function closeLeftMenu() {
               {% endifequal %}
 
               {% ifequal window 'KWIC' %}
+                <tr>
+                  <td colspan="4">
+                        <a href="#" onclick="open_popup({{forloop.counter0}});" id="btn-abrir-popup_{{forloop.counter0}}"
+                        style=".btn-abrir-popup_{{forloop.counter0}}:hover {background: rgba(94,125,227, .9);}" 
+                        title="Ver metadato"><i class="fas fa-eye fa-1x"></i>Ver metadato</a>
+                  </td>
+                </tr>
                 {% for x in result %}
                   {% ifequal forloop.counter0 0 %}
                     <tr bgcolor= "#eee">
@@ -463,6 +483,25 @@ function closeLeftMenu() {
         </div>
 {% endif %}
 
+
+{% if results|length != 0 %}
+  {% for r_m in results_m %}
+    <div class="overlay" id="overlay_{{forloop.counter0}}">
+        <div class="popup" id="popup_{{forloop.counter0}}">
+          <a href="#" id="btn-cerrar-popup_{{forloop.counter0}}" class="btn-cerrar-popup" onclick="close_popup({{forloop.counter0}});">
+            <i class="fas fa-times"></i></a>
+          {% if project_select %}
+          <h3><b>Metadatos del Proyecto: </b>{{project_select.name_project}}</h3>
+          {% endif %}
+
+          <p class="text-justify">{{r_m}}</p>
+
+        </div>
+      </div>
+  {% endfor %}  
+{% endif %}
+
+
 <script>
   function mostrar_cerrar_f(){
     var elem_display = document.getElementById('filters').style.display;
@@ -473,6 +512,17 @@ function closeLeftMenu() {
       document.getElementById('filters').style.display='none';
     }
   }
+  
+  function open_popup(id){
+    document.getElementById('overlay_'+id).classList.add('active');
+	  document.getElementById('popup_'+id).classList.add('active');
+  }
+
+  function close_popup(id){
+    document.getElementById('overlay_'+id).classList.remove('active');
+	  document.getElementById('popup_'+id).classList.remove('active');
+  }
+
 </script>
 
 {% endblock content %}

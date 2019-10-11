@@ -1,0 +1,14 @@
+.vscode/
+GECO/GECO/__pycache__/
+GECO/apps/__pycache__/
+GECO/apps/concordanciaParalelo/__pycache__/
+GECO/apps/concordanciaParalelo/migrations/__pycache__/
+GECO/apps/concordanciaParalelo/templatetags/__pycache__/
+GECO/common/__pycache__/
+GECO/corpus/__pycache__/
+GECO/corpus/migrations/0001_initial.py
+GECO/corpus/migrations/0002_auto_20191007_1717.py
+GECO/corpus/migrations/__pycache__/
+GECO/mediafiles/
+GECO/users/__pycache__/
+GECO/users/migrations/__pycache__/

@@ -1,0 +1,82 @@
+{% extends "base_generic.html" %}
+
+{% load my_filters %}
+
+{% block content %}
+<div class="container">
+    <div class="formulario">
+        <form method="post">
+        {% csrf_token %}
+        <h4 align="center"><strong>{{title}}</strong></h4>
+        <br>
+        <div class="form-group row">
+            <label class="col-sm-3 col-lg-3"><b>Nombre del proyecto</b></label>
+            <div class="col-sm-9 col-lg-9">
+                <input type="text" name="name_project"  max_length="100" style="width:100%;" required
+                 placeholder='Escriba aquí el nombre del proyecto...' value="{{name_project}}">
+                {% if error %}<strong style="color:red;">{{error}}</strong>{%endif%}
+            </div>	
+                          
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-3"><b>Descripción del proyecto</b></label>
+            <div class="col-lg-9">
+                <textarea class="form-control" rows="3" id="comment" name="description" style='width:100%;' required
+                placeholder='Escriba aquí la descripción del proyecto...'>{{description}}</textarea>    
+            </div>	              
+        </div>
+
+        <div class="input-group mb-3">
+            <label><b>Metadatos para su proyecto</b></label>
+            <table class="table table-borderless">
+                    <tr>
+                    <input type="hidden" name="name_metadata" value="1" />
+                    <input type="hidden" name="name_metadata" value="2" />
+
+                    {% for m_d in metadata %}
+                        <td><input type="checkbox" name="name_metadata" value="{{m_d.0}}"
+                        {% if m_d.0 == 1 or m_d.0 == 2 %}checked disabled readonly="readonly"{% endif %}
+                        {% if m_d.0|stringformat:"i" in metadata_check %} checked {% endif %}                      
+                        <label for="">{{m_d.1}}</label>
+                        </td>
+                        {% if forloop.counter|here %}                                     
+                            </tr>
+                            <tr>                        
+                        {% endif %}
+                    {% endfor %}
+                    </tr>                                                          
+            </table>
+        </div>
+        <hr>
+
+        <div class="form-group row text-left">
+            <div class="col-sm-4">
+                <input type="checkbox" name="public_status" value="True"
+                {% if public == True %} checked {% endif %}>¿Será público?
+            </div>
+            <div class="col-sm-4"> 
+                <input type="checkbox" name="collab_status" value="True"
+                {% if collab == True %} checked {% endif %}>¿Será colaborativo?
+            </div>
+            <div class="col-sm-4">
+                <input type="checkbox" name="parallel_status" value="True"
+                {% if parallel == True %} checked {% endif %}
+                {% if title == 'Editar el proyecto' %} disabled {% endif %}>¿Será para corpus paralelo?
+            </div>
+        </div>
+
+        <div class="form-group row text-left">
+            <div class="col-sm-3">
+                <button onClick ="window.location.href = '{% url 'dashboard' %}'" class="btn btn-danger">
+                <a style="color:#FFF;text-decoration:none;">Cancelar</a></button> 
+                &nbsp;
+                <button type="submit" class="btn btn-success">Enviar</button>
+            </div>
+            <div class="col-sm-9"></div>
+        </div>
+
+        </form>
+    </div>
+</div>
+
+{% endblock %}

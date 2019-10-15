@@ -92,14 +92,20 @@ def user_dashboard_view(request):
                                                    'documents': result,
                                                    'colaboradores': colaboradores})
 
-""" def document_view_view(request, document_id):
-    if request.method == 'GET':
-        doc_lines = []
-        file = File.objects.get(id=document_id)
-        text = open(os.path.join(settings.MEDIA_ROOT, str(file.file)), 'r').readlines()
-        for line in text:
-            doc_lines.append(line)
-    return render(request, 'document_view.html', {'file':file, 'text':doc_lines}) """
+def document_view_view(request, proyect_id, name_file):
+    if request.user.is_authenticated:
+        if request.method == 'GET':
+            doc_lines = []
+            file = File.objects.get(name_file=name_file)
+            text = open(os.path.join(settings.MEDIA_ROOT, str(file.file)), 'r', encoding="utf8").readlines()
+            for line in text:
+                doc_lines.append(str(line))
+            
+            p = Project.objects.get(id=int(proyect_id))
+    else:
+        return redirect('login')
+       
+    return render(request, 'document_view.html', {'file':file, 'text':doc_lines, 'name_project': p.name_project})
 
 
 def randomStringDigits(stringLength=8):
@@ -108,6 +114,73 @@ def randomStringDigits(stringLength=8):
     return ''.join(random.choice(lettersAndDigits) for i in range(stringLength))
 
 
+def create_project_view(request):
+    title='Crear un proyecto'
+    name_project = ''
+    description = ''
+    m_D = Metadata.objects.order_by('id')
+    metadata = []
+    for m in m_D:
+        metadata.append((m.id, m.name_metadata))
+    metadata_check = []
+    public = False
+    collab = False
+    parallel = False
+    error = ''
+    if request.user.is_authenticated:
+        if request.method == 'POST':        
+            name_project = request.POST['name_project']
+            description = request.POST['description']        
+            metadata_check = request.POST.getlist('name_metadata')
+            
+            if 'public_status' in request.POST:
+                public = True            
+            if 'collab_status' in request.POST:
+                collab = True            
+            if 'parallel_status' in request.POST:
+                parallel = True
+
+            if Project.objects.filter(name_project=name_project).exists():
+                error = 'Ya existe un proyecto con ese nombre. Compruebe que sea único.'
+            else:            
+                code_random = randomStringDigits()
+                _proj = Project.objects.filter(code=code_random)
+                while _proj.exists():
+                    code_random = randomStringDigits()
+                    _proj = Project.objects.filter(code=code_random)
+                    
+                try:
+                    p = Project(owner = request.user,
+                                name_project = name_project,
+                                description = description,
+                                public_status = public,
+                                collab_status = collab,
+                                parallel_status = parallel,
+                                code = code_random)
+                    p.save()
+                    p.project_members.add(request.user)
+
+                    for md in metadata_check:
+                        meta = Metadata.objects.get(id=int(md))
+                        meta.project.add(p)
+                        meta.save()  
+                    
+                    new_dir_path = 'mediafiles/'+str(code_random)
+                    os.makedirs(new_dir_path)
+                    return HttpResponseRedirect(reverse_lazy('dashboard')+'?q='+name_project)
+                
+                except IntegrityError as e:
+                    traceback.print_exc()
+                    error=str(traceback.print_exception)
+    else:
+        return redirect('login')
+    
+    contexto = {'name_project':name_project, 'description':description, 'metadata':metadata, 'metadata_check':metadata_check,
+                'public':public, 'collab':collab, 'parallel':parallel, 'error':error, 'title':title}
+    
+    return render(request, 'create_project_form_c.html', contexto)
+
+'''
 class Project_Create(CreateView):
     model = Project
     template_name = 'create_project_form.html'
@@ -171,42 +244,106 @@ class Project_Create(CreateView):
         else: #en caso de no ser válidos se muestra el contexto en blanco
             error = 'Ya existe un proyecto con ese nombre. Compruebe que sea único.'
             return self.render_to_response(self.get_context_data(form=form, form2=form2, error=error))
+'''
 
-class Project_Update(UpdateView):
-    model = Project
-    second_model = Metadata # se llama el segundo modelo
-    template_name = 'create_project_form.html'
-    form_class = create_project_form
-    second_form_class = metadata_project_form    
-    success_url = reverse_lazy('dashboard')
 
-    def get_context_data(self, **kwargs): #para poder llamar los objectos de los modelos y se rendericen los atributos de c/u
-        context = super(Project_Update, self).get_context_data(**kwargs)
-        pk = self.kwargs.get('pk', 0) #se obtienen las llaves
-        project = self.model.objects.get(id=pk) #contiene el objeto de la solicitud a editar
-        metadata = self.second_model.objects.get(project=project.id) #contiene el objeto de Persona relacionada a la solicitud
-        if 'form' not in context: #validar que los form esten en el contexto y luego asignarlos
-            context['form'] = self.form_class()
-        if 'form2' not in context:
-            context['form2'] = self.second_form_class(instance=metadata) #se instancia a la persona que se obtiene
-        context['id'] = pk
-        return context
+def update_project_view(request, pk):
+    title='Editar el proyecto'
+    name_project = ''
+    description = ''
+    m_D = Metadata.objects.order_by('id')
+    metadata = []
+    for m in m_D:
+        metadata.append((m.id, m.name_metadata))
+    metadata_check = []
+    public = False
+    collab = False
+    parallel = False
+    error = ''
+    
+    if request.user.is_authenticated:
+        if request.method == 'GET':
+            p = Project.objects.get(id=int(pk))
+            name_project = p.name_project
+            description = p.description
+            public = p.public_status
+            collab = p.collab_status
+            parallel = p.parallel_status
+            
+            project_metadato = Metadata.objects.filter(project=p)
+            for p_m in project_metadato:
+                metadata_check.append(str(p_m.id))
+            
+        elif request.method == 'POST':        
+            name_project = request.POST['name_project']
+            description = request.POST['description']        
+            metadata_check = request.POST.getlist('name_metadata')
+            
+            if 'public_status' in request.POST:
+                public = True            
+            if 'collab_status' in request.POST:
+                collab = True
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object #se obtiene el objeto
-        id_solicitud = kwargs['pk'] #obtiene el id que se envío por url
-        solicitud = self.model.objects.get(id=id_solicitud)
-        persona = self.second_model.objects.get(id=solicitud.persona_id)
-        # se recoge de los 2 formularios la información que se introduce, instanciado
-        form = self.form_class(request.POST, instance=solicitud)
-        form2 = self.second_form_class(request.POST, instance=persona)
-        #se validan los formularios y se guarda la información
-        if form.is_valid() and form2.is_valid():
-            form.save()
-            form2.save()
-            return HttpResponseRedirect(self.get_success_url())
-        else:
-            return HttpResponseRedirect(self.get_success_url())
+            if Project.objects.filter(name_project=name_project).exclude(id=int(pk)).exists():
+                error = 'Ya existe un proyecto con ese nombre. Compruebe que sea único.'
+            else:    
+                                
+                try:
+                    p = Project.objects.get(id=int(pk))
+                    p.name_project = name_project
+                    p.description = description
+                    p.public_status = public
+                    p.collab_status = collab
+                    p.save()
+                    
+                    if not collab:
+                        colaboradores = p.project_members.all()
+                        for c in colaboradores:
+                            if c!=p.owner:
+                                p.project_members.remove(c)
+                    
+                    project_metadato = Metadata.objects.filter(project=p)
+                    for p_m in project_metadato:
+                        if not str(p_m.id) in metadata_check:
+                            meta = Metadata.objects.get(id=int(p_m.id))
+                            meta.project.remove(p)
+                            
+                            docs = Document.objects.filter(project_id=p.id)
+                            for d in docs:
+                                files = File.objects.filter(document_id=d.id)
+                                for f in files:
+                                    File_Metadata_Relation.objects.get(metadata_id=int(p_m.id), file_id=f.id).delete()
+                            
+                    project_metadato = [m.id for m in Metadata.objects.filter(project=p)]
+                    for m_c in metadata_check:
+                        if not int(m_c) in project_metadato:
+                            meta = Metadata.objects.get(id=int(m_c))
+                            meta.project.add(p)
+                            meta.save()
+                            
+                            docs = Document.objects.filter(project_id=p.id)
+                            for d in docs:
+                                files = File.objects.filter(document_id=d.id)
+                                for f in files:
+                                    f_m = File_Metadata_Relation(file_id=f.id,
+                                                                metadata_id=int(m_c),
+                                                                data_value='')
+                                    f_m.save()
+
+                    
+                    return HttpResponseRedirect(reverse_lazy('dashboard')+'?q='+name_project)
+                
+                except IntegrityError as e:
+                    traceback.print_exc()
+                    error=str(traceback.print_exception)
+    
+    else:
+        return redirect('login')
+       
+    contexto = {'name_project':name_project, 'description':description, 'metadata':metadata, 'metadata_check':metadata_check,
+                'public':public, 'collab':collab, 'parallel':parallel, 'error':error, 'title':title}
+    
+    return render(request, 'create_project_form_c.html', contexto)
 
    # De igual manera, pensar el editar proyecto,! cuando se edita un proyecto
    # verificar que si se editaron los metadatos, entonces esos metadatos si
@@ -271,46 +408,6 @@ class Document_Delete(DeleteView):
         document.delete() 
         return HttpResponseRedirect(self.get_success_url()+'?q='+project.name_project)
     
-
-#ya esta función no sirve
-'''def create_project_view(request):
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            form = create_project_form(request.POST)
-            form2 = metadata_project_form(request.POST)
-            if form.is_valid() and form2.is_valid():
-                validatedData = form.cleaned_data
-                validatedData2 = form2.cleaned_data
-                
-                try:
-                    p = Project(owner = request.user,
-                                name_project = str(validatedData['name_project']),
-                                description = str(validatedData['description']),
-                                public_status = validatedData['is_public'],
-                                collab_status = validatedData['is_collab'],
-                                parallel_status = validatedData['is_parallel'])
-                    p.save()
-                    p.project_members.add(request.user)
-                    
-                    list_md = validatedData2['name_metadata']
-                    for md in list_md:
-                        meta = Metadata.objects.get(id=int(md))
-                        meta.project.add(p)
-                        meta.save()                       
-                    return redirect(reverse('dashboard')+'?q='+validatedData['name_project'])
-                except IntegrityError as e:
-                    #traceback.print_exc()
-                    error = 'Compruebe que el nombre y la descripción de su proyecto sean únicos. Ya existe un proyecto con esos valores.'
-                    return render(request, 'create_project_form.html', {'form': form, 'form2': form2, 'error': error})
-                    #return render(request, 'create_project_form.html', {'form': form, 'form2': form2, 'error': str(traceback.print_exception)})
-        else:
-            form = create_project_form()
-            form2 = metadata_project_form()
-    else:
-        return redirect('index')
-    return render(request, 'create_project_form.html', {'form': form, 'form2': form2, 'error': False})
-'''
-
 
 def upload_document_view(request, id_project):
     project = Project.objects.get(id=id_project)

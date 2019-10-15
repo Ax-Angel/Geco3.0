@@ -1,9 +1,13 @@
 {% extends "base_generic.html" %}
-<h3>Editar documento</h3>
+<h3>Documento</h3>
 
 {% block content %}
 {% load static %}
 <div class="container">
+    <div style="text-align:right">
+        <a href="{% url 'dashboard' %}?q={{ name_project }}" ><strong>Atrás</strong></a>
+    </div>
+    <h4>Archivo: <strong>{{file.name_file}}</strong></h4><br>
     {% for line in text %}
         <p>{{line}}</p>
     {% endfor %}

@@ -3,6 +3,7 @@ from django.forms.widgets import CheckboxSelectMultiple
 
 from .models import *
 
+'''
 class create_project_form(forms.ModelForm):
     name_project = forms.CharField(label='Nombre del proyecto', max_length=100, widget=forms.TextInput(attrs={'style':'width:100%;'}))
     description = forms.CharField(label='Descripción del proyecto', widget=forms.Textarea(attrs={'placeholder': 'Escriba aquí la descripción del proyecto...', 'rows':'3', 'style':'width:100%;'}))
@@ -50,6 +51,7 @@ class metadata_project_form(forms.ModelForm):
     class Meta:
         model = Metadata
         fields = ('name_metadata',)
+'''
 
 class contact_form(forms.Form):
     name = forms.CharField(label='Su nombre*', max_length=50)

@@ -470,6 +470,11 @@ input[type=email] {
     opacity: 0;
 }
 
+.popup.concord {
+    width: 50% !important;
+    height: 60% !important;
+}
+
 .popup .btn-cerrar-popup {
     font-size: 16px;
     line-height: 16px;

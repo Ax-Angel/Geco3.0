@@ -135,9 +135,11 @@ function closeRightMenu() {
             <p class="navbar-brand"><b>Proyecto: </b>{{project.name_project}}</p>
             <span class="options">
               <input type="text" name="id_project" id="id_project" value="{{project.id}}" hidden/>
+              {% if user == project.owner%}              
+              <a href="{% url 'update_project' project.id %}" title="Editar proyecto"><i class="fas fa-cog fa-2x"></i></a>
+              {% endif %}
               {% if user == project.owner or user in colaboradores %}
               <a href="{% url 'upload_document' project.id %}" title="Subir archivo"><i class="fas fa-upload fa-2x"></i></a>
-              {% comment %} <a href="#" title="Editar proyecto"><i class="fas fa-cog fa-2x"></i></a> {% endcomment %}
               {% endif %}
               {% if project.collab_status and user == project.owner %}
               <a href="{% url 'add_collaborator' project.id %}" title="Añadir colaborador al proyecto"><i class="fas fa-share-alt fa-2x"></i></a>
@@ -190,13 +192,21 @@ function closeRightMenu() {
                         {% endif %}
                       </td>
                       {% for r_f in f %}
-                        <td>{{r_f}}</td>
+                        {% if forloop.first %}
+                          <td><a title="Ver archivo" href="{% url 'document_view' proyect_id=project.id name_file=r_f %}">{{r_f}}</a></td>
+                        {% else %}
+                          <td>{{r_f}}</td>
+                        {% endif %}
                       {% endfor %}
                     </tr>
                   {% else %}
                     <tr>
                       {% for r_f in f %}
-                        <td>{{r_f}}</td>
+                        {% if forloop.first %}
+                          <td><a title="Ver archivo" href="{% url 'document_view' proyect_id=project.id name_file=r_f %}">{{r_f}}</a></td>
+                        {% else %}
+                          <td>{{r_f}}</td>
+                        {% endif %}
                       {% endfor %}
                     </tr>
                   {% endif %}

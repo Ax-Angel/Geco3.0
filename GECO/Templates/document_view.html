@@ -11,6 +11,9 @@
     {% for line in text %}
         <p>{{line}}</p>
     {% endfor %}
+    <div style="text-align:right">
+        <a href="{% url 'dashboard' %}?q={{ name_project }}" ><strong>Atrás</strong></a>
+    </div>
 </div>
 {% endblock content %}
  

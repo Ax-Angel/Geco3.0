@@ -9,10 +9,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.urls import reverse
 
-from django.conf import settings
-
 from django.core.files.storage import default_storage
 from django.core.mail import send_mail
+
+from django.conf import settings
 
 from corpus.forms import *
 from .models import *
@@ -28,11 +28,38 @@ import random
 import string
 
 
-# Create your views here.
+#View Index
 def index_view(request):
     if request.method == 'GET':
         return render(request, 'index.html', {})
 
+
+#View Help
+def help_view(request):
+    if request.method == 'POST':
+        form = contact_form(request.POST)
+        if form.is_valid():
+            validatedData = form.cleaned_data
+            name = validatedData['name']
+            from_email = validatedData['email']
+            message = validatedData['message']
+            
+            subject='Mensaje de usuario GECO'
+            body_message = 'Usted ha recibido un nuevo mensaje de un usuario'+'\n'+'Nombre: '+name+'\n'+'Correo elecrónico: '+from_email+'\n'+'Mensaje: '+message
+            email = EmailMessage(subject, body_message, from_email, to=['gil@iingen.unam.mx'], 
+                                 reply_to=[from_email])
+            email.send()
+            
+    form = contact_form()
+    return render(request, 'help.html', {'form': form})
+
+
+#View apps
+def apps_view(request):
+    return render(request, 'applications.html')
+
+
+#View user_dashboard
 def user_dashboard_view(request):
     if request.user.is_authenticated:
         if request.method == 'GET' and request.GET.get('q',False):
@@ -92,22 +119,8 @@ def user_dashboard_view(request):
                                                    'documents': result,
                                                    'colaboradores': colaboradores})
 
-def document_view_view(request, proyect_id, name_file):
-    if request.user.is_authenticated:
-        if request.method == 'GET':
-            doc_lines = []
-            file = File.objects.get(name_file=name_file)
-            text = open(os.path.join(settings.MEDIA_ROOT, str(file.file)), 'r', encoding="utf8").readlines()
-            for line in text:
-                doc_lines.append(str(line))
-            
-            p = Project.objects.get(id=int(proyect_id))
-    else:
-        return redirect('login')
-       
-    return render(request, 'document_view.html', {'file':file, 'text':doc_lines, 'name_project': p.name_project})
 
-
+#Project Management
 def randomStringDigits(stringLength=8):
     """Generate a random string of letters and digits """
     lettersAndDigits = string.ascii_letters + string.digits
@@ -373,42 +386,62 @@ class Project_Delete(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
     
 
-class Document_Delete(DeleteView):
-    model = Document
-    template_name = 'delete_document_form.html'
-    success_url = reverse_lazy('dashboard')
-    
-    def get_context_data(self, **kwargs):
-        context = super(Document_Delete, self).get_context_data(**kwargs)
-        self.object = self.get_object #se obtiene el objeto
-        document = kwargs['object'] #obtiene el id que se envío por url
-        #document = self.model.objects.get(id=id_document)
-        project = Project.objects.get(id=document.project_id) 
-        files = File.objects.filter(document_id=document.id)
-        _f = ''
-        for f in files:
-            _f+= '"'+f.name_file + '" '
-        if 'project' not in context:
-            context['project'] = project
-        if 'files' not in context:
-            context['files'] = _f
-    
-        return context
-    
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object #se obtiene el objeto
-        id_document = kwargs['pk'] #obtiene el id que se envío por url
-        document = self.model.objects.get(id=id_document)
-        
-        files = File.objects.filter(document_id=document.id)
-        for f in files:
-            if os.path.exists(f.file.path):
-                os.remove(f.file.path)
-        project = Project.objects.get(id=document.project_id)        
-        document.delete() 
-        return HttpResponseRedirect(self.get_success_url()+'?q='+project.name_project)
-    
+def add_collaborator_view(request, id_project):
+    project = Project.objects.get(id=id_project)
+    colaboradores = project.project_members.all()
+    error = ''
+    email = ''
+    sbj = '¡GECO te saluda!'
+    msg = 'Hola, {0} {1} te invita a que te registres en GECO para colaborar en el proyecto {2}.\n\nPor favor utiliza este correo para tu registro en la siguiente dirección: http://172.16.199.134/accounts/register/\n\nEn caso de que quieras utilizar otro correo para registrarte, avísale a {0} por medio de su correo: {3}'.format(request.user.first_name, request.user.last_name, project.name_project, project.get_owner())
 
+    if request.user.is_authenticated and project.get_owner()==request.user:
+        if request.method == 'GET' and request.GET.get('q',False):
+            id_colaborador = int(request.GET.get('q', ''))
+            project.project_members.remove(id_colaborador)
+            colaboradores = project.project_members.all()
+            
+        elif request.method == 'POST':
+            email = request.POST['email_user']
+            try:
+                user = User.objects.get(email = email)
+                project.project_members.add(user)
+                email = ''
+            except:
+                error = "Usuario no encontrado. Ya se le ha enviado un correo electrónico invitándolo a que se registre"
+                send_mail(sbj, msg, settings.DEFAULT_FROM_EMAIL, [email])
+    else:
+        return redirect('login')
+    
+    contexto = {'project':project, 'colaboradores':colaboradores, 'error': error, 'email': email}
+    return render(request, 'add_collaborator_form.html', contexto)
+
+
+
+    return render(request, 'applications.html')
+
+
+def download_project(request, project_id):
+    project = Project.objects.get(id=project_id)
+
+    currentDT = datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
+    zipfile_name = "%s.zip" % currentDT
+    currentDT = currentDT + '/' + project.code
+    
+    response = HttpResponse(content_type='application/zip')
+    zip_file = zipfile.ZipFile(response, 'w')
+    paths = glob(settings.MEDIA_ROOT + '/' + project.code + '/*.txt')
+
+    for file in paths:
+        fdir, fname = os.path.split(file)
+        zip_path = os.path.join(currentDT, fname)
+        zip_file.write(file, zip_path)
+    response['Content-Disposition'] = 'attachment; filename={}'.format(zipfile_name)
+    zip_file.close()
+
+    return response
+
+
+#Document Management
 def upload_document_view(request, id_project):
     project = Project.objects.get(id=id_project)
     metadata = Metadata.objects.filter(project = id_project)
@@ -503,115 +536,56 @@ def lenguas():
     return lengua
 
 
-def list_collaborators_project_view(request):
-    pass
-
-
-def add_collaborator_view(request, id_project):
-    project = Project.objects.get(id=id_project)
-    colaboradores = project.project_members.all()
-    error = ''
-    email = ''
-    sbj = '¡GECO te saluda!'
-    msg = 'Hola, {0} {1} te invita a que te registres en GECO para colaborar en el proyecto {2}.\n\nPor favor utiliza este correo para tu registro en la siguiente dirección: http://172.16.199.134/accounts/register/\n\nEn caso de que quieras utilizar otro correo para registrarte, avísale a {0} por medio de su correo: {3}'.format(request.user.first_name, request.user.last_name, project.name_project, project.get_owner())
-
-    if request.user.is_authenticated and project.get_owner()==request.user:
-        if request.method == 'GET' and request.GET.get('q',False):
-            id_colaborador = int(request.GET.get('q', ''))
-            project.project_members.remove(id_colaborador)
-            colaboradores = project.project_members.all()
-            
-        elif request.method == 'POST':
-            email = request.POST['email_user']
-            try:
-                user = User.objects.get(email = email)
-                project.project_members.add(user)
-            except:
-                error = "Usuario no encontrado. Ya se le ha enviado un correo electrónico invitándolo a que se registre"
-                send_mail(sbj, msg, settings.DEFAULT_FROM_EMAIL, [email])
-    else:
-        return redirect('login')
+class Document_Delete(DeleteView):
+    model = Document
+    template_name = 'delete_document_form.html'
+    success_url = reverse_lazy('dashboard')
     
-    contexto = {'project':project, 'colaboradores':colaboradores, 'error': error, 'email': email}
-    return render(request, 'add_collaborator_form.html', contexto)
+    def get_context_data(self, **kwargs):
+        context = super(Document_Delete, self).get_context_data(**kwargs)
+        self.object = self.get_object #se obtiene el objeto
+        document = kwargs['object'] #obtiene el id que se envío por url
+        #document = self.model.objects.get(id=id_document)
+        project = Project.objects.get(id=document.project_id) 
+        files = File.objects.filter(document_id=document.id)
+        _f = ''
+        for f in files:
+            _f+= '"'+f.name_file + '" '
+        if 'project' not in context:
+            context['project'] = project
+        if 'files' not in context:
+            context['files'] = _f
+    
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object #se obtiene el objeto
+        id_document = kwargs['pk'] #obtiene el id que se envío por url
+        document = self.model.objects.get(id=id_document)
+        
+        files = File.objects.filter(document_id=document.id)
+        for f in files:
+            if os.path.exists(f.file.path):
+                os.remove(f.file.path)
+        project = Project.objects.get(id=document.project_id)        
+        document.delete() 
+        return HttpResponseRedirect(self.get_success_url()+'?q='+project.name_project)
+    
 
-
-def invite_user_view(request):
-    error = ''
-    email = ''
-    sbj = '¡GECO te saluda!'
-    msg = 'Hola, {0} {1} te invita a que te registres en GECO'.format(request.user.first_name, request.user.last_name,)
-
+def document_view_view(request, proyect_id, name_file):
     if request.user.is_authenticated:
-        if request.method == 'POST':
-            email = request.POST['email_user']
-            try:
-                send_mail(sbj, msg, settings.DEFAULT_FROM_EMAIL, [email])
-                error = 'Invitación enviada correctamente al usuario'
-            except:
-                error = 'Hubo un error al enviar invitación al usuario'
+        if request.method == 'GET':
+            doc_lines = []
+            file = File.objects.get(name_file=name_file)
+            text = open(os.path.join(settings.MEDIA_ROOT, str(file.file)), 'r', encoding="utf8").readlines()
+            for line in text:
+                doc_lines.append(str(line))
+            
+            p = Project.objects.get(id=int(proyect_id))
     else:
         return redirect('login')
-    
-    contexto = {'error': error, 'email': email}
-    return render(request, 'invite_user_form.html', contexto)
-
-
-def list_user_projects_view(request):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            projects = Project.objects.filter(project_members=request.user)
-            result = []
-            for project in projects:
-                result.append(project)
-            print(result)       
-    else:
-        result = []
-    return render(request, 'list_user_projects.html', {'result': result})
-
-
-def help_view(request):
-    if request.method == 'POST':
-        form = contact_form(request.POST)
-        if form.is_valid():
-            validatedData = form.cleaned_data
-            name = validatedData['name']
-            from_email = validatedData['email']
-            message = validatedData['message']
-            
-            subject='Mensaje de usuario GECO'
-            body_message = 'Usted ha recibido un nuevo mensaje de un usuario'+'\n'+'Nombre: '+name+'\n'+'Correo elecrónico: '+from_email+'\n'+'Mensaje: '+message
-            email = EmailMessage(subject, body_message, from_email, to=['gil@iingen.unam.mx'], 
-                                 reply_to=[from_email])
-            email.send()
-            
-    form = contact_form()
-    return render(request, 'help.html', {'form': form})
-
-
-def apps_view(request):
-    return render(request, 'applications.html')
-
-
-def download_project(request, project_id):
-    project = Project.objects.get(id=project_id)
-
-    currentDT = datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
-    zipfile_name = "%s.zip" % currentDT
-    currentDT = currentDT + '/' + project.code
-    
-    response = HttpResponse(content_type='application/zip')
-    zip_file = zipfile.ZipFile(response, 'w')
-    paths = glob(settings.MEDIA_ROOT + '/' + project.code + '/*.txt')
-
-    for file in paths:
-        fdir, fname = os.path.split(file)
-        zip_path = os.path.join(currentDT, fname)
-        zip_file.write(file, zip_path)
-    response['Content-Disposition'] = 'attachment; filename={}'.format(zipfile_name)
-    zip_file.close()
-
-    return response
+       
+    return render(request, 'document_view.html', {'file':file, 'text':doc_lines, 'name_project': p.name_project})
 
 
 def download_document(request, document_id):

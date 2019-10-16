@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404 # noqa
 from django.urls import reverse
+
+from django.conf import settings
+from django.core.mail import send_mail
+
 from users.models import User
 from users.forms import *
+
 import traceback
 
-# Create your views here.
+#User Management
 def register_user_view(request):
     """
     Esta función regresa el template y controla la vista del formulario para crear usuarios nuevos.
@@ -38,6 +43,7 @@ def register_user_view(request):
         form = register_user_form(request.POST)
     return render(request, 'registration/register_user_form.html', {'form': form})
 
+
 def edit_user_view(request, user_id):
     if request.user.is_authenticated and (int(request.user.pk) == int(user_id)):
         user = User.objects.get(id=user_id)
@@ -52,6 +58,7 @@ def edit_user_view(request, user_id):
     else:
         return redirect('login')
 
+
 def info_user_view(request, user_id):
     if request.user.is_authenticated and (int(request.user.pk) == int(user_id)):
         if request.method == "GET":
@@ -59,3 +66,25 @@ def info_user_view(request, user_id):
         return render(request, "info_user.html", {'user': user})
     else:
         return redirect('login')
+
+
+def invite_user_view(request):
+    error = ''
+    email = ''
+    sbj = '¡GECO te saluda!'
+    msg = 'Hola, {0} {1} te invita a que te registres en GECO'.format(request.user.first_name, request.user.last_name,)
+
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            email = request.POST['email_user']
+            try:
+                send_mail(sbj, msg, settings.DEFAULT_FROM_EMAIL, [email])
+                error = 'Invitación enviada correctamente al usuario'
+                email = ''
+            except:
+                error = 'Hubo un error al enviar invitación al usuario'
+    else:
+        return redirect('login')
+    
+    contexto = {'error': error, 'email': email}
+    return render(request, 'invite_user_form.html', contexto)

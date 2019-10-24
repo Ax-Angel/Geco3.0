@@ -392,7 +392,7 @@ def add_collaborator_view(request, id_project):
     error = ''
     email = ''
     sbj = '¡GECO te saluda!'
-    msg = 'Hola, {0} {1} te invita a que te registres en GECO para colaborar en el proyecto {2}.\n\nPor favor utiliza este correo para tu registro en la siguiente dirección: http://172.16.199.134/accounts/register/\n\nEn caso de que quieras utilizar otro correo para registrarte, avísale a {0} por medio de su correo: {3}'.format(request.user.first_name, request.user.last_name, project.name_project, project.get_owner())
+    msg = 'Hola, {0} {1} te invita a que te registres en GECO para colaborar en el proyecto {2}.\n\nPor favor utiliza este correo para tu registro en la siguiente dirección: http://www.geco.unam.mx/accounts/register/\n\nEn caso de que quieras utilizar otro correo para registrarte, avísale a {0} por medio de su correo: {3}'.format(request.user.first_name, request.user.last_name, project.name_project, project.get_owner())
 
     if request.user.is_authenticated and project.get_owner()==request.user:
         if request.method == 'GET' and request.GET.get('q',False):

@@ -10,3 +10,5 @@ GECO/corpus/migrations/
 GECO/mediafiles/
 GECO/users/__pycache__/
 GECO/users/migrations/
+GECO/GECO/settings.py
+mediafiles/

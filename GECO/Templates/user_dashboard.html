@@ -176,6 +176,7 @@ function closeRightMenu() {
                 {% for v_m in value_metadata %}
                   <th scope="col">{{v_m}}</th>
                 {% endfor %}
+                <th scope="col">Créditos a</th>
               </tr>
             </thead>
             <tbody>
@@ -198,6 +199,7 @@ function closeRightMenu() {
                           <td>{{r_f}}</td>
                         {% endif %}
                       {% endfor %}
+                      <td>{{usuario}}</td>
                     </tr>
                   {% else %}
                     <tr>
@@ -206,7 +208,8 @@ function closeRightMenu() {
                           <td><a title="Ver archivo" href="{% url 'document_view' proyect_id=project.id name_file=r_f %}">{{r_f}}</a></td>
                         {% else %}
                           <td>{{r_f}}</td>
-                        {% endif %}
+                          
+                        {% endif %}       
                       {% endfor %}
                     </tr>
                   {% endif %}

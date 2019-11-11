@@ -156,7 +156,7 @@ def create_project_view(request):
                 public = True            
             if 'collab_status' in request.POST:
                 collab = True            
-            if 'parallel_status' in request.POST:
+            if 'parallel_status':
                 parallel = True
 
             if Project.objects.filter(name_project=name_project).exists():
@@ -267,6 +267,7 @@ class Project_Create(CreateView):
 
 
 def update_project_view(request, pk):
+    edit = True
     title='Editar el proyecto'
     name_project = ''
     description = ''
@@ -360,7 +361,7 @@ def update_project_view(request, pk):
         return redirect('login')
        
     contexto = {'name_project':name_project, 'description':description, 'metadata':metadata, 'metadata_check':metadata_check,
-                'public':public, 'collab':collab, 'parallel':parallel, 'error':error, 'title':title}
+                'public':public, 'collab':collab, 'parallel':parallel, 'error':error, 'title':title, 'editar':edit}
     
     return render(request, 'create_project_form_c.html', contexto)
 

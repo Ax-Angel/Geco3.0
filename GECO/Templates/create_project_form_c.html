@@ -26,7 +26,32 @@
             </div>	              
         </div>
 
-        <div class="input-group mb-3">
+        <hr>
+
+        <div class="form-group row text-left">
+            {% if editar %}
+                <div class="col-sm-4">
+                    <input type="checkbox" name="public_status" value="True"
+                    {% if public == True %} checked {% endif %}>Hacerlo público
+                </div>
+            {% endif %}
+            <div class="col-sm-4"> 
+                <input type="checkbox" name="collab_status" value="True"
+                {% if collab == True %} checked {% endif %}>¿Será colaborativo?
+            </div>
+            <script>
+            
+            </script>
+
+            <div class="col-sm-4">
+                <!--Se debe cambiar en la respectiva función en la vista el parallel status cuando haya funcionalidad de corpus monolingües-->
+                <input id="paralelo" onClick="show_md()" type="checkbox" name="parallel_status" value="True" checked disabled>¿Será corpus paralelo?
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="metadatos" class="input-group mb-3">
             <label><b>Metadatos para su proyecto</b></label>
             <table class="table table-borderless">
                     <tr>
@@ -47,23 +72,6 @@
                     </tr>                                                          
             </table>
         </div>
-        <hr>
-
-        <div class="form-group row text-left">
-            <div class="col-sm-4">
-                <input type="checkbox" name="public_status" value="True"
-                {% if public == True %} checked {% endif %}>¿Será público?
-            </div>
-            <div class="col-sm-4"> 
-                <input type="checkbox" name="collab_status" value="True"
-                {% if collab == True %} checked {% endif %}>¿Será colaborativo?
-            </div>
-            <div class="col-sm-4">
-                <input type="checkbox" name="parallel_status" value="True"
-                {% if parallel == True %} checked {% endif %}
-                {% if title == 'Editar el proyecto' %} disabled {% endif %}>¿Será para corpus paralelo?
-            </div>
-        </div>
 
         <div class="form-group row text-left">
             <div class="col-sm-3">
@@ -77,5 +85,16 @@
         </form>
     </div>
 </div>
+
+<script>
+    // document.getElementById('paralelo').addEventListener("click", show_md(), false);
+    function show_md() {
+        if (document.getElementById('paralelo').checked==true) {
+            document.getElementById('metadatos').style.display='';
+        } else {
+            document.getElementById('metadatos').style.display='none';
+        }
+    }
+</script>
 
 {% endblock %}

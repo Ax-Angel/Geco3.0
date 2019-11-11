@@ -7,7 +7,7 @@
         <br>
         <br>
         <div class="row">
-            <div class="col-md-4 mb-3">
+            {% comment %} <div class="col-md-4 mb-3">
                 <a href="http://www.corpus.unam.mx/saute/" target="_blank"><img src="{% static 'img/desarrollos/saute.png' %}">
                 <p>Saute</p></a>
             </div>
@@ -33,6 +33,10 @@
             <div class="col-md-4 mb-3">
                 <a href="http://www.corpus.unam.mx/geco/default/ecode" target="_blank"><img src="{% static 'img/desarrollos/ecode.png' %}">
                 <p>Ecode</p></a>
+            </div> {% endcomment %}
+            <div class="col-md-12 mb-12">
+                <a href="{% url 'concordance_paralle' %}" target="_blank"><img width="150px" src="{% static 'img/desarrollos/parallel.jpeg' %}">
+                <p>Concordancias Paralelo</p></a>
             </div>                    
         </div>
     </div>

@@ -2,109 +2,107 @@
 
 {% block content %}
 
-<div id="content">
-  <div class="container text-center">
-    
-    {% if user.is_authenticated %}
-      <p>  Hola {{ user.username }}! </p>
-      <p>  Estas loggueado </p>
-      <p><a href="{% url 'logout' %}">cerrar sesión</a></p>
+<div class="container text-center form-square">
+  
+  {% if user.is_authenticated %}
+    <p>  Hola {{ user.username }}! </p>
+    <p>  Estas loggueado </p>
+    <p><a href="{% url 'logout' %}">cerrar sesión</a></p>
 
-    {% else %}
-      <div class="formulario">
+  {% else %}
+    <div class="formulario">
 
-        <h2>Registro de usuario</h2>
-        <p>&nbsp;</p>
+      <h2>Registro de usuario</h2>
+      <p>&nbsp;</p>
 
-        {% if 'error' in request.GET %}
-          <p style="color:red">Los sentimos, algo no ha salido bien, por favor verifica que todo esté bien y vuelve a intentar</p>
-        {% endif %}
+      {% if 'error' in request.GET %}
+        <p style="color:red">Los sentimos, algo no ha salido bien, por favor verifica que todo esté bien y vuelve a intentar</p>
+      {% endif %}
 
-        <form method="post">
-          {% csrf_token %}
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Nombre(s)*</b></label>
-            <div class="col-sm-9">
-                <input type="text" name="first_name" placeholder="Juan" required>
-            </div>              
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Nombre(s)*</b></label>
+          <div class="col-sm-9">
+              <input type="text" name="first_name" placeholder="Juan" required>
+          </div>              
+        </div>
+
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Apellido(s)*</b></label>
+          <div class="col-sm-9">
+              <input type="text" name="last_name" placeholder="Sánchez Segura" required>
+          </div>	              
+        </div>
+
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Nombre del usuario*</b></label>
+          <div class="col-sm-9">
+              <input type="text" name="username" placeholder="juan91" required>
+          </div>	              
+        </div>
+
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Correo electrónico*</b></label>
+          <div class="col-sm-9">
+              <input type="email" name="email" placeholder="test@test.com" required>
           </div>
+        </div>
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Apellido(s)*</b></label>
-            <div class="col-sm-9">
-                <input type="text" name="last_name" placeholder="Sánchez Segura" required>
-            </div>	              
-          </div>
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Contraseña*</b></label>
+          <div class="col-sm-9">
+              <input type="password" name="password" required>
+          </div>   
+        </div>
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Nombre del usuario*</b></label>
-            <div class="col-sm-9">
-                <input type="text" name="username" placeholder="juan91" required>
-            </div>	              
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Confirmar contraseña*</b></label>
+          <div class="col-sm-9">
+              <input type="password" name="confirm" required>
           </div>
+        </div>
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Correo electrónico*</b></label>
-            <div class="col-sm-9">
-                <input type="email" name="email" placeholder="test@test.com" required>
-            </div>
-          </div>
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Institución</b></label>
+          <div class="col-sm-9">
+              {{ form.institution }}
+          </div> 
+        </div>
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Contraseña*</b></label>
-            <div class="col-sm-9">
-                <input type="password" name="password" required>
-            </div>   
-          </div>
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Grado escolar</b></label>
+          <div class="col-sm-9">
+              {{ form.degree }}
+          </div>   
+        </div>
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Confirmar contraseña*</b></label>
-            <div class="col-sm-9">
-                <input type="password" name="confirm" required>
-            </div>
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>País</b></label>
+          <div class="col-sm-9">
+              {{ form.country }}
           </div>
+        </div>
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Institución</b></label>
-            <div class="col-sm-9">
-                {{ form.institution }}
-            </div> 
+        <div class="form-group row text-left">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-9">
+              <p><b>*</b>Campos obligatorios para que su registro sea exitoso</p>
           </div>
+        </div>
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Grado escolar</b></label>
-            <div class="col-sm-9">
-                {{ form.degree }}
-            </div>   
+        <div class="form-group row text-left">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-9"> 
+              <input type="submit" class="btn btn-danger" onClick ="window.location.href = '{% url 'index' %}'" value="Cancelar" /> 
+              &nbsp;
+              <input type="submit" class="btn btn-success" value="Enviar" />
           </div>
-
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>País</b></label>
-            <div class="col-sm-9">
-                {{ form.country }}
-            </div>
-          </div>
-
-          <div class="form-group row text-left">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-9">
-                <p><b>*</b>Campos obligatorios para que su registro sea exitoso</p>
-            </div>
-          </div>
-
-          <div class="form-group row text-left">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-9"> 
-                <input type="submit" class="btn btn-danger" onClick ="window.location.href = '{% url 'index' %}'" value="Cancelar" /> 
-                &nbsp;
-                <input type="submit" class="btn btn-success" value="Enviar" />
-            </div>
-          </div>
-          
-        </form>
-      </div>
-  </div>
+        </div>
+        
+      </form>
+    </div>
+</div>
 {% endif %}
-  </div>
 </div>
 {% endblock %}

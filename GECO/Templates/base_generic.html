@@ -14,14 +14,15 @@
   <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="shortcut icon" href="{% static 'img/geco.png' %}" type="image/x-icon" />
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600|Open+Sans" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,600|Open+Sans" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
 {% block banner %}
 <nav class="navbar fixed-top navbar-light bg-light navbar-expand-lg">
-  <img id="logo" onClick ="window.location.href = '{% url 'index' %}'" src="{% static 'img/geco.png' %}" width="38" height="34" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco_00.jpg">
+  <img id="logo" onClick ="window.location.href = '{% url 'index' %}'" src="{% static 'img/geco.png' %}" width="60" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco_00.jpg">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>

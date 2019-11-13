@@ -2,93 +2,93 @@
 
 {% block content %}
 
-<div id="content">
-  <div class="container text-center">
+
+<div class="container text-center form-square">
     
-      <div class="formulario">
+    <div class="formulario">
 
-        <h2>Editar Información de usuario</h2>
-        <p>&nbsp;</p>
+      <h2>Editar Información de usuario</h2>
+      <p>&nbsp;</p>
 
-        <form method="post">
-          {% csrf_token %}
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Nombre(s)*</b></label>
-            <div class="col-sm-9">
-                {{form.first_name}}
-            </div>	              
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Nombre(s)*</b></label>
+          <div class="col-sm-9">
+              {{form.first_name}}
+          </div>	              
+        </div>
+
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Apellido(s)*</b></label>
+          <div class="col-sm-9">
+              {{form.last_name}}
+          </div>	              
+        </div>
+
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Nombre del usuario*</b></label>
+          <div class="col-sm-9">
+              {{form.username}}
+          </div>	              
+        </div>
+
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Correo electrónico*</b></label>
+          <div class="col-sm-9">
+              {{form.email}}
           </div>
+        </div>
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Apellido(s)*</b></label>
-            <div class="col-sm-9">
-                {{form.last_name}}
-            </div>	              
-          </div>
+        {% comment %} <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Contraseña*</b></label>
+          <div class="col-sm-9">
+              {{form.password}}
+          </div>   
+        </div>
+{% endcomment %}
+        
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Nombre del usuario*</b></label>
-            <div class="col-sm-9">
-                {{form.username}}
-            </div>	              
-          </div>
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Institución</b></label>
+          <div class="col-sm-9">
+              {{ form.institution }}
+          </div> 
+        </div>
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Correo electrónico*</b></label>
-            <div class="col-sm-9">
-                {{form.email}}
-            </div>
-          </div>
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>Grado escolar</b></label>
+          <div class="col-sm-9">
+              {{ form.degree }}
+          </div>   
+        </div>
 
-          {% comment %} <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Contraseña*</b></label>
-            <div class="col-sm-9">
-                {{form.password}}
-            </div>   
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label"><b>País</b></label>
+          <div class="col-sm-9">
+              {{ form.country }}
           </div>
- {% endcomment %}
-          
+        </div>
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Institución</b></label>
-            <div class="col-sm-9">
-                {{ form.institution }}
-            </div> 
+        <div class="form-group row text-left">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-9">
+              <p><b>*</b>Campos obligatorios para que su registro sea exitoso</p>
           </div>
+        </div>
 
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>Grado escolar</b></label>
-            <div class="col-sm-9">
-                {{ form.degree }}
-            </div>   
+        <div class="form-group row text-left">
+          <div class="col-sm-3"></div>
+          <div class="col-sm-9"> 
+              <input type="submit" class="btn btn-danger" onClick ="window.location.href = '{% url 'index' %}'" value="Cancelar" /> 
+              &nbsp;
+              <input type="submit" class="btn btn-success" value="Enviar" />
           </div>
-
-          <div class="form-group row text-left">
-            <label class="col-sm-3 col-form-label"><b>País</b></label>
-            <div class="col-sm-9">
-                {{ form.country }}
-            </div>
-          </div>
-
-          <div class="form-group row text-left">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-9">
-                <p><b>*</b>Campos obligatorios para que su registro sea exitoso</p>
-            </div>
-          </div>
-
-          <div class="form-group row text-left">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-9"> 
-                <input type="submit" class="btn btn-danger" onClick ="window.location.href = '{% url 'index' %}'" value="Cancelar" /> 
-                &nbsp;
-                <input type="submit" class="btn btn-success" value="Enviar" />
-            </div>
-          </div>
-          
-        </form>
-      </div>
-  </div>
-  </div>
+        </div>
+        
+      </form>
+    </div>
+  
 </div>
+
 {% endblock %}

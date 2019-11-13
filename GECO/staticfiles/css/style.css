@@ -15,7 +15,7 @@ Tags: corpus lingüístico
 */
 
 html {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     line-height: 1.15;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
@@ -27,6 +27,9 @@ body {
     background-color: #FFF;
     padding-top: 60px;
     padding-bottom: 40px;
+    background: url('/static/img/gecos-bg2.png');
+    font-family: 'Ubuntu', sans-serif;
+    color: #010a04;
 }
 
 article,
@@ -83,6 +86,8 @@ a:active {
 }*/
 
 #fixed-header {
+    font-family: 'Ubuntu', sans-serif;
+    color: #010a04;
     top: 0;
 }
 
@@ -90,12 +95,15 @@ a:active {
 /* Footer */
 
 #fixed-footer {
+    font-family: 'Ubuntu', sans-serif;
+    color: #010a04;
     bottom: 0;
     height: 2em;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
-    background-color: rgb(238, 235, 235);
+    background-color: #58595b;
+    opacity: 0.9;
     position: fixed;
     width: 100%;
     text-align: center;
@@ -134,9 +142,26 @@ a:active {
 }
 */
 
+#navbarNav {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 122%;
+    color: #010a04;
+}
+
+#init {
+    font-family: 'Ubuntu', sans-serif;
+    color: #010a04;
+}
+
 #dashboard {
+    font-family: 'Ubuntu', sans-serif;
+    color: #010a04;
     margin-left: 9%;
     margin-right: 9%;
+}
+
+.form-square {
+    opacity: 0.86;
 }
 
 
@@ -188,6 +213,8 @@ nav ul li {
 /* Sidebars */
 
 .sidebar-nav {
+    font-family: 'Ubuntu', sans-serif;
+    color: #010a04;
     margin-top: 20px;
     padding: 0;
     list-style: none;
@@ -247,7 +274,7 @@ input[type=email] {
 }
 
 .button {
-    font: bold 11px Arial;
+    font-family: 'Ubuntu', sans-serif;
     text-decoration: none;
     background-color: #EEEEEE;
     color: #333333;
@@ -259,13 +286,21 @@ input[type=email] {
     margin-left: 70%;
 }
 
+.btn-success {
+    background-color: #037f36;
+}
+
+.btn-success:hover {
+    background-color: #046e30;
+}
+
 .btn-danger {
-    background-color: #da2727 !important;
+    background-color: #7f1716 !important;
     color: #FFF !important;
 }
 
 .btn-danger:hover {
-    background-color: #971e1e !important;
+    background-color: #64100f !important;
 }
 
 .button_export {
@@ -363,7 +398,25 @@ input[type=email] {
 }
 
 .navbar {
-    background-color: rgb(238, 235, 235) !important;
+    background-color: #ffffff !important;
+    opacity: 0.86;
+}
+
+.table-dark {
+    background-color: #787a7c;
+    opacity: 0.90;
+}
+
+.table-sucess {
+    background-color: #b3b4b6;
+    opacity: 0.90;
+}
+
+#leftMenu {
+    font-family: 'Ubuntu', sans-serif;
+    color: #010a04;
+    opacity: 0.92;
+    background-color: #888888;
 }
 
 .dropdown-item:hover {

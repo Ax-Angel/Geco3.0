@@ -371,6 +371,10 @@ input[type=email] {
 }
 
 #lateral {
+    padding: 0.5%;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    opacity: 0.86;
     float: left;
     margin-left: 5%;
 }
@@ -382,9 +386,13 @@ input[type=email] {
 #contenido_help {
     float: left;
     width: 60%;
-    padding: 5px 0 20px 0;
+    /* padding: 5px 0 20px 0; */
     margin-right: 10%;
-    margin-left: 9%
+    margin-left: 9%;
+    padding: 3% 3% 3% 3%;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    opacity: 0.93;
 }
 
 @media screen and (max-width: 768px) {

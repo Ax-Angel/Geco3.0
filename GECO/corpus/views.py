@@ -454,6 +454,7 @@ def upload_document_view(request, id_project):
     metadata = Metadata.objects.filter(project = id_project)
     error = ''
     lengua = lenguas()
+    clasif_gen = clasificacion_generica()
 
     if request.user.is_authenticated and project.is_user_collaborator(request.user):
         if request.method == 'POST':
@@ -463,7 +464,7 @@ def upload_document_view(request, id_project):
                 file_name = _file.name
                 if not file_name.endswith('.txt'):
                     error = 'Los archivos tienen que ser formato .txt'
-                    contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua}
+                    contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua, 'clasif_gen':clasif_gen}
                     return render(request, 'upload_document_form.html', contexto)
                 i+=1
             
@@ -478,7 +479,7 @@ def upload_document_view(request, id_project):
                     else:
                         if num_line_tmp != num_line:
                             error = 'Los corpus paralelos tienen que estar alineados'
-                            contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua}
+                            contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua, 'clasif_gen':clasif_gen}
                             return render(request, 'upload_document_form.html', contexto)      
                     i+=1
             
@@ -522,7 +523,7 @@ def upload_document_view(request, id_project):
     else:
         return redirect('login')
     
-    contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua}
+    contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua, 'clasif_gen':clasif_gen}
     return render(request, 'upload_document_form.html', contexto)
 
 
@@ -541,6 +542,107 @@ def lenguas():
               ["Totonaco","TOT"], ["Triqui","TRC"], ["Tseltal","TZH"] ,["Tzotzil","TZO"], ["Yaqui","YAQ"], ["Zapoteco","ZAP"],
               ["Zoque","ZOR"]]
     return lengua
+
+
+def clasificacion_generica():
+    clasif_gen = ["Expositivo", "Narrativo", "Poético", "Religioso", "Histórico", "Político", "Dramático"]
+    return clasif_gen
+
+
+def upload_document_update_view(request, document_id):
+    document = Document.objects.get(id=document_id)
+    project = Project.objects.get(id=document.project.id)
+    
+    if request.user.is_authenticated and project.is_user_collaborator(request.user):
+        metadata = Metadata.objects.filter(project = project.id)
+        files = File.objects.filter(document_id=document.id)
+        error = ''
+        lengua = lenguas()
+        clasif_gen = clasificacion_generica()
+        files_value = []
+        
+        for f in files:
+            info_file = []
+            info_file.append(f.name_file)
+            name_id = 'file_'+str(f.id)
+            info_file.append(name_id)
+            file_metadata = []
+            for m in metadata:
+                data = File_Metadata_Relation.objects.filter(metadata_id=m.id, file_id=f.id)
+                file_metadata.append((m.id, name_id+'_m_'+str(m.id), data))
+            info_file.append(file_metadata)
+            files_value.append(info_file)
+            
+        if request.method == 'POST':
+            
+            i = 1
+            while str(i) in request.POST:
+                _file = request.FILES['new_file_'+str(i)]
+                file_name = _file.name
+                if not file_name.endswith('.txt'):
+                    error = 'Los nuevos archivos tienen que ser formato .txt'
+                    contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua, 'clasif_gen':clasif_gen,
+                                'files_value':files_value}
+                    return render(request, 'upload_document_update_form.html', contexto)
+                i+=1
+                
+            if project.parallel_status:
+                i = 1                    
+                num_line_tmp = len(open(os.path.join(settings.MEDIA_ROOT, str(files[0].file)), 'r', encoding="utf8").readlines())
+                while str(i) in request.POST:
+                    _file = request.FILES['new_file_'+str(i)]
+                    num_line = len(_file.read().splitlines())
+                    if num_line_tmp != num_line:
+                        error = 'Los corpus paralelos tienen que estar alineados'
+                        contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua, 'clasif_gen':clasif_gen,
+                                    'files_value':files_value}
+                        return render(request, 'upload_document_update_form.html', contexto)      
+                    i+=1
+            
+            i = 1
+            
+            #updating old documents
+            for f in files:
+                for m in metadata:
+                    if 'file_'+str(f.id)+'_m_'+str(m.id) in request.POST:
+                        File_Metadata_Relation.objects.filter(metadata_id = m.id, 
+                                                              file_id = f.id).update(data_value = request.POST['file_'+str(f.id)+'_m_'+str(m.id)])
+            
+            #updating news documents
+            while str(i) in request.POST:
+                
+                if project.parallel_status:
+                    d = document
+                elif not project.parallel_status:
+                    d = Document(project = project, owner = request.user)
+                    d.save()
+                            
+                _file = request.FILES['new_file_'+str(i)]
+                save_path = settings.MEDIA_ROOT + '/' +  project.code  + '/' + _file.name
+                path = default_storage.save(save_path, _file)
+                
+                name_file = path.split('/')[-1]
+                f = File(file = project.code+ '/' + name_file, name_file = name_file, document = d)
+                f.save()
+                
+                for m in metadata:
+                    if 'new_file_'+str(i)+'_m_'+str(m.id) in request.POST:
+                        f_m_r = File_Metadata_Relation(metadata = m,
+                                                       file = f,
+                                                       data_value = request.POST['new_file_'+str(i)+'_m_'+str(m.id)])
+                    else:
+                        f_m_r = File_Metadata_Relation(metadata = m, file = f)
+                    f_m_r.save()
+                i+=1
+                        
+            return HttpResponseRedirect(reverse_lazy('dashboard')+'?q='+project.name_project)
+        
+        contexto = {'project':project, 'metadata': metadata, 'error': error, 'lenguas':lengua, 'clasif_gen':clasif_gen,
+                    'files_value':files_value}
+        return render(request, 'upload_document_update_form.html', contexto)  
+    
+    else:
+        return redirect('login')
 
 
 class Document_Delete(DeleteView):

@@ -27,7 +27,7 @@ SECRET_KEY = '1h+fg6y-cteaonvt+3ls$xlbf%lqhn&nzxt-0dlad_r@3k4_l4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['www.geco.unam.mx', '172.16.199.134']
+ALLOWED_HOSTS = ['www.geco.unam.mx', '172.16.199.134', 'localhost']
 
 
 AUTH_USER_MODEL = 'users.User'

@@ -192,7 +192,8 @@ function closeRightMenu() {
                         <a href="#" onclick="open_popup({{res.0}});" id="btn-abrir-popup_{{res.0}}" style=".btn-abrir-popup_{{res.0}}:hover {background: rgba(94,125,227, .9);}" title="Ver documento">
                           <i class="fas fa-eye fa-1x"></i></a>
                         <a href="{% url 'download_document' res.0 %}" title="Descargar documento"><i class="fas fa-file-download fa-1x"></i></a>
-                        {% if user == project.owner or user in colaboradores %}                     
+                        {% if user == project.owner or user in colaboradores %}
+                          <a href="{% url 'upload_document_update' res.0 %}" title="Editar documento"><i class="fas fa-edit fa-1x"></i></a>                     
                           <a href="{% url 'delete_document' res.0 %}" title="Eliminar documento"><i class="fas fa-trash fa-1x"></i></a>
                         {% endif %}
                       </td>

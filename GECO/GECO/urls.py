@@ -41,6 +41,7 @@ urlpatterns = [
     
     #Document management
     url(r'^dashboard/upload_document/(?P<id_project>\d+)/$', upload_document_view, name = 'upload_document'),
+    url(r'^dashboard/upload_document_update/(?P<document_id>\d+)/$', upload_document_update_view, name = 'upload_document_update'),
     url(r'^dashboard/document_view/(?P<proyect_id>\d+)/(?P<name_file>[\w\s\S\W]+)/$', document_view_view, name='document_view'),
     url(r'^dashboard/delete_document/(?P<pk>\d+)/$', login_required(Document_Delete.as_view()), name='delete_document'),
     url(r'^dashboard/download_document/(?P<document_id>\d+)/$', download_document, name = 'download_document'),

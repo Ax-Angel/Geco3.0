@@ -11,7 +11,7 @@
 
         <div class="form-group text-right">
             <button type="button" class="btn btn-success" onclick="agregarFila()" title="Agregar Fila"><i class="fas fa-plus-circle"></i></button>
-            <button type="button" class="btn btn-danger" onclick="eliminarFila()" title="Eliminar Fila"><i class="fas fa-minus-circle"></i></button>
+            <button type="button" class="btn btn-danger" onclick="eliminarFila({{files_value|length}})" title="Eliminar Fila"><i class="fas fa-minus-circle"></i></button>
         </div>
 
         <div class="table-responsive">
@@ -20,106 +20,51 @@
                     <tr>
                         <th>Subir archivo (.txt)</th>
                         {% for m in metadata %}
-                            {% comment %} {% if m.id == 6 %}
-                            <th style="width:50%;" colspan="8" id="_m_{{m.id}}">{{m.name_metadata}}</th>
-                            {% endif %} {% endcomment %}
                             <th id="_m_{{m.id}}">{{m.name_metadata}}</th>
                         {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
-                    {% if project.parallel_status %}
+                    {% for f_v in files_value %}
                         <tr>
-                            <th><input type="file" id="file_1" name="file_1" accept=".txt" required>
-                            <input type="hidden" id="1" name="1" value="1" /></th>
-                            {% for m in metadata %}
-                                {% if m.id == 1 %}
-                                    <th><select class="form-control" id="file_1_m_{{m.id}}" name="file_1_m_{{m.id}}" required>
-                                        <option value="">Seleccione...</option>
+                            <th>{{f_v[0]}}
+                            <input type="hidden" id="{{f_v[1]}}" name="{{f_v[1]}}" value="{{f_v[1]}}" /></th>
+                            {% for f in f_v[2] %}
+
+                                {% if f[0] == 1 %}
+                                    <th><select class="form-control" id="{{f[1]}}" name="{{f[1]}}" required>
+                                        <option value="" {% if f[2] == "" %} selected {% endif %}>Seleccione...</option>
                                         {% for l in lenguas %}
-                                            <option value="{{l.1}}">{{l.0}}</option>
+                                            {% if f[2] == l.1%}
+                                                <option value="{{l.1}}" selected>{{l.0}}</option>
+                                            {% else %}
+                                                <option value="{{l.1}}">{{l.0}}</option>
+                                            {% endif %}
                                         {% endfor %}
                                         </select></th>
                                 
-                                {% elif m.id == 2 %}
-                                    <th><input type="text" name="file_1_m_{{m.id}}" id="file_1_m_{{m.id}}" value="" required/></th>
-                                {% comment %} {% elif m.id == 6 %}
-                                    <th colspan="4" style="width:50%;"><input type="text" name="file_1_m_{{m.id}}" id="file_1_m_{{m.id}}"></th> {% endcomment %}
-
-                                {% elif m.id == 16 %}
-                                    <th><select class="form-control" id="file_1_m_{{m.id}}" name="file_1_m_{{m.id}}">
+                                {% elif f[0] == 2 %}
+                                    <th><input type="text" name="{{f[1]}}" id="{{f[1]}}" value="{{f[2]}}" required/></th>
+                              
+                                {% elif f[0] == 16 %}
+                                    <th><select class="form-control" id="{{f[1]}}" name="{{f[1]}}">
                                         <option value="">Seleccione...</option>
                                         {% for c in clasif_gen %}
-                                            <option value="{{c}}">{{c}}</option>
+                                            {% if f[2] == c%}
+                                                <option value="{{c}}" selected>{{c}}</option>
+                                            {% else %}
+                                                <option value="{{c}}">{{c}}</option>
+                                            {% endif %}
                                         {% endfor %}
                                     </select></th>
                                 
                                 {% else %}
-                                    <th><input type="text" name="file_1_m_{{m.id}}" id="file_1_m_{{m.id}}" value=""/></th>
+                                    <th><input type="text" name="{{f[1]}}" id="{{f[1]}}" value="{{f[2]}}"/></th>
                                 {% endif %}
-                                
+                            
                             {% endfor %}
                         </tr>
-                        <tr>
-                            <th><input type="file" id="file_2" name="file_2" accept=".txt" required>
-                            <input type="hidden" id="2" name="2" value="2" /></th>
-                            {% for m in metadata %}
-                                {% if m.id == 1 %}
-                                    <th><select class="form-control" id="file_2_m_{{m.id}}" name="file_2_m_{{m.id}}" required>
-                                        <option value="">Seleccione...</option>
-                                        {% for l in lenguas %}
-                                            <option value="{{l.1}}">{{l.0}}</option>
-                                        {% endfor %}
-                                    </select></th>
-                                
-                                {% elif m.id == 2 %}
-                                    <th><input type="text" name="file_2_m_{{m.id}}" id="file_2_m_{{m.id}}" value="" required/></th>
-
-
-                                {% elif m.id == 16 %}
-                                    <th><select class="form-control" id="file_2_m_{{m.id}}" name="file_2_m_{{m.id}}">
-                                        <option value="">Seleccione...</option>
-                                        {% for c in clasif_gen %}
-                                            <option value="{{c}}">{{c}}</option>
-                                        {% endfor %}
-                                    </select></th>
-                                
-                                {% else %}
-                                    <th><input type="text" name="file_2_m_{{m.id}}" id="file_2_m_{{m.id}}" value=""/></th>
-                                {% endif %}
-                            {% endfor %}
-                        </tr>
-
-                    {% else %}
-                        <tr>
-                            <th><input type="file" id="file_1" name="file_1" accept=".txt" required>
-                            <input type="hidden" id="1" name="1" value="1" /></th>
-                            {% for m in metadata %}
-                                {% if m.id == 1 %}
-                                    <th><select class="form-control" id="file_1_m_{{m.id}}" name="file_1_m_{{m.id}}" required>
-                                        <option value="">Seleccione...</option>
-                                        {% for l in lenguas %}
-                                            <option value="{{l.1}}">{{l.0}}</option>
-                                        {% endfor %}
-                                    </select></th>
-                                
-                                {% elif m.id == 2 %}
-                                    <th><input type="text" name="file_1_m_{{m.id}}" id="file_1_m_{{m.id}}" value="" required/></th>
-
-                                {% elif m.id == 16 %}
-                                    <th><select class="form-control" id="file_1_m_{{m.id}}" name="file_1_m_{{m.id}}">
-                                        <option value="">Seleccione...</option>
-                                        {% for c in clasif_gen %}
-                                            <option value="{{c}}">{{c}}</option>
-                                        {% endfor %}
-                                    </select></th>
-                                
-                                {% else %}
-                                    <th><input type="text" name="file_1_m_{{m.id}}" id="file_1_m_{{m.id}}" value=""/></th>
-                                {% endif %}
-                            {% endfor %}
-                        </tr>
-                    {% endif %}
+                    {% endfor %}                
                     
                 </tbody>
             </table>
@@ -158,7 +103,7 @@ function agregarFila(){
           i ++;
       }
   }
-  var id1 = 'file_'+String(i);
+  var id1 = 'new_file_'+String(i);
   var table = document.getElementById("tablaprueba");
   
   t = table.insertRow(-1);
@@ -209,21 +154,14 @@ function agregarFila(){
   }
 }
 
-function eliminarFila(){
+function eliminarFila(max){
   var table = document.getElementById("tablaprueba");
   var rowCount = table.rows.length;
   //console.log(rowCount);
-
-  if("{{project.parallel_status|safe}}" == "True")
-    if(rowCount <= 3)
-        alert('No se puede eliminar más filas, es el mínimo requerido');
-    else
-        table.deleteRow(rowCount -1);
+  if(rowCount <= max)
+    alert('No se puede eliminar más filas, es el mínimo requerido');
   else
-    if(rowCount <= 2)
-        alert('No se puede eliminar más filas, es el mínimo requerido');
-    else
-        table.deleteRow(rowCount -1);
+    table.deleteRow(rowCount -1);
 }
 </script>
 

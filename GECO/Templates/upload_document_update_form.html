@@ -27,15 +27,15 @@
                 <tbody>
                     {% for f_v in files_value %}
                         <tr>
-                            <th>{{f_v[0]}}
-                            <input type="hidden" id="{{f_v[1]}}" name="{{f_v[1]}}" value="{{f_v[1]}}" /></th>
-                            {% for f in f_v[2] %}
+                            <th>{{f_v.0}}
+                            <input type="hidden" id="{{f_v.1}}" name="{{f_v.1}}" value="{{f_v.1}}" /></th>
+                            {% for f in f_v.2 %}
 
-                                {% if f[0] == 1 %}
-                                    <th><select class="form-control" id="{{f[1]}}" name="{{f[1]}}" required>
-                                        <option value="" {% if f[2] == "" %} selected {% endif %}>Seleccione...</option>
+                                {% if f.0 == 1 %}
+                                    <th><select class="form-control" id="{{f.1}}" name="{{f.1}}" required>
+                                        <option value="" {% if f.2 == "" %} selected {% endif %}>Seleccione...</option>
                                         {% for l in lenguas %}
-                                            {% if f[2] == l.1%}
+                                            {% if f.2 == l.1%}
                                                 <option value="{{l.1}}" selected>{{l.0}}</option>
                                             {% else %}
                                                 <option value="{{l.1}}">{{l.0}}</option>
@@ -43,14 +43,14 @@
                                         {% endfor %}
                                         </select></th>
                                 
-                                {% elif f[0] == 2 %}
-                                    <th><input type="text" name="{{f[1]}}" id="{{f[1]}}" value="{{f[2]}}" required/></th>
+                                {% elif f.0 == 2 %}
+                                    <th><input type="text" name="{{f.1}}" id="{{f.1}}" value="{{f.2}}" required/></th>
                               
-                                {% elif f[0] == 16 %}
-                                    <th><select class="form-control" id="{{f[1]}}" name="{{f[1]}}">
+                                {% elif f.0 == 16 %}
+                                    <th><select class="form-control" id="{{f.1}}" name="{{f.1}}">
                                         <option value="">Seleccione...</option>
                                         {% for c in clasif_gen %}
-                                            {% if f[2] == c%}
+                                            {% if f.2 == c%}
                                                 <option value="{{c}}" selected>{{c}}</option>
                                             {% else %}
                                                 <option value="{{c}}">{{c}}</option>
@@ -59,7 +59,7 @@
                                     </select></th>
                                 
                                 {% else %}
-                                    <th><input type="text" name="{{f[1]}}" id="{{f[1]}}" value="{{f[2]}}"/></th>
+                                    <th><input type="text" name="{{f.1}}" id="{{f.1}}" value="{{f.2}}"/></th>
                                 {% endif %}
                             
                             {% endfor %}

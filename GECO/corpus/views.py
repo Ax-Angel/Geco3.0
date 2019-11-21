@@ -569,7 +569,7 @@ def upload_document_update_view(request, document_id):
             file_metadata = []
             for m in metadata:
                 data = File_Metadata_Relation.objects.filter(metadata_id=m.id, file_id=f.id)
-                file_metadata.append((m.id, name_id+'_m_'+str(m.id), data))
+                file_metadata.append((m.id, name_id+'_m_'+str(m.id), data.data_value))
             info_file.append(file_metadata)
             files_value.append(info_file)
             

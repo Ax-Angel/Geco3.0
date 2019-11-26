@@ -62,11 +62,6 @@ def apps_view(request):
 #View user_dashboard
 def user_dashboard_view(request):
     if request.user.is_authenticated:
-        their_institution = ''
-        if request.user.institution != '':
-            their_institution = '-{}'.format(request.user.institution)
-        user = request.user.first_name + ' ' + request.user.last_name + their_institution
-
         if request.method == 'GET' and request.GET.get('q',False):
             name_project = str(request.GET.get('q', ''))
             project = Project.objects.get(name_project=name_project)
@@ -122,8 +117,7 @@ def user_dashboard_view(request):
                                                    'public_projects': public_projects, 
                                                    'project': project, 'value_metadata':value_metadata, 
                                                    'documents': result,
-                                                   'colaboradores': colaboradores,
-                                                   'usuario':user})
+                                                   'colaboradores': colaboradores})
 
 
 #Project Management
@@ -458,6 +452,11 @@ def upload_document_view(request, id_project):
 
     if request.user.is_authenticated and project.is_user_collaborator(request.user):
         if request.method == 'POST':
+            their_institution = ''
+            if request.user.institution != '':
+                their_institution = '-{}'.format(request.user.institution)
+            user = request.user.first_name + ' ' + request.user.last_name + their_institution
+            print(user)
             i = 1
             while str(i) in request.POST:
                 _file = request.FILES['file_'+str(i)]

@@ -180,7 +180,7 @@ function closeRightMenu() {
                 {% for v_m in value_metadata %}
                   <th scope="col">{{v_m}}</th>
                 {% endfor %}
-                <th scope="col">Créditos a</th>
+                {% comment %} <th scope="col">Créditos a</th> {% endcomment %}
               </tr>
             </thead>
             <tbody>
@@ -204,7 +204,7 @@ function closeRightMenu() {
                           <td>{{r_f}}</td>
                         {% endif %}
                       {% endfor %}
-                      <td>{{usuario}}</td>
+                      {% comment %} <td>{{usuario}}</td> {% endcomment %}
                     </tr>
                   {% else %}
                     <tr>

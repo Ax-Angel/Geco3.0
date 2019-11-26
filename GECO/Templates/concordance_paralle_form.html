@@ -170,7 +170,7 @@ function closeLeftMenu() {
             <input type="text" name="search_petition" id="search_petition" value="{{search_petition}}" style="width:70%;"/>
           </div>
           <div style="display: inline-block;">
-            <a href="javascript:mostrar_cerrar();"><img width="18px" height="18px" src="{% static 'img/ayuda.jpg' %}">Ayuda</a>
+            <a href="javascript:mostrar_cerrar();">Ayuda <i class="far fa-question-circle fa-1x"></i></a>
           </div>
         </div>
         <br>
@@ -384,8 +384,8 @@ function closeLeftMenu() {
       </div>
     {% else %}
       <div style="margin-left: 1%;">
-        <a class="button_export" href="{% url 'export_search_csv' %}"><img width="18px" height="18px" src="{% static 'img/down.jpg' %}"> CSV</a>
-        <a class="button_export" href="{% url 'export_search_xls' %}"><img width="18px" height="18px" src="{% static 'img/down.jpg' %}"> EXCEL</a>
+        <a class="button_export" href="{% url 'export_search_csv' %}"><i class="fas fa-file-csv fa-1x"></i> CSV</a>
+        <a class="button_export" href="{% url 'export_search_xls' %}"><i class="far fa-file-excel fa-1x"></i> EXCEL</a>
       </div>
 
       <div class="table-responsive">
@@ -487,13 +487,14 @@ function closeLeftMenu() {
 {% if results|length != 0 %}
   {% for r_m in results_m %}
     <div class="overlay" id="overlay_{{forloop.counter0}}">
-        <div class="popup concord" id="popup_{{forloop.counter0}}">
+        <div class="popup concord overflow-auto" id="popup_{{forloop.counter0}}">
           <a href="#" id="btn-cerrar-popup_{{forloop.counter0}}" class="btn-cerrar-popup" onclick="close_popup({{forloop.counter0}});">
             <i class="fas fa-times"></i></a>
           {% if project_select %}
           <h3><b>Metadatos del Proyecto: </b>{{project_select.name_project}}</h3>
           {% endif %}
 
+          <p>Hola</p>
           <p class="text-justify">{{r_m}}</p>
 
         </div>

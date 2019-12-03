@@ -5,7 +5,8 @@
 {% block banner %}
  {% load static %}
 <nav class="navbar fixed-top navbar-light bg-light navbar-expand-lg">
-  <h4><strong>Concordancias para Corpus Paralelo</strong></h4>
+  <img id="logo" onClick ="window.location.href = '{% url 'index' %}'" src="{% static 'img/geco.png' %}" width="60" alt="GECO 3 logo"  longdesc="../staticfiles/img/geco_00.jpg">
+  <h4 style="margin-left:2%;"><strong>Concordancias para Corpus Paralelo</strong></h4>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -36,9 +37,9 @@
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 
-<body {% if project_select.name_project == 'CPLM' %}class="cplm-back"{% endif %}>
+<body {% if project_select.name_project == 'CPLM Corpus Paralelo de Lenguas Mexicanas' %}class="cplm-back"{% else %}class="concordancia"{% endif %}>
 
-<div class="w3-sidebar w3-bar-block w3-card w3-animate-left {% if project_select.name_project == 'CPLM' %}cplm-back{% endif %}" style="display:none;min-width:200px;width:20%;max-height:90%;" id="leftMenu">
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-left {% if project_select.name_project == 'CPLM Corpus Paralelo de Lenguas Mexicanas' %}cplm-back{% endif %}" style="display:none;min-width:200px;width:20%;max-height:90%;" id="leftMenu">
   <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Cerrar &times;</button>
 																	<!-- Aquí van los contenidos del menú izquierdo -->
   <fieldset>
@@ -131,7 +132,7 @@ function closeLeftMenu() {
       </div>
     {% else %}
 
-        {% if project_select.name_project == "CPLM" %}
+        {% if project_select.name_project == "CPLM Corpus Paralelo de Lenguas Mexicanas" %}
 
         <div>
           <img style="width:100%;" src="{% static 'img/CPLM/banners-headerconlogo.jpg' %}">
@@ -140,7 +141,7 @@ function closeLeftMenu() {
         {% else %}
 
 
-      <div class="container">
+      <div class="container formulario form-square">
         <legend><h4><b>Proyecto: </b>{{project_select.name_project}}</h4></legend>
       {% if project_select.description %}
         <br>
@@ -289,7 +290,7 @@ function closeLeftMenu() {
         </div>
 
         <br>
-          <a href="javascript:mostrar_cerrar_f();">Filtros:</a>
+          <input type="button" class="btn btn-primary" onClick="javascript:mostrar_cerrar_f();" value="Filtros" />
         <br>
         {% if filter_metadato %}
           <div id="filters" style="display: none">         
@@ -390,7 +391,7 @@ function closeLeftMenu() {
 
       <div class="table-responsive">
         <br>
-        <table style="width:98%; margin-left: 1%; margin-right: 1%;" class="table table-bordered">
+        <table style="width:98%; margin-left: 1%; margin-right: 1%;" class="table table-bordered {% if project_select.name_project != "CPLM Corpus Paralelo de Lenguas Mexicanas" %}table-striped table-info"{% endif %}>
           {% ifequal window 'Vertical' %}
             <caption style="caption-side: top;">Resultados: {{visualize|a_sub_b:1}} de {{results|length|a_sub_b:1}}</caption>
           {% else %}
@@ -412,7 +413,7 @@ function closeLeftMenu() {
                     <td>
                         <a href="#" onclick="open_popup({{forloop.counter0|a_sub_b:1}});" id="btn-abrir-popup_{{forloop.counter0|a_sub_b:1}}"
                         style=".btn-abrir-popup_{{forloop.counter0|a_sub_b:1}}:hover {background: rgba(94,125,227, .9);}" 
-                        title="Ver metadato"><i class="fas fa-eye fa-1x"></i>Ver metadato</a>
+                        title="Ver metadato"><i class="fas fa-eye fa-1x"></i> Ver metadato</a>
                     </td>
                     {% for x in result %}                      
                       <td>{{x}}</td>
@@ -476,7 +477,7 @@ function closeLeftMenu() {
   <br>
   <br>
 </div>
-{% if project_select.name_project == "CPLM" %}
+{% if project_select.name_project == "CPLM Corpus Paralelo de Lenguas Mexicanas" %}
 
         <div>
           <img style="width:100%;max-height:100px;" src="{% static 'img/CPLM/bannerfooter.jpg' %}">
@@ -493,8 +494,7 @@ function closeLeftMenu() {
           {% if project_select %}
           <h3><b>Metadatos del Proyecto: </b>{{project_select.name_project}}</h3>
           {% endif %}
-
-          <p>Hola</p>
+          <hr>
           <p class="text-justify">{{r_m}}</p>
 
         </div>

@@ -122,6 +122,12 @@ a:active {
     background-color: #f2f2f2;
 }
 
+@media screen and (max-width: 390px) {
+    .formulario {
+        margin-top: 38px;
+    }
+}
+
 #content {
     background: #FFF;
     margin: 0px auto;
@@ -294,6 +300,19 @@ input[type=email] {
     background-color: #046e30;
 }
 
+.btn-primary {
+    background-color: rgb(69, 140, 173);
+    border-color: #0e394d !important;
+}
+
+.btn-primary:hover {
+    background-color: rgb(46, 92, 114) !important;
+}
+
+.btn-primary:active {
+    background-color: rgb(32, 82, 82) !important;
+}
+
 .btn-danger {
     background-color: #7f1716 !important;
     color: #FFF !important;
@@ -420,6 +439,11 @@ input[type=email] {
     opacity: 0.90;
 }
 
+.table-info {
+    background-color: #c9d3d8;
+    opacity: 0.90;
+}
+
 #leftMenu {
     font-family: 'Ubuntu', sans-serif;
     color: #010a04;
@@ -460,6 +484,13 @@ input[type=email] {
 @media screen and (min-width: 1768px) {
     .accordion {
         max-height: 50rem;
+    }
+}
+
+@media screen and (max-width: 390px) {
+    .cplm-back,
+    .concordancia {
+        margin-top: 95px;
     }
 }
 

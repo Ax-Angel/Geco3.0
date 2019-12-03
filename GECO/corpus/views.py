@@ -527,6 +527,7 @@ def upload_document_view(request, id_project):
 
 
 def lenguas():
+    # TODO checar si hay que agregar variantes.
     lengua = [["Aguacateco","AGU"], ["Akateko","KNJ"], ["Amuzgo","AZG"], ["Alemán", "DE"], ["Ayapaneco","AYA"], ["Ch'ol","CHL"], ["Chatino","CHAT"],
               ["Chichimeco","PEI"], ["Chinanteco","CHIN"], ["Chocholteco","COZ"], ["Chontal de la sierra de oaxaca","CHD"],
               ["Chontal de tabasco","CHF"], ["Chuj","CAC"], ["Cora","CRN"], ["Cucapá","COC"], ["Cuicateco","CUT"],

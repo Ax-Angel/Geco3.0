@@ -92,7 +92,7 @@
     
 </div>
 
-<div class="w3-dark-grey">
+<div style="z-index:20;" class="w3-dark-grey">
   <button class="w3-button dark-grey w3-medium w3-left" onclick="openLeftMenu()">&#9776; Proyectos</button>
 </div>
 
@@ -135,7 +135,7 @@ function closeRightMenu() {
     <div class="container-fliud nuevo">
 
       <nav class="navbar navbar-toggleable-xl navbar-inverse bg-primary">
-        <div class="container">
+        <div style="overflow: auto;" class="container">
             <p class="navbar-brand"><b>Proyecto: </b>{{project.name_project}}</p>
             <span class="options">
               <input type="text" name="id_project" id="id_project" value="{{project.id}}" hidden/>

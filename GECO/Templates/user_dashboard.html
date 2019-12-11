@@ -163,6 +163,10 @@ function closeRightMenu() {
         </div>
       {% endif %}
 
+      {% if 'bad' in request.GET %}
+        <p align="center" class="error_label">Un proyecto paralelo no puede tener menos de dos textos</p>
+      {% endif %}
+
       <div class="table-responsive">
         {% if documents|length == 0 %}
           <div>

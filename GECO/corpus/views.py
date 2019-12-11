@@ -664,7 +664,7 @@ class Document_Delete(DeleteView):
             context['project'] = project
         if 'files' not in context:
             context['files'] = _f
-    
+
         return context
     
     def post(self, request, *args, **kwargs):
@@ -680,6 +680,50 @@ class Document_Delete(DeleteView):
         document.delete() 
         return HttpResponseRedirect(self.get_success_url()+'?q='+project.name_project)
     
+class Parallel_File_Delete(DeleteView):
+    model = Document
+    template_name = 'delete_parallel_file.html'
+    success_url = reverse_lazy('dashboard')
+    error = ''
+    
+    def get_context_data(self, **kwargs):
+        context = super(Parallel_File_Delete, self).get_context_data(**kwargs)
+        print("contexto antes de modificarlo: {}".format(context))
+        self.object = self.get_object #se obtiene el objeto
+        document = kwargs['object'] #obtiene el id que se envío por url
+        #document = self.model.objects.get(id=id_document)
+        project = Project.objects.get(id=document.project_id) 
+        files = File.objects.filter(document_id=document.id)
+        _f = ''
+        for f in files:
+            _f+= '"'+f.name_file + '" '
+            print(f)
+        if 'project' not in context:
+            context['project'] = project
+        if 'files' not in context:
+            context['file_to_delete'] = files[len(files)-1].name_file
+        return render(request, template_name)
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object #se obtiene el objeto
+        id_document = kwargs['pk'] #obtiene el id que se envío por url
+        document = self.model.objects.get(id=id_document)
+        #print('id: {}. documento: {}'.format(id_document, document))
+        files = File.objects.filter(document_id=document.id)
+        print('files: {}'.format(files))
+        """ for f in files:
+            if os.path.exists(f.file.path):
+                os.remove(f.file.path) """
+        project = Project.objects.get(id=document.project_id)
+        if Project.is_parallel and len(files) <= 2:
+            return redirect(reverse('dashboard') + '?q=' + project.name_project  + '&bad')
+        
+        if os.path.exists(files[len(files)-1].file.path):
+            print("Este es el archivo que se va a borrar: {}".format(files[len(files)-1].name_file))
+            os.remove(files[len(files)-1].file.path)
+            files[len(files)-1].delete()
+
+        return HttpResponseRedirect(self.get_success_url()+'?q='+project.name_project)
 
 def document_view_view(request, proyect_id, name_file):
     if request.user.is_authenticated:

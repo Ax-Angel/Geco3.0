@@ -522,6 +522,16 @@ input[type=email] {
     cursor: pointer;
 }
 
+.error_label {
+    background-color: #fffffe;
+    color: red;
+    opacity: 0.98;
+    border-radius: 2px;
+    padding: 3px;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
 
 /* ------------------------- */
 

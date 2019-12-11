@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="formulario">
+		<form method="post">
+			{% csrf_token %}
+			<h4>¿Desea eliminar del proyecto: "{{ project.name_project }}" el archivo: <i>{{file_to_delete}}</i>?</h4>
+			<br>
+			<a class="btn btn-danger" href="{% url 'upload_document_update' project.id %}">Cancelar</a>
+			<button class="btn btn-success" type="submit">Aceptar</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

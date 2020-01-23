@@ -112,7 +112,7 @@ def user_dashboard_view(request):
             user_projects.append(proj)
         elif proj.is_public():
             public_projects.append(proj)
-
+    print(result)
     return render(request, 'user_dashboard.html', {'user_projects': user_projects, 
                                                    'public_projects': public_projects, 
                                                    'project': project, 'value_metadata':value_metadata, 
@@ -552,6 +552,8 @@ def clasificacion_generica():
 def upload_document_update_view(request, document_id):
     document = Document.objects.get(id=document_id)
     project = Project.objects.get(id=document.project.id)
+    query_files = File.objects.filter(document=document)
+    
     
     if request.user.is_authenticated and project.is_user_collaborator(request.user):
         metadata = Metadata.objects.filter(project = project.id)
@@ -565,12 +567,13 @@ def upload_document_update_view(request, document_id):
             info_file = []
             info_file.append(f.name_file)
             name_id = 'file_'+str(f.id)
-            info_file.append(name_id)
+            info_file.append(name_id)          
             file_metadata = []
             for m in metadata:
                 data = File_Metadata_Relation.objects.get(metadata_id=m.id, file_id=f.id)
                 file_metadata.append((m.id, name_id+'_m_'+str(m.id), data.data_value))
             info_file.append(file_metadata)
+            info_file.append(f.id)
             files_value.append(info_file)
             
         if request.method == 'POST':
@@ -681,47 +684,32 @@ class Document_Delete(DeleteView):
         return HttpResponseRedirect(self.get_success_url()+'?q='+project.name_project)
     
 class Parallel_File_Delete(DeleteView):
-    model = Document
+    model = File
     template_name = 'delete_parallel_file.html'
     success_url = reverse_lazy('dashboard')
     error = ''
     
     def get_context_data(self, **kwargs):
         context = super(Parallel_File_Delete, self).get_context_data(**kwargs)
-        print("contexto antes de modificarlo: {}".format(context))
-        self.object = self.get_object #se obtiene el objeto
-        document = kwargs['object'] #obtiene el id que se envío por url
-        #document = self.model.objects.get(id=id_document)
-        project = Project.objects.get(id=document.project_id) 
-        files = File.objects.filter(document_id=document.id)
-        _f = ''
-        for f in files:
-            _f+= '"'+f.name_file + '" '
-            print(f)
-        if 'project' not in context:
-            context['project'] = project
-        if 'files' not in context:
-            context['file_to_delete'] = files[len(files)-1].name_file
-        return render(request, template_name)
+        return context
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object #se obtiene el objeto
-        id_document = kwargs['pk'] #obtiene el id que se envío por url
-        document = self.model.objects.get(id=id_document)
-        #print('id: {}. documento: {}'.format(id_document, document))
-        files = File.objects.filter(document_id=document.id)
-        print('files: {}'.format(files))
-        """ for f in files:
-            if os.path.exists(f.file.path):
-                os.remove(f.file.path) """
-        project = Project.objects.get(id=document.project_id)
-        if Project.is_parallel and len(files) <= 2:
-            return redirect(reverse('dashboard') + '?q=' + project.name_project  + '&bad')
+        id_file = kwargs['pk'] #obtiene el id que se envío por url
+        selected_file = self.model.objects.get(id=id_file)
+        projects = Project.objects.filter(owner_id=selected_file.document.owner_id)
+        project = None
+        for p in projects:
+            if p.id == selected_file.document.project_id:
+                project = p
         
-        if os.path.exists(files[len(files)-1].file.path):
-            print("Este es el archivo que se va a borrar: {}".format(files[len(files)-1].name_file))
-            os.remove(files[len(files)-1].file.path)
-            files[len(files)-1].delete()
+        files = File.objects.filter(document_id=selected_file.document.id)
+        if project.is_parallel and len(files) <= 2:
+            return redirect(reverse('dashboard') + '?q=' + project.name_project  + '&bad')
+
+        if os.path.exists(selected_file.file.path):
+            selected_file.delete()
+            os.remove(selected_file.file.path)
 
         return HttpResponseRedirect(self.get_success_url()+'?q='+project.name_project)
 
@@ -729,8 +717,12 @@ def document_view_view(request, proyect_id, name_file):
     if request.user.is_authenticated:
         if request.method == 'GET':
             doc_lines = []
-            file = File.objects.get(name_file=name_file)
-            text = open(os.path.join(settings.MEDIA_ROOT, str(file.file)), 'r', encoding="utf8").readlines()
+            main_file = None
+            files = File.objects.filter(name_file=name_file)
+            for f in files:
+                if f.document.project_id == int(proyect_id):
+                    main_file = f
+            text = open(os.path.join(settings.MEDIA_ROOT, str(main_file.file)), 'r', encoding="utf8").readlines()
             for line in text:
                 doc_lines.append(str(line))
             
@@ -738,7 +730,7 @@ def document_view_view(request, proyect_id, name_file):
     else:
         return redirect('login')
        
-    return render(request, 'document_view.html', {'file':file, 'text':doc_lines, 'name_project': p.name_project})
+    return render(request, 'document_view.html', {'file':main_file, 'text':doc_lines, 'name_project': p.name_project})
 
 
 def download_document(request, document_id):

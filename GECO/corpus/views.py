@@ -27,6 +27,7 @@ import datetime
 import random
 import string
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 #View Index
 def index_view(request):
@@ -61,6 +62,8 @@ def apps_view(request):
 
 #View user_dashboard
 def user_dashboard_view(request):
+    page = request.GET.get('page', 1)
+    pages = []
     if request.user.is_authenticated:
         if request.method == 'GET' and request.GET.get('q',False):
             name_project = str(request.GET.get('q', ''))
@@ -93,7 +96,15 @@ def user_dashboard_view(request):
                     ar_tt.append(a_t)
                 array_tmp.append(ar_tt)
                 result.append(array_tmp)
-            
+
+            paginator = Paginator(result, 10)
+            try:
+                pages = paginator.page(page)
+            except PageNotAnInteger:
+                pages = paginator.page(1)
+            except EmptyPage:
+                pages = paginator.page(paginator.num_pages)
+
             colaboradores = project.project_members.all()
                
         else:
@@ -112,11 +123,10 @@ def user_dashboard_view(request):
             user_projects.append(proj)
         elif proj.is_public():
             public_projects.append(proj)
-    print(result)
     return render(request, 'user_dashboard.html', {'user_projects': user_projects, 
                                                    'public_projects': public_projects, 
                                                    'project': project, 'value_metadata':value_metadata, 
-                                                   'documents': result,
+                                                   'documents': pages,
                                                    'colaboradores': colaboradores})
 
 

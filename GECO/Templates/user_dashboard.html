@@ -184,7 +184,7 @@ function closeRightMenu() {
                 {% for v_m in value_metadata %}
                   <th scope="col">{{v_m}}</th>
                 {% endfor %}
-                {% comment %} <th scope="col">Créditos a</th> {% endcomment %}
+                <th scope="col">Créditos a</th>
               </tr>
             </thead>
             <tbody>
@@ -208,7 +208,7 @@ function closeRightMenu() {
                           <td>{{r_f}}</td>
                         {% endif %}
                       {% endfor %}
-                      {% comment %} <td>{{usuario}}</td> {% endcomment %}
+                      <td>usuario</td>
                     </tr>
                   {% else %}
                     <tr>
@@ -226,6 +226,29 @@ function closeRightMenu() {
               {% endfor %}
             </tbody>
           </table>
+          {% if documents.has_other_pages %}
+            <nav aria-label="...">
+              <ul class="pagination pagination-lg">
+                {% if documents.has_previous %}
+                  <li class="page-item"><a class="page-link" href="?q={{ project.name_project }}&page={{ documents.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li></li>
+                {% endif %}
+                {% for i in documents.paginator.page_range %}
+                  {% if documents.number == i %}
+                    <li class="page-item active-own"><a class="page-link active-own">{{ i }}</a></li>
+                  {% else %}
+                    <li class="page-item"><a class="page-link" href="?q={{ project.name_project }}&page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if documents.has_next %}
+                  <li class="page-item"><a class="page-link" href="?q={{ project.name_project }}&page={{ documents.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li></li>
+                {% endif %}
+              </ul>
+            </nav>
+          {% endif %}
         {% endif %}
       </div>
     

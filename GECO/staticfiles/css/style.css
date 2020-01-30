@@ -494,6 +494,11 @@ input[type=email] {
     }
 }
 
+.active-own {
+    background-color: #0e394d;
+    color: white;
+}
+
 .btn-abrir-popup {
     padding: 0 20px;
     margin-bottom: 20px;
